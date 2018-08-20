@@ -20,7 +20,6 @@ public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth firebaseAuth;
-    private Slider slider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +38,8 @@ public class HomeActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Firebase Auth
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        // Slider banner
-        Slider.init(new PicassoImageLoadingService(this));
-        slider = findViewById(R.id.banner_slider_home);
-        slider.setAdapter(new MainSliderAdapter());
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.frm,new HomeFragment()).commit();
     }
 
     @Override
@@ -90,10 +84,11 @@ public class HomeActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
 
+            fragmentTransaction.replace(R.id.frm,new HomeFragment()).commit();
+
         } else if (id == R.id.nav_entire_library) {
 
-            Intent intent = new Intent(HomeActivity.this, EntireLibraryActivity.class);
-            startActivity(intent);
+            fragmentTransaction.replace(R.id.frm,new EntireLibraryFragment()).commit();
 
         } else if (id == R.id.nav_categories) {
 
