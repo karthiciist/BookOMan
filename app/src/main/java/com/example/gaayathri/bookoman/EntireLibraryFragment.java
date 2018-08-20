@@ -1,32 +1,21 @@
 package com.example.gaayathri.bookoman;
 
 import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Paint;
-import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -66,9 +55,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EntireLibraryActivity extends AppCompatActivity implements OnLikeListener, OnAnimationEndListener {
+public class EntireLibraryFragment extends Fragment implements OnLikeListener, OnAnimationEndListener {
 
-    private static final String TAG = "SecondActivity";
+    private static final String TAG = "EntireLibraryFragment";
 
     private RecyclerView recyclerView;
     private FirestoreRecyclerAdapter adapter;
@@ -86,15 +75,18 @@ public class EntireLibraryActivity extends AppCompatActivity implements OnLikeLi
     String downloadUri;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_entire_library);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View view;
+
+        view = inflater.inflate(R.layout.fragment_entire_library, container, false);
 
         // Initiating dialog windows
-        myDialog = new Dialog(this);
+        myDialog = new Dialog(getActivity());
         myDialog.setContentView(R.layout.expandeddialog);
 
-        myDialog2 = new Dialog(this);
+        myDialog2 = new Dialog(getActivity());
         myDialog2.setContentView(R.layout.imageexpanded);
 
 
@@ -111,18 +103,18 @@ public class EntireLibraryActivity extends AppCompatActivity implements OnLikeLi
         btnCallSeller.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(EntireLibraryActivity.this, "Calling seller!!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Calling seller!!!", Toast.LENGTH_SHORT).show();
             }
         });
 
         btnChatSeller.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(EntireLibraryActivity.this, "Chatting seller!!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Chatting seller!!!", Toast.LENGTH_SHORT).show();
             }
         });
 
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(getActivity());
 
 
         // Initialize firebase
@@ -133,7 +125,7 @@ public class EntireLibraryActivity extends AppCompatActivity implements OnLikeLi
 
 
         // FAB setup
-        fab = findViewById(R.id.fab);
+        fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,13 +135,13 @@ public class EntireLibraryActivity extends AppCompatActivity implements OnLikeLi
 
 
         // Setting up recycler view
-        recyclerView = findViewById(R.id.rvNoteList);
+        recyclerView = view.findViewById(R.id.rvNoteList);
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
 
         loadNotesList();
 
@@ -187,12 +179,124 @@ public class EntireLibraryActivity extends AppCompatActivity implements OnLikeLi
             }
         });
 
+        return view;
+
+    }
+
+    @Override
+    public void onAnimationEnd(LikeButton likeButton) {
+
+        Log.d("ExpandedView", "Animation End for %s" + likeButton);
+
+    }
+
+    @Override
+    public void liked(LikeButton likeButton) {
+
+        String email = firebaseAuth.getCurrentUser().getEmail();
+        String uuid = firebaseAuth.getCurrentUser().getUid();
+
+        TextView titleExp = myDialog.findViewById(R.id.titleExp);
+        TextView authExp = myDialog.findViewById(R.id.authorExp);
+        TextView degreeExp = myDialog.findViewById(R.id.degreeExp);
+        TextView specialExp = myDialog.findViewById(R.id.specialExp);
+        TextView locationExp = myDialog.findViewById(R.id.locationExp);
+        TextView mrpExp = myDialog.findViewById(R.id.mrpPriceExp);
+        TextView priceExp = myDialog.findViewById(R.id.priceExp);
+        TextView userExp = myDialog.findViewById(R.id.userExp);
+        TextView sellerMsgExp = myDialog.findViewById(R.id.sellerMsgExp);
+        ImageView bookpic = myDialog.findViewById(R.id.ivBookPic);
+
+
+
+        final Map<String, String> bookMap = new HashMap<>();
+
+        bookMap.put("liked", entryName);
+        bookMap.put("title", titleExp.getText().toString());
+        bookMap.put("author", authExp.getText().toString());
+        bookMap.put("degree", degreeExp.getText().toString());
+        bookMap.put("specialization", specialExp.getText().toString());
+        bookMap.put("location", locationExp.getText().toString());
+        bookMap.put("price", priceExp.getText().toString());
+        bookMap.put("mrp", mrpExp.getText().toString());
+        bookMap.put("user", userExp.getText().toString());
+        bookMap.put("sellerMsg", sellerMsgExp.getText().toString());
+        bookMap.put("downloadUri", downloadUri);
+
+        firestoreDB.collection("users").document(email).collection("favorites").document(entryName).set(bookMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(getActivity(), "Added to favorites!!!", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(), "Check your internet connection!!!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Map<String, Object> data = new HashMap<>();
+        data.put(uuid, true);
+
+        firestoreDB.collection("books").document(entryName)
+                .set(data, SetOptions.merge());
+
+
+    }
+
+    @Override
+    public void unLiked(LikeButton likeButton) {
+
+        String email = firebaseAuth.getCurrentUser().getEmail();
+        String uuid = firebaseAuth.getCurrentUser().getUid();
+
+        firestoreDB.collection("users").document(email).collection("favorites").document(entryName)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getActivity(), "Removed from favorites", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity(), "Check your internet connection!!!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        Map<String, Object> data = new HashMap<>();
+        data.put(uuid, false);
+
+        firestoreDB.collection("books").document(entryName)
+                .set(data, SetOptions.merge());
+
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        firestoreListener.remove();
     }
 
     private void fabClicked() {
 
-        //Intent intent = new Intent(EntireLibraryActivity.this, SellActivity.class);
-        //startActivity(intent);
+        Intent intent = new Intent(getActivity(), SellActivity.class);
+        startActivity(intent);
 
     }
 
@@ -217,7 +321,7 @@ public class EntireLibraryActivity extends AppCompatActivity implements OnLikeLi
                 holder.price.setText(note.getPrice());
                 holder.location.setText(note.getLocation());
 
-                Picasso.with(EntireLibraryActivity.this).load(note.getDownloadUri()).fit().centerCrop().into(holder.bookpic);
+                Picasso.with(getActivity()).load(note.getDownloadUri()).fit().centerCrop().into(holder.bookpic);
 
 
                 holder.onclicklinearLayout.setOnClickListener(new View.OnClickListener() {
@@ -261,7 +365,7 @@ public class EntireLibraryActivity extends AppCompatActivity implements OnLikeLi
                             }
                         });
 
-                        Picasso.with(EntireLibraryActivity.this).load(note.getDownloadUri()).fit().centerCrop().into(bookpic);
+                        Picasso.with(getActivity()).load(note.getDownloadUri()).fit().centerCrop().into(bookpic);
 
                         entryName = note.getEntryName();
                         downloadUri = note.getDownloadUri();
@@ -276,7 +380,7 @@ public class EntireLibraryActivity extends AppCompatActivity implements OnLikeLi
                             @Override
                             public void onClick(View v) {
                                 ImageView ivExpandedPic = myDialog2.findViewById(R.id.ivImage);
-                                Picasso.with(EntireLibraryActivity.this).load(note.getDownloadUri()).fit().into(ivExpandedPic);
+                                Picasso.with(getActivity()).load(note.getDownloadUri()).fit().into(ivExpandedPic);
                                 myDialog2.show();
                             }
                         });
@@ -329,9 +433,9 @@ public class EntireLibraryActivity extends AppCompatActivity implements OnLikeLi
                         .storageBucket("gs://login-demo-3c273.appspot.com")
                         .build();
 
-        ChatManager.start(this, mChatConfiguration, iChatUser);
+        ChatManager.start(getActivity(), mChatConfiguration, iChatUser);
 
-        ChatUI.getInstance().setContext(this);
+        ChatUI.getInstance().setContext(getActivity());
 
         ChatUI.getInstance().openConversationMessagesActivity(uid, name);
 
@@ -358,95 +462,5 @@ public class EntireLibraryActivity extends AppCompatActivity implements OnLikeLi
                 }
             }
         });
-    }
-
-    @Override
-    public void onAnimationEnd(LikeButton likeButton) {
-
-        Log.d("ExpandedView", "Animation End for %s" + likeButton);
-
-    }
-
-    @Override
-    public void liked(LikeButton likeButton) {
-
-        String email = firebaseAuth.getCurrentUser().getEmail();
-        String uuid = firebaseAuth.getCurrentUser().getUid();
-
-        TextView titleExp = myDialog.findViewById(R.id.titleExp);
-        TextView authExp = myDialog.findViewById(R.id.authorExp);
-        TextView degreeExp = myDialog.findViewById(R.id.degreeExp);
-        TextView specialExp = myDialog.findViewById(R.id.specialExp);
-        TextView locationExp = myDialog.findViewById(R.id.locationExp);
-        TextView mrpExp = myDialog.findViewById(R.id.mrpPriceExp);
-        TextView priceExp = myDialog.findViewById(R.id.priceExp);
-        TextView userExp = myDialog.findViewById(R.id.userExp);
-        TextView sellerMsgExp = myDialog.findViewById(R.id.sellerMsgExp);
-        ImageView bookpic = myDialog.findViewById(R.id.ivBookPic);
-
-
-
-        final Map<String, String> bookMap = new HashMap<>();
-
-        bookMap.put("liked", entryName);
-        bookMap.put("title", titleExp.getText().toString());
-        bookMap.put("author", authExp.getText().toString());
-        bookMap.put("degree", degreeExp.getText().toString());
-        bookMap.put("specialization", specialExp.getText().toString());
-        bookMap.put("location", locationExp.getText().toString());
-        bookMap.put("price", priceExp.getText().toString());
-        bookMap.put("mrp", mrpExp.getText().toString());
-        bookMap.put("user", userExp.getText().toString());
-        bookMap.put("sellerMsg", sellerMsgExp.getText().toString());
-        bookMap.put("downloadUri", downloadUri);
-
-        firestoreDB.collection("users").document(email).collection("favorites").document(entryName).set(bookMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(EntireLibraryActivity.this, "Added to favorites!!!", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(EntireLibraryActivity.this, "Check your internet connection!!!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        Map<String, Object> data = new HashMap<>();
-        data.put(uuid, true);
-
-        firestoreDB.collection("books").document(entryName)
-                .set(data, SetOptions.merge());
-
-
-    }
-
-    @Override
-    public void unLiked(LikeButton likeButton) {
-
-        String email = firebaseAuth.getCurrentUser().getEmail();
-        String uuid = firebaseAuth.getCurrentUser().getUid();
-
-        firestoreDB.collection("users").document(email).collection("favorites").document(entryName)
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(EntireLibraryActivity.this, "Removed from favorites", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(EntireLibraryActivity.this, "Check your internet connection!!!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        Map<String, Object> data = new HashMap<>();
-        data.put(uuid, false);
-
-        firestoreDB.collection("books").document(entryName)
-                .set(data, SetOptions.merge());
-
     }
 }
