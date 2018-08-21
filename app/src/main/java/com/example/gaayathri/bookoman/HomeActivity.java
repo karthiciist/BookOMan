@@ -28,6 +28,9 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Firebase Auth
+        firebaseAuth = FirebaseAuth.getInstance();
+
         // Navigation drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -95,6 +98,8 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_my_profile) {
 
         } else if (id == R.id.nav_my_materials) {
+
+            fragmentTransaction.replace(R.id.frm,new MyMaterialsFragment()).commit();
 
         } else if (id == R.id.nav_my_favorites) {
 
