@@ -57,6 +57,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.like.LikeButton;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
@@ -130,10 +131,10 @@ public class MyProfileFragment extends Fragment {
     public static final String DonotShow = "false";
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view;
+        final View view;
 
         view = inflater.inflate(R.layout.fragment_my_profile, container, false);
 
@@ -210,7 +211,7 @@ public class MyProfileFragment extends Fragment {
                         userNameL = document.getString("name");
                         userPhoneL = document.getString("phone");
                         userDegreeL = document.getString("degree");
-                        userSpecialL = document.getString("special");
+                        userSpecialL = document.getString("specialization");
                         userCityL = document.getString("city");
                         userProfilePicL = document.getString("downloadUri");
 
@@ -367,13 +368,17 @@ public class MyProfileFragment extends Fragment {
                         userMap.put("degree", degree);
                         userMap.put("specialization", specialization);
 
-                        firestore.collection("users").document(email).set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        firestore.collection("users").document(email).set(userMap, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
 
                                 progressDialog2.dismiss();
 
                                 myDialog4.dismiss();
+
+                                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                ft.detach(MyProfileFragment.this).attach(MyProfileFragment.this).commit();
+
 
                                 Toast.makeText(getActivity(), "Profile updated successfully!!!", Toast.LENGTH_SHORT).show();
                             }
@@ -488,13 +493,17 @@ public class MyProfileFragment extends Fragment {
                         userMap.put("degree", degree);
                         userMap.put("specialization", specialization);
 
-                        firestore.collection("users").document(email).set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        firestore.collection("users").document(email).set(userMap, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
 
                                 progressDialog2.dismiss();
 
                                 myDialog4.dismiss();
+
+                                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                ft.detach(MyProfileFragment.this).attach(MyProfileFragment.this).commit();
+
 
                                 Toast.makeText(getActivity(), "Profile updated successfully!!!", Toast.LENGTH_SHORT).show();
                             }

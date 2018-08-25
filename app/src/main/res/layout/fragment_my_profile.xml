@@ -271,6 +271,7 @@
                                     android:fontFamily="sans-serif-light"
                                     android:text=""
                                     android:textColor="#000000"
+                                    android:textStyle="bold"
                                     android:textSize="18sp"
                                     android:layout_marginRight="5dp"/>
 
@@ -280,7 +281,8 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="sans-serif-light"
                                     android:text=""
-                                    android:textColor="#000000"
+                                    android:textStyle="italic"
+                                    android:textColor="#3e3d3d"
                                     android:textSize="18sp" />
 
                             </LinearLayout>
