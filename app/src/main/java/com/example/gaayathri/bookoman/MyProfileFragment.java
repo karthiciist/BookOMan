@@ -3,9 +3,12 @@ package com.example.gaayathri.bookoman;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,6 +31,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -39,6 +44,8 @@ import com.example.gaayathri.bookoman.viewholder.NoteViewHorizontal;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -53,14 +60,17 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.like.LikeButton;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
+import com.yarolegovich.lovelydialog.LovelyInfoDialog;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class MyProfileFragment extends Fragment {
 
-    private DrawerLayout mDrawerLayout;
     private static final String TAG = "SecondActivity";
     private RecyclerView recyclerView;
     private FirestoreRecyclerAdapter adapter;
@@ -69,10 +79,13 @@ public class MyProfileFragment extends Fragment {
     private ListenerRegistration firestoreListener;
     private List<Note> notesList;
     private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog1;
+    private ProgressDialog progressDialog2;
 
-    private Toolbar toolbar;
     Dialog myDialog;
     Dialog myDialog2;
+    Dialog myDialog3;
+    Dialog myDialog4;
     String entryName;
     String downloadUri;
 
@@ -110,6 +123,12 @@ public class MyProfileFragment extends Fragment {
 
     CircularImageView profilePic;
 
+    private FirebaseFirestore firestore;
+
+    SharedPreferences sharedpreferences;
+    public static final String mypreference = "mypref";
+    public static final String DonotShow = "false";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -118,10 +137,17 @@ public class MyProfileFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_my_profile, container, false);
 
+        progressDialog = new ProgressDialog(getActivity());
+
+        progressDialog.setMessage("Loading your profile...");
+        progressDialog.show();
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String name = user.getEmail();
 
-        String userName = user.getDisplayName();
+        firestore = FirebaseFirestore.getInstance();
+
+        ImageView editProfile = view.findViewById(R.id.profile_edit);
 
         userNametv = view.findViewById(R.id.tv_name);
         userCity = view.findViewById(R.id.tv_city);
@@ -138,11 +164,14 @@ public class MyProfileFragment extends Fragment {
         myDialog2 = new Dialog(getActivity());
         myDialog2.setContentView(R.layout.imageexpanded);
 
-        progressDialog = new ProgressDialog(getActivity());
+        myDialog3 = new Dialog(getActivity());
+        myDialog3.setContentView(R.layout.fillprofiledialog);
+
+        myDialog4 = new Dialog(getActivity());
+        myDialog4.setContentView(R.layout.edit_profile_dialog);
 
         noAdsPlaced = view.findViewById(R.id.tv_materials);
         noLikes = view.findViewById(R.id.tv_favorites);
-
 
         RelativeLayout llAds = view.findViewById(R.id.llAds);
         llAds.setOnClickListener(new View.OnClickListener() {
@@ -179,10 +208,10 @@ public class MyProfileFragment extends Fragment {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
 
                         userNameL = document.getString("name");
-                        userPhoneL = document.getString("UserPhoneNo");
-                        userDegreeL = document.getString("UserDegree");
-                        userSpecialL = document.getString("UserSpecial");
-                        userCityL = document.getString("UserCity");
+                        userPhoneL = document.getString("phone");
+                        userDegreeL = document.getString("degree");
+                        userSpecialL = document.getString("special");
+                        userCityL = document.getString("city");
                         userProfilePicL = document.getString("downloadUri");
 
                         userNametv.setText(userNameL);
@@ -194,6 +223,19 @@ public class MyProfileFragment extends Fragment {
 
                         Picasso.with(getActivity()).load(profilePicUrl).fit().centerCrop().into(profilePic);
 
+                        if ((userNameL == null) || (userPhoneL == null) || (userDegreeL == null) || (userSpecialL == null) || (userCityL == null)) {
+
+                            SharedPreferences sharedpreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+
+                            String showDialog = sharedpreferences.getString(DonotShow, "");
+
+                            if (!showDialog.equals("true") ) {
+
+                                showFillProfileDialog();
+
+                            }
+
+                        }
 
                     } else {
                         Log.d(TAG, "No such document");
@@ -234,9 +276,6 @@ public class MyProfileFragment extends Fragment {
                     }
                 });
 
-        progressDialog.setMessage("Loading your profile...");
-        progressDialog.show();
-
         firestoreDB.collection("books")
                 .whereEqualTo("user", name)
                 .get()
@@ -270,9 +309,216 @@ public class MyProfileFragment extends Fragment {
                     }
                 });
 
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                progressDialog1 = new ProgressDialog(getActivity());
+
+                progressDialog1.setMessage("Loading edit window...");
+                progressDialog1.show();
+
+                final EditText et_name = myDialog4.findViewById(R.id.et_name);
+                final EditText et_email = myDialog4.findViewById(R.id.et_email);
+                final EditText et_phone = myDialog4.findViewById(R.id.et_phone);
+                final EditText et_city = myDialog4.findViewById(R.id.et_city);
+                final EditText et_degree = myDialog4.findViewById(R.id.et_degree);
+                final EditText et_special = myDialog4.findViewById(R.id.et_special);
+
+                et_name.setText(userNameL);
+                et_email.setText(mail);
+                et_phone.setText(userPhoneL);
+                et_city.setText(userCityL);
+                et_degree.setText(userDegreeL);
+                et_special.setText(userSpecialL);
+
+                Button btnCancel = myDialog4.findViewById(R.id.btnCancel);
+                Button btnUpdate = myDialog4.findViewById(R.id.btnUpdate);
+
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        myDialog4.dismiss();
+                    }
+                });
+
+                btnUpdate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        progressDialog2 = new ProgressDialog(getActivity());
+
+                        progressDialog2.setMessage("Updating profile...");
+                        progressDialog2.show();
+
+                        String name = et_name.getText().toString();
+                        String email = et_email.getText().toString();
+                        String phone = et_phone.getText().toString();
+                        String city = et_city.getText().toString();
+                        String degree = et_degree.getText().toString();
+                        String specialization = et_special.getText().toString();
+
+                        Map<String, String> userMap = new HashMap<>();
+
+                        userMap.put("name", name);
+                        userMap.put("email", email );
+                        userMap.put("phone", phone);
+                        userMap.put("city", city);
+                        userMap.put("degree", degree);
+                        userMap.put("specialization", specialization);
+
+                        firestore.collection("users").document(email).set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+
+                                progressDialog2.dismiss();
+
+                                myDialog4.dismiss();
+
+                                Toast.makeText(getActivity(), "Profile updated successfully!!!", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                                progressDialog2.dismiss();
+
+                                String error = e.getMessage();
+                                Toast.makeText(getActivity(), "Cannot update profile. Error:" + error, Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+
+                    }
+                });
+
+                progressDialog1.dismiss();
+
+                myDialog4.show();
+            }
+        });
+
         progressDialog.dismiss();
 
         return view;
+
+    }
+
+    private void showFillProfileDialog() {
+
+        Button btnDismiss = myDialog3.findViewById(R.id.btnDismiss);
+        Button btnUpdate = myDialog3.findViewById(R.id.btnUpdate);
+
+        final CheckBox simpleCheckBox = myDialog3.findViewById(R.id.cbDonotShow);
+
+        btnDismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Boolean checkBoxState = simpleCheckBox.isChecked();
+
+                if (checkBoxState) {
+
+                    SharedPreferences sharedpreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.putString(DonotShow, "true");
+                    editor.commit();
+
+                }
+
+                myDialog3.dismiss();
+            }
+        });
+
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                myDialog3.dismiss();
+
+                progressDialog2 = new ProgressDialog(getActivity());
+
+                progressDialog2.setMessage("Updating profile...");
+                progressDialog2.show();
+
+                final EditText et_name = myDialog4.findViewById(R.id.et_name);
+                final EditText et_email = myDialog4.findViewById(R.id.et_email);
+                final EditText et_phone = myDialog4.findViewById(R.id.et_phone);
+                final EditText et_city = myDialog4.findViewById(R.id.et_city);
+                final EditText et_degree = myDialog4.findViewById(R.id.et_degree);
+                final EditText et_special = myDialog4.findViewById(R.id.et_special);
+
+                final String mail = firebaseAuth.getCurrentUser().getEmail();
+
+                et_name.setText(userNameL);
+                et_email.setText(mail);
+                et_phone.setText(userPhoneL);
+                et_city.setText(userCityL);
+                et_degree.setText(userDegreeL);
+                et_special.setText(userSpecialL);
+
+                Button btnCancel = myDialog4.findViewById(R.id.btnCancel);
+                Button btnUpdate = myDialog4.findViewById(R.id.btnUpdate);
+
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        myDialog4.dismiss();
+                    }
+                });
+
+                btnUpdate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        String name = et_name.getText().toString();
+                        String email = et_email.getText().toString();
+                        String phone = et_phone.getText().toString();
+                        String city = et_city.getText().toString();
+                        String degree = et_degree.getText().toString();
+                        String specialization = et_special.getText().toString();
+
+                        Map<String, String> userMap = new HashMap<>();
+
+                        userMap.put("name", name);
+                        userMap.put("email", email );
+                        userMap.put("phone", phone);
+                        userMap.put("city", city);
+                        userMap.put("degree", degree);
+                        userMap.put("specialization", specialization);
+
+                        firestore.collection("users").document(email).set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+
+                                progressDialog2.dismiss();
+
+                                myDialog4.dismiss();
+
+                                Toast.makeText(getActivity(), "Profile updated successfully!!!", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                                progressDialog2.dismiss();
+
+                                String error = e.getMessage();
+                                Toast.makeText(getActivity(), "Cannot update profile. Error:" + error, Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+
+                    }
+                });
+
+                myDialog4.show();
+            }
+        });
+
+        myDialog3.show();
+
     }
 
     private void loadNotesList() {
@@ -409,10 +655,6 @@ public class MyProfileFragment extends Fragment {
     public void onStop() {
         super.onStop();
         adapter.stopListening();
-    }
-
-    private void updateNote() {
-
     }
 
 }
