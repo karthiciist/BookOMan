@@ -97,11 +97,15 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_my_profile) {
 
+            fragmentTransaction.replace(R.id.frm,new MyProfileFragment()).commit();
+
         } else if (id == R.id.nav_my_materials) {
 
             fragmentTransaction.replace(R.id.frm,new MyMaterialsFragment()).commit();
 
         } else if (id == R.id.nav_my_favorites) {
+
+            fragmentTransaction.replace(R.id.frm,new MyFavoritesFragment()).commit();
 
         } else if (id == R.id.nav_conversations) {
 
