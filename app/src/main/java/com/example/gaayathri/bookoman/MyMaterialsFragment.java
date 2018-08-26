@@ -81,6 +81,7 @@ public class MyMaterialsFragment extends Fragment {
 
     Dialog myDialog;
     Dialog myDialog2;
+    Dialog myDialog3;
     String entryName;
 
     String UpdateNoteTitle;
@@ -116,13 +117,17 @@ public class MyMaterialsFragment extends Fragment {
         myDialog2 = new Dialog(getActivity());
         myDialog2.setContentView(R.layout.imageexpanded);
 
+        myDialog3 = new Dialog(getActivity());
+        myDialog3.setContentView(R.layout.dialog_confirm_delete);
+
         progressDialog = new ProgressDialog(getActivity());
 
         firestoreDB = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        String name = user.getEmail();
+
+        String uid = user.getUid();
 
         recyclerView = view.findViewById(R.id.rvNoteList);
 
@@ -143,7 +148,7 @@ public class MyMaterialsFragment extends Fragment {
 
         loadNotesList();
 
-        firestoreListener = firestoreDB.collection("books").whereEqualTo("user", name)
+        firestoreListener = firestoreDB.collection("books").whereEqualTo("uid", uid)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
@@ -190,9 +195,9 @@ public class MyMaterialsFragment extends Fragment {
     private void loadNotesList() {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String name = user.getEmail();
+        String uid = user.getUid();
 
-        Query query = firestoreDB.collection("books").whereEqualTo("user", name);
+        Query query = firestoreDB.collection("books").whereEqualTo("uid", uid);
 
 
         FirestoreRecyclerOptions<Note> response = new FirestoreRecyclerOptions.Builder<Note>()
@@ -311,7 +316,8 @@ public class MyMaterialsFragment extends Fragment {
                 delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        deleteNote();
+                        //deleteNote();
+                        showDeleteConfirmationDialog();
                     }
                 });
                 likeButton.setVisibility(View.GONE);
@@ -334,6 +340,35 @@ public class MyMaterialsFragment extends Fragment {
 
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
+    }
+
+    private void showDeleteConfirmationDialog() {
+
+        Button btnDelete = myDialog3.findViewById(R.id.btnDelete);
+        Button btnNo = myDialog3.findViewById(R.id.btnNo);
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                myDialog3.dismiss();
+
+                deleteNote();
+
+            }
+        });
+
+        btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                myDialog3.dismiss();
+
+            }
+        });
+
+        myDialog3.show();
+
     }
 
     private void updateNote() {

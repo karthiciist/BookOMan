@@ -131,14 +131,14 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
 
         loadNotesList();
 
-        String uuid = firebaseAuth.getCurrentUser().getUid();
+        String uid = firebaseAuth.getCurrentUser().getUid();
 
-        firestoreListener = firestoreDB.collection("books").whereEqualTo(uuid, true).orderBy("timestamp", Query.Direction.DESCENDING)
+        firestoreListener = firestoreDB.collection("books").whereEqualTo(uid, true).orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
                         if (e != null) {
-                            Toast.makeText(getActivity(), "Cannot retrieve your favorites", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getActivity(), "Cannot retrieve your favorites", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -263,11 +263,11 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
 
     private void loadNotesList() {
 
-        String uuid = firebaseAuth.getCurrentUser().getUid();
+        String uid = firebaseAuth.getCurrentUser().getUid();
 
         CollectionReference booksRef = firestoreDB.collection("books");
 
-        Query query = booksRef.whereEqualTo(uuid, true).orderBy("timestamp", Query.Direction.DESCENDING);
+        Query query = booksRef.whereEqualTo(uid, true).orderBy("timestamp", Query.Direction.DESCENDING);
 
 
         FirestoreRecyclerOptions<Note> response = new FirestoreRecyclerOptions.Builder<Note>()

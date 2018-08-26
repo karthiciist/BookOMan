@@ -144,6 +144,7 @@ public class MyProfileFragment extends Fragment {
         progressDialog.show();
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user.getUid();
         String name = user.getEmail();
 
         firestore = FirebaseFirestore.getInstance();
@@ -255,7 +256,7 @@ public class MyProfileFragment extends Fragment {
 
         loadNotesList();
 
-        firestoreListener = firestoreDB.collection("books").whereEqualTo("user", name)
+        firestoreListener = firestoreDB.collection("books").whereEqualTo("uid", uid)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
@@ -278,7 +279,7 @@ public class MyProfileFragment extends Fragment {
                 });
 
         firestoreDB.collection("books")
-                .whereEqualTo("user", name)
+                .whereEqualTo("uid", uid)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -533,9 +534,9 @@ public class MyProfileFragment extends Fragment {
     private void loadNotesList() {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String name = user.getEmail();
+        String uid = user.getUid();
 
-        final Query query = firestoreDB.collection("books").whereEqualTo("user", name);
+        final Query query = firestoreDB.collection("books").whereEqualTo("uid", uid);
 
         FirestoreRecyclerOptions<Note> response = new FirestoreRecyclerOptions.Builder<Note>()
                 .setQuery(query, Note.class)

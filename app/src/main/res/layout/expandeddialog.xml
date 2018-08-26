@@ -182,15 +182,29 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/userExp"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:text="Posted User"
-            android:textSize="15sp"
-            android:layout_gravity="center_horizontal" />
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Posted by  "
+                android:textSize="15sp"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:id="@+id/userExp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="italic"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -206,7 +220,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="Seller Message"
             android:layout_gravity="center"/>
 
         <LinearLayout
@@ -214,10 +227,11 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="30dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_gravity="center_horizontal">
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="center_horizontal"
+            android:padding="5dp">
 
             <Button
                 android:id="@+id/btnCallSeller"

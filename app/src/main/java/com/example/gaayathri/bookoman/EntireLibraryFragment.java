@@ -360,7 +360,7 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
                             @Override
                             public void onClick(View v) {
 
-                                launchOneToOneChat(uid, "Bommi");
+                                launchOneToOneChat(uid, note.getuser());
 
                             }
                         });
@@ -429,8 +429,8 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
 
         ChatManager.Configuration mChatConfiguration =
                 new ChatManager.Configuration.Builder(getString(R.string.google_app_id))
-                        .firebaseUrl("https://login-demo-3c273.firebaseio.com/")
-                        .storageBucket("gs://login-demo-3c273.appspot.com")
+                        .firebaseUrl("https://bookoman-3f038.firebaseio.com/")
+                        .storageBucket("https://bookoman-3f038.firebaseio.com/")
                         .build();
 
         ChatManager.start(getActivity(), mChatConfiguration, iChatUser);

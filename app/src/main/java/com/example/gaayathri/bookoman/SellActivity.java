@@ -174,6 +174,7 @@ public class SellActivity extends AppCompatActivity {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final String email = user.getEmail();
+        final String name = user.getDisplayName();
 
         final String entryName = timeStamp + email;
 
@@ -235,7 +236,7 @@ public class SellActivity extends AppCompatActivity {
                                         bookMap.put("specialization", lspecialization);
                                         bookMap.put("mrp", "₹ " + lmrp);
                                         bookMap.put("price", "₹ " + lprice);
-                                        bookMap.put("user", email);
+                                        bookMap.put("user", name);
                                         bookMap.put("location", llocation);
                                         bookMap.put("timestamp", timeStamp);
                                         bookMap.put("entryName", entryName);
