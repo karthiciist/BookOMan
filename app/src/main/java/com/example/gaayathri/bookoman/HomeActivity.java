@@ -13,6 +13,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import org.chat21.android.core.ChatManager;
+import org.chat21.android.core.users.models.ChatUser;
+import org.chat21.android.core.users.models.IChatUser;
+import org.chat21.android.ui.ChatUI;
 
 import ss.com.bannerslider.Slider;
 
@@ -25,29 +31,59 @@ public class HomeActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance();
 
         // Navigation drawer
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frm,new HomeFragment()).commit();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        IChatUser iChatUser = new ChatUser(user.getUid(), user.getDisplayName());
+
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
+        ChatManager.Configuration mChatConfiguration =
+                new ChatManager.Configuration.Builder(getString(R.string.google_app_id))
+                        .firebaseUrl("https://bookoman-3f038.firebaseio.com/")
+                        .storageBucket("gs://bookoman-3f038.appspot.com")
+                        .build();
+
+        ChatManager.start(this, mChatConfiguration, iChatUser);
+
+        ChatUI.getInstance().setContext(this);
+
+        ChatUI.getInstance().processRemoteNotification(getIntent());
+    }
+
+    @Override
+    protected void onResume() {
+        ChatManager.getInstance().getMyPresenceHandler().connect();
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        ChatManager.getInstance().getMyPresenceHandler().dispose();
+        super.onDestroy();
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -57,19 +93,16 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -80,7 +113,7 @@ public class HomeActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -109,6 +142,8 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_conversations) {
 
+            ChatUI.getInstance().openConversationsListActivity();
+
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_logout) {
@@ -117,7 +152,7 @@ public class HomeActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

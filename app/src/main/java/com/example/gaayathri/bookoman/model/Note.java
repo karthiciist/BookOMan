@@ -18,6 +18,15 @@ public class Note {
     private String uid;
     private String sellerMsg;
     private String downloadUri;
+    private String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getDownloadUri() {
         return downloadUri;
@@ -54,7 +63,7 @@ public class Note {
     public Note() {
     }
 
-    public Note(String id, String title, String author, String degree, String specialization, String location, String mrp, String price, String entryName, String user, String uid, String sellerMsg) {
+    public Note(String id, String title, String author, String degree, String specialization, String location, String mrp, String price, String entryName, String user, String uid, String sellerMsg, String email) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -68,10 +77,11 @@ public class Note {
         this.uid = uid;
         this.sellerMsg = sellerMsg;
         this.downloadUri = downloadUri;
+        this.email = email;
     }
 
 
-    public Note(String title, String author, String degree, String specialization, String location, String mrp, String price, String entryName, String user, String uid, String sellerMsg) {
+    public Note(String title, String author, String degree, String specialization, String location, String mrp, String price, String entryName, String user, String uid, String sellerMsg, String email) {
         this.title = title;
         this.author = author;
         this.degree = degree;
@@ -84,6 +94,7 @@ public class Note {
         this.sellerMsg = sellerMsg;
         this.downloadUri = downloadUri;
         this.uid = uid;
+        this.email = email;
     }
 
     public String getuser() {
@@ -176,6 +187,7 @@ public class Note {
         result.put("uid", this.uid);
         result.put("sellerMsg", this.sellerMsg);
         result.put("downloadUri", this.downloadUri);
+        result.put("email", this.email);
 
         return result;
     }

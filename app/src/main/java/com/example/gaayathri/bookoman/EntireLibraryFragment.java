@@ -2,7 +2,6 @@ package com.example.gaayathri.bookoman;
 
 import android.app.Dialog;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -420,24 +419,9 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
 
     private void launchOneToOneChat(String uid, String name){
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        IChatUser iChatUserRecepient = new ChatUser(uid, name);
 
-
-        IChatUser iChatUser = new ChatUser(user.getUid(), user.getDisplayName());
-
-        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-
-        ChatManager.Configuration mChatConfiguration =
-                new ChatManager.Configuration.Builder(getString(R.string.google_app_id))
-                        .firebaseUrl("https://bookoman-3f038.firebaseio.com/")
-                        .storageBucket("https://bookoman-3f038.firebaseio.com/")
-                        .build();
-
-        ChatManager.start(getActivity(), mChatConfiguration, iChatUser);
-
-        ChatUI.getInstance().setContext(getActivity());
-
-        ChatUI.getInstance().openConversationMessagesActivity(uid, name);
+        ChatUI.getInstance().openConversationMessagesActivity(iChatUserRecepient);
 
     }
 

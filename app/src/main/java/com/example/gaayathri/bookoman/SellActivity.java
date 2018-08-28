@@ -243,6 +243,7 @@ public class SellActivity extends AppCompatActivity {
                                         bookMap.put("sellerMsg", lsellerMsg);
                                         bookMap.put("downloadUri", downloadUri);
                                         bookMap.put("uid", uid);
+                                        bookMap.put("email", email);
 
                                         firestore.collection("books").document(timeStamp + email).set(bookMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
