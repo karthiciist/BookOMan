@@ -47,24 +47,23 @@
                     android:layout_marginLeft="20dp"
                     android:textStyle="bold"/>
 
+                <android.support.v7.widget.RecyclerView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/rvNoteList1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical" />
+
             </LinearLayout>
 
 
-            <android.support.v7.widget.CardView
+            <ImageView
+                android:id="@+id/imSell1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                app:cardCornerRadius="5dp">
-
-                <ImageView
-                    android:id="@+id/imSell1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/bannernew"
-                    android:layout_margin="7dp"
-                    android:adjustViewBounds="true"/>
-
-            </android.support.v7.widget.CardView>
+                android:layout_height="match_parent"
+                android:src="@drawable/between1"
+                android:layout_margin="7dp"
+                android:adjustViewBounds="true"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -87,7 +86,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
-                        android:id="@+id/testTV"
+                        android:id="@+id/userCity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="City"
@@ -98,23 +97,22 @@
                         android:textStyle="bold"/>
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                app:cardCornerRadius="5dp">
-
-                <ImageView
-                    android:id="@+id/imSell2"
+                <android.support.v7.widget.RecyclerView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/rvNoteList2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/bannernew2"
-                    android:layout_margin="7dp"
-                    android:adjustViewBounds="true"/>
+                    android:scrollbars="vertical" />
 
-            </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imSell2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/between2"
+                android:layout_margin="7dp"
+                android:adjustViewBounds="true"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -137,7 +135,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
-                        android:id="@+id/testTV1"
+                        android:id="@+id/userDegree"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Degree"
@@ -147,6 +145,13 @@
                         android:layout_marginLeft="20dp"
                         android:textStyle="bold"/>
                 </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/rvNoteList3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical" />
 
             </LinearLayout>
 

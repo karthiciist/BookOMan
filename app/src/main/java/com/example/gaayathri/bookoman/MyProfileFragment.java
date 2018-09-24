@@ -1,35 +1,21 @@
 package com.example.gaayathri.bookoman;
 
 import android.app.Dialog;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Build;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -39,6 +25,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.gaayathri.bookoman.model.Note;
 import com.example.gaayathri.bookoman.viewholder.NoteViewHorizontal;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -60,9 +48,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.like.LikeButton;
 import com.mikhaellopez.circularimageview.CircularImageView;
-import com.squareup.picasso.Picasso;
-import com.yarolegovich.lovelydialog.LovelyInfoDialog;
-import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -127,6 +112,7 @@ public class MyProfileFragment extends Fragment {
     private FirebaseFirestore firestore;
 
     SharedPreferences sharedpreferences;
+
     public static final String mypreference = "mypref";
     public static final String DonotShow = "false";
 
@@ -137,6 +123,8 @@ public class MyProfileFragment extends Fragment {
         final View view;
 
         view = inflater.inflate(R.layout.fragment_my_profile, container, false);
+
+        setRetainInstance(true);
 
         progressDialog = new ProgressDialog(getActivity());
 
@@ -180,7 +168,7 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.frm,new MyMaterialsFragment()).commit();
+                fragmentTransaction.replace(R.id.frm,new MyMaterialsFragment()).addToBackStack(null).commit();
             }
         });
 
@@ -189,7 +177,7 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.frm,new MyFavoritesFragment()).commit();
+                fragmentTransaction.replace(R.id.frm,new MyFavoritesFragment()).addToBackStack(null).commit();
             }
         });
 
@@ -223,7 +211,10 @@ public class MyProfileFragment extends Fragment {
                         userPhoneNo.setText(userPhoneL);
                         userEmailId.setText(mail);
 
-                        Picasso.with(getActivity()).load(profilePicUrl).fit().centerCrop().into(profilePic);
+                        final RequestOptions options = new RequestOptions();
+                        options.centerCrop();
+
+                        Glide.with(getActivity()).load(profilePicUrl).apply(options).into(profilePic);
 
                         if ((userNameL == null) || (userPhoneL == null) || (userDegreeL == null) || (userSpecialL == null) || (userCityL == null)) {
 
@@ -551,7 +542,10 @@ public class MyProfileFragment extends Fragment {
                 holder.title.setText(noteHorizontal.getTitle());
                 holder.author.setText(noteHorizontal.getAuthor());
 
-                Picasso.with(getActivity()).load(noteHorizontal.getDownloadUri()).fit().centerCrop().into(holder.bookpic);
+                final RequestOptions options = new RequestOptions();
+                options.centerCrop();
+
+                Glide.with(getActivity()).load(noteHorizontal.getDownloadUri()).apply(options).into(holder.bookpic);
 
                 holder.onclicklinearLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -600,7 +594,7 @@ public class MyProfileFragment extends Fragment {
 
                         mrpExp.setPaintFlags(mrpExp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-                        Picasso.with(getActivity()).load(noteHorizontal.getDownloadUri()).fit().centerCrop().into(bookpic);
+                        Glide.with(getActivity()).load(noteHorizontal.getDownloadUri()).apply(options).into(bookpic);
 
                         myDialog.show();
 
@@ -608,7 +602,7 @@ public class MyProfileFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 ImageView ivExpandedPic = myDialog2.findViewById(R.id.ivImage);
-                                Picasso.with(getActivity()).load(noteHorizontal.getDownloadUri()).fit().into(ivExpandedPic);
+                                Glide.with(getActivity()).load(noteHorizontal.getDownloadUri()).apply(options).into(ivExpandedPic);
                                 myDialog2.show();
                             }
                         });

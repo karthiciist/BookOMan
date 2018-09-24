@@ -4,31 +4,36 @@ import android.Manifest;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.Display;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bluehomestudio.steps.CircleImageSteps;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,17 +49,30 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SellActivity extends AppCompatActivity {
+
+public class SellTestActivity extends AppCompatActivity {
+
+    CircleImageSteps circleImageSteps;
+
+    Button prvBtn;
+    Button nextBtn;
+    Button prv1Btn;
+    Button next1Btn;
+    Button finishbtn;
+    LinearLayout bookDetails;
+    LinearLayout sampleAd;
+    private SimpleDraweeView swView;
+    private SimpleDraweeView sampleView;
+
+    private SimpleDraweeView sampleApprovalView;
 
     public static final int MY_REQUEST_CAMERA   = 10;
     public static final int MY_REQUEST_WRITE_CAMERA   = 11;
@@ -63,8 +81,6 @@ public class SellActivity extends AppCompatActivity {
     public static final int MY_REQUEST_READ_GALLERY   = 13;
     public static final int MY_REQUEST_WRITE_GALLERY   = 14;
     public static final int MY_REQUEST_GALLERY   = 15;
-
-    private SimpleDraweeView swView;
 
     public File filen = null;
 
@@ -87,11 +103,92 @@ public class SellActivity extends AppCompatActivity {
     Uri photocUri;
     String downloadUri;
 
+    SharedPreferences sharedPreferences;
+
+    public static final String mypreference = "mypref";
+    public static final String city = "cityKey";
+    public static final String name = "nameKey";
+
+    ImageView sampleImage;
+    TextView sampleTitle;
+    TextView sampleAuthor;
+    TextView sampleDegree;
+    TextView sampleSpecial;
+    TextView sampleMrp;
+    TextView samplePrice;
+    TextView sampleSellerMsg;
+    TextView adLookLike;
+    TextView imageLookLike;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fresco.initialize(this);
-        setContentView(R.layout.activity_sell);
+        setContentView(R.layout.activity_sell_test);
+
+        circleImageSteps = findViewById(R.id.cis_steps);
+        circleImageSteps.addSteps(R.drawable.ic_camera_enhance_white_24dp, R.drawable.ic_format_list_bulleted_white_24dp
+                , R.drawable.ic_check_white_24dp);
+
+        prvBtn = findViewById(R.id.previous);
+        nextBtn = findViewById(R.id.next);
+
+        prv1Btn = findViewById(R.id.previous1);
+        next1Btn = findViewById(R.id.next1);
+
+        finishbtn = findViewById(R.id.finish);
+
+        bookDetails = findViewById(R.id.bookDetails);
+        swView = findViewById(R.id.bookPic);
+        sampleView = findViewById(R.id.sampleBookPic);
+
+        sampleApprovalView = findViewById(R.id.sampleApprovalImage);
+
+        sampleAd = findViewById(R.id.sampleAd);
+
+        sampleTitle = findViewById(R.id.sampleTitle);
+        sampleAuthor = findViewById(R.id.sampleAuthor);
+        sampleDegree = findViewById(R.id.sampleDegree);
+        sampleSpecial = findViewById(R.id.sampleSpecial);
+        sampleMrp = findViewById(R.id.sampleMrp);
+        samplePrice = findViewById(R.id.samplePrice);
+        sampleSellerMsg = findViewById(R.id.sampleSellerMsg);
+
+        adLookLike = findViewById(R.id.adLookLike);
+
+        imageLookLike = findViewById(R.id.imageLookLike);
+
+        sharedPreferences = SellTestActivity.this.getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+
+        if ((sharedPreferences.contains(city)) & (sharedPreferences.contains(name))) {
+
+            String userCityL = sharedPreferences.getString(city, "");
+            TextView sampleLocation = findViewById(R.id.sampleLocation);
+            sampleLocation.setText(userCityL);
+
+            String userNameL = sharedPreferences.getString(name, "");
+            TextView sampleUser = findViewById(R.id.sampleUser);
+            sampleUser.setText(userNameL);
+
+        }
+
+
+        prvBtn.setVisibility(View.GONE);
+        prv1Btn.setVisibility(View.GONE);
+        next1Btn.setVisibility(View.GONE);
+        sampleAd.setVisibility(View.GONE);
+
+        finishbtn.setVisibility(View.GONE);
+
+        adLookLike.setVisibility(View.GONE);
+
+        sampleApprovalView.setVisibility(View.GONE);
+        imageLookLike.setVisibility(View.GONE);
+
+        nextBtn.setVisibility(View.GONE);
+
+        bookDetails.setVisibility(View.GONE);
+        sampleAd = findViewById(R.id.sampleAd);
 
         firebaseStorage = FirebaseStorage.getInstance();
 
@@ -103,7 +200,7 @@ public class SellActivity extends AppCompatActivity {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
 
-        swView = findViewById(R.id.img1);
+        //swView = findViewById(R.id.img1);
 
         swView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +240,7 @@ public class SellActivity extends AppCompatActivity {
         btnLHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SellActivity.this, HomeActivity.class);
+                Intent intent = new Intent(SellTestActivity.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -152,7 +249,7 @@ public class SellActivity extends AppCompatActivity {
         btnLAnotherAd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SellActivity.this, SellActivity.class);
+                Intent intent = new Intent(SellTestActivity.this, SellTestActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -169,7 +266,7 @@ public class SellActivity extends AppCompatActivity {
         specialization = findViewById(R.id.etSpecialization);
         mrp = findViewById(R.id.etMrp);
         price = findViewById(R.id.etExpectedPrice);
-        placead = findViewById(R.id.btnPlaceAd);
+        placead = findViewById(R.id.finish);
         sellerMsg = findViewById(R.id.etNoteToBuyer);
 
         Long tsLong = System.currentTimeMillis()/1000;
@@ -199,9 +296,10 @@ public class SellActivity extends AppCompatActivity {
                                 progressDialog.setMessage("Placing your ad...");
                                 progressDialog.show();
 
-                                swView.setDrawingCacheEnabled(true);
-                                swView.buildDrawingCache();
-                                Bitmap bitmap1 = swView.getDrawingCache();
+                                sampleApprovalView.setDrawingCacheEnabled(true);
+                                sampleApprovalView.buildDrawingCache();
+                                Bitmap bitmap1 = sampleApprovalView.getDrawingCache();
+
                                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                                 bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                                 byte[] data1 = baos.toByteArray();
@@ -211,7 +309,7 @@ public class SellActivity extends AppCompatActivity {
                                 uploadTask.addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(SellActivity.this, "Failed to upload image and ad!!!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SellTestActivity.this, "Failed to upload image and ad!!!", Toast.LENGTH_SHORT).show();
                                         progressDialog.dismiss();
                                     }
                                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -260,7 +358,7 @@ public class SellActivity extends AppCompatActivity {
                                                 }).addOnFailureListener(new OnFailureListener() {
                                                     @Override
                                                     public void onFailure(@NonNull Exception e) {
-                                                        Toast.makeText(SellActivity.this, "Check your internet connection", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(SellTestActivity.this, "Check your internet connection", Toast.LENGTH_SHORT).show();
                                                         progressDialog.dismiss();
                                                     }
                                                 });
@@ -273,16 +371,121 @@ public class SellActivity extends AppCompatActivity {
                         });
 
                     } else {
-                        Toast.makeText(SellActivity.this, "location unavailable", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SellTestActivity.this, "location unavailable", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
                     }
                 } else {
-                    Toast.makeText(SellActivity.this, "location unavailable", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SellTestActivity.this, "location unavailable", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                 }
             }
         });
+
     }
+
+    public void onClick(View view) {
+
+        switch (view.getId()) {
+
+            case R.id.next:
+                circleImageSteps.nextStep();
+                prvBtn.setVisibility(View.VISIBLE);
+                swView.setVisibility(View.INVISIBLE);
+                bookDetails.setVisibility(View.VISIBLE);
+                prv1Btn.setVisibility(View.GONE);
+                nextBtn.setVisibility(View.GONE);
+                adLookLike.setVisibility(View.GONE);
+                sampleApprovalView.setVisibility(View.GONE);
+                imageLookLike.setVisibility(View.GONE);
+                next1Btn.setVisibility(View.VISIBLE);
+
+                break;
+
+            case R.id.next1:
+
+                if ((title.getText().toString().equals("")) && (author.getText().toString().equals("")) && (degree.getText().toString().equals("")) && (specialization.getText().toString().equals("")) && (mrp.getText().toString().equals("")) && (price.getText().toString().equals("")) && (sellerMsg.getText().toString().equals(""))){
+
+                    Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+
+                }else{
+
+                    circleImageSteps.nextStep();
+                    next1Btn.setVisibility(View.GONE);
+                    prvBtn.setVisibility(View.GONE);
+                    bookDetails.setVisibility(View.GONE);
+                    swView.setVisibility(View.INVISIBLE);
+                    sampleApprovalView.setVisibility(View.VISIBLE);
+                    imageLookLike.setVisibility(View.VISIBLE);
+
+                    adLookLike.setVisibility(View.VISIBLE);
+                    finishbtn.setVisibility(View.VISIBLE);
+                    sampleAd.setVisibility(View.VISIBLE);
+                    prv1Btn.setVisibility(View.VISIBLE);
+
+                    final String ltitle = title.getText().toString();
+                    final String lauthor = author.getText().toString();
+                    final String ldegree = degree.getText().toString();
+                    final String lspecialization = specialization.getText().toString();
+                    final String lmrp = mrp.getText().toString();
+                    final String lprice = price.getText().toString();
+                    final String lsellerMsg = sellerMsg.getText().toString();
+
+
+                    sampleTitle.setText(ltitle);
+                    sampleAuthor.setText(lauthor);
+                    sampleDegree.setText(ldegree);
+                    sampleSpecial.setText(lspecialization);
+                    sampleMrp.setText("₹" + lmrp);
+                    samplePrice.setText("₹" + lprice);
+                    sampleSellerMsg.setText(lsellerMsg);
+
+                    sampleMrp.setPaintFlags(sampleMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+                }
+
+                break;
+
+            case R.id.previous:
+                circleImageSteps.previousStep();
+                sampleAd.setVisibility(View.GONE);
+                bookDetails.setVisibility(View.GONE);
+                prvBtn.setVisibility(View.GONE);
+                finishbtn.setVisibility(View.GONE);
+                next1Btn.setVisibility(View.GONE);
+                prv1Btn.setVisibility(View.GONE);
+                adLookLike.setVisibility(View.GONE);
+                sampleApprovalView.setVisibility(View.GONE);
+                imageLookLike.setVisibility(View.GONE);
+
+                swView.setVisibility(View.VISIBLE);
+                nextBtn.setVisibility(View.VISIBLE);
+
+                break;
+
+            case R.id.previous1:
+                circleImageSteps.previousStep();
+                prv1Btn.setVisibility(View.GONE);
+                finishbtn.setVisibility(View.GONE);
+                swView.setVisibility(View.INVISIBLE);
+                sampleAd.setVisibility(View.GONE);
+                adLookLike.setVisibility(View.GONE);
+                sampleApprovalView.setVisibility(View.GONE);
+                imageLookLike.setVisibility(View.GONE);
+
+                bookDetails.setVisibility(View.VISIBLE);
+                prvBtn.setVisibility(View.VISIBLE);
+                next1Btn.setVisibility(View.VISIBLE);
+
+                break;
+
+            case R.id.finish:
+                Toast.makeText(this, "Uploading ad!!!", Toast.LENGTH_SHORT).show();
+                break;
+
+        }
+
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -297,6 +500,12 @@ public class SellActivity extends AppCompatActivity {
             case CAPTURE_CAMERA:
 
                 swView.setImageURI(Uri.parse("file:///" + filen));
+
+                nextBtn.setVisibility(View.VISIBLE);
+
+                sampleApprovalView.setImageURI(Uri.parse("file:///" + filen));
+
+                sampleView.setImageURI(Uri.parse("file:///" + filen));
                 break;
 
 
@@ -315,6 +524,12 @@ public class SellActivity extends AppCompatActivity {
                     inputStream.close();
                     swView.setImageURI(Uri.parse("file:///" + filen));//fresco library
 
+                    nextBtn.setVisibility(View.VISIBLE);
+
+                    sampleApprovalView.setImageURI(Uri.parse("file:///" + filen));//fresco library
+
+                    sampleView.setImageURI(Uri.parse("file:///" + filen));//fresco library
+
                 } catch (Exception e) {
 
                     Log.e("", "Error while creating temp file", e);
@@ -326,19 +541,19 @@ public class SellActivity extends AppCompatActivity {
 
 
     private void checkPermissionCA(){
-        int permissionCheck = ContextCompat.checkSelfPermission(SellActivity.this, android.Manifest.permission.CAMERA);
+        int permissionCheck = ContextCompat.checkSelfPermission(SellTestActivity.this, android.Manifest.permission.CAMERA);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
-                    SellActivity.this, new String[]{android.Manifest.permission.CAMERA}, MY_REQUEST_CAMERA);
+                    SellTestActivity.this, new String[]{android.Manifest.permission.CAMERA}, MY_REQUEST_CAMERA);
         } else {
             catchPhoto();
         }
     }
     private void checkPermissionCW(){
-        int permissionCheck = ContextCompat.checkSelfPermission(SellActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permissionCheck = ContextCompat.checkSelfPermission(SellTestActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
-                    SellActivity.this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_REQUEST_WRITE_CAMERA);
+                    SellTestActivity.this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_REQUEST_WRITE_CAMERA);
         } else {
             checkPermissionCA();
         }
@@ -352,28 +567,28 @@ public class SellActivity extends AppCompatActivity {
                 intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, photocUri);
                 startActivityForResult(intent, CAPTURE_CAMERA);
             } catch (ActivityNotFoundException e) {
-                Toast.makeText(SellActivity.this, "please check your sdcard status", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SellTestActivity.this, "please check your sdcard status", Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(SellActivity.this, "please check your sdcard status", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SellTestActivity.this, "please check your sdcard status", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void checkPermissionRG(){
-        int permissionCheck = ContextCompat.checkSelfPermission(SellActivity.this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
+        int permissionCheck = ContextCompat.checkSelfPermission(SellTestActivity.this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
-                    SellActivity.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, MY_REQUEST_READ_GALLERY);
+                    SellTestActivity.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, MY_REQUEST_READ_GALLERY);
         } else {
             checkPermissionWG();
         }
     }
     private void checkPermissionWG(){
-        int permissionCheck = ContextCompat.checkSelfPermission(SellActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permissionCheck = ContextCompat.checkSelfPermission(SellTestActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
         // int permissionCheck2 = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
-                    SellActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_REQUEST_WRITE_GALLERY);
+                    SellTestActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_REQUEST_WRITE_GALLERY);
         } else {
             getPhotos();
         }
@@ -422,4 +637,5 @@ public class SellActivity extends AppCompatActivity {
                 break;
         }
     }
+
 }

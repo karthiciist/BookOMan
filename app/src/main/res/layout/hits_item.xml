@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:algolia="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout">
+
+            <LinearLayout
+                android:id="@+id/product_image_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="120dp"
+                android:minWidth="100dp">
+
+                <ImageView
+                    android:id="@+id/product_image"
+                    android:layout_width="100dp"
+                    android:layout_height="140dp"
+                    android:padding="8dp"
+                    android:src="@drawable/product_placeholder"
+                    algolia:attribute='@{"downloadUri"}' />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <TextView
+                    android:padding="3dp"
+                    android:text="Title"
+                    android:textColor="@color/grey"
+                    android:id="@+id/title_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:textSize="15sp"
+                    algolia:attribute='@{"title"}'
+                    algolia:highlightColor='@{@color/colorAccentSoft}'
+                    tools:text="Title"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:text="Author"
+                    android:textSize="15sp"
+                    android:id="@+id/author_name"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    algolia:attribute='@{"author"}'
+                    algolia:highlightColor='@{@color/colorAccentSoft}' />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+
+
+                        android:padding="3dp"
+                        android:layout_marginRight="5dp"
+                        android:id="@+id/degree_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="Degree"
+                        android:textSize="15sp"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        algolia:attribute='@{"degree"}'
+                        algolia:highlightColor='@{@color/colorAccentSoft}'
+                        tools:text="Degree" />
+
+                    <TextView
+                        android:id="@+id/special_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Specialization"
+                        android:textSize="15sp"
+                        algolia:attribute='@{"specialization"}'
+                        algolia:highlightColor='@{@color/colorAccentSoft}'
+                        tools:text="Specialization"
+                        android:padding="3dp"/>
+
+                </LinearLayout>
+
+                <TextView
+
+                    android:padding="3dp"
+                    android:id="@+id/location_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Location"
+                    android:textColor="@color/grey"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    algolia:attribute='@{"location"}'
+                    algolia:highlightColor='@{@color/colorAccentSoft}'
+                    tools:text="Location" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+
+                        android:padding="3dp"
+                        android:id="@+id/mrp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="MRP"
+                        android:textSize="15sp"
+                        android:textColor="@color/red"
+                        android:textStyle="bold"
+                        algolia:attribute='@{"mrp"}'
+                        algolia:highlightColor='@{@color/colorAccentSoft}'
+                        tools:text="MRP"
+                        android:foreground="@drawable/stikethrough"
+                        android:layout_marginRight="5dp"/>
+
+                    <TextView
+                        android:id="@+id/price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Price"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        algolia:attribute='@{"price"}'
+                        algolia:highlightColor='@{@color/colorAccentSoft}'
+                        tools:text="Price"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+</layout>

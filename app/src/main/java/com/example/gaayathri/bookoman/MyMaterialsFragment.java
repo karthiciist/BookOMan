@@ -3,37 +3,26 @@ package com.example.gaayathri.bookoman;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Paint;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.app.Fragment;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.gaayathri.bookoman.model.Note;
 import com.example.gaayathri.bookoman.viewholder.NoteViewHolder;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -54,17 +43,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.like.LikeButton;
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
-
-
 public class MyMaterialsFragment extends Fragment {
-
-    private static final String TAG = "MyMaterialsActivity";
 
     private RecyclerView recyclerView;
     private FirestoreRecyclerAdapter adapter;
@@ -76,8 +58,6 @@ public class MyMaterialsFragment extends Fragment {
     private FirebaseAuth firebaseAuth;
 
     private ProgressDialog progressDialog;
-    private DrawerLayout mDrawerLayout;
-    private Toolbar toolbar;
 
     Dialog myDialog;
     Dialog myDialog2;
@@ -107,6 +87,8 @@ public class MyMaterialsFragment extends Fragment {
         View view;
 
         view = inflater.inflate(R.layout.fragment_my_materials, container, false);
+
+        setRetainInstance(true);
 
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
@@ -220,7 +202,10 @@ public class MyMaterialsFragment extends Fragment {
 
                 downloadUri = noteMyMaterials.getDownloadUri();
 
-                Picasso.with(getActivity()).load(downloadUri).fit().centerCrop().into(holder.bookpic);
+                final RequestOptions options = new RequestOptions();
+                options.centerCrop();
+
+                Glide.with(getActivity()).load(downloadUri).apply(options).into(holder.bookpic);
 
                 holder.onclicklinearLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -272,7 +257,7 @@ public class MyMaterialsFragment extends Fragment {
 
                         mrpExp.setPaintFlags(mrpExp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-                        Picasso.with(getActivity()).load(downloadUri).fit().centerCrop().into(bookpic);
+                        Glide.with(getActivity()).load(noteMyMaterials.getDownloadUri()).apply(options).into(bookpic);
 
                         myDialog.show();
 
@@ -280,7 +265,7 @@ public class MyMaterialsFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 ImageView ivExpandedPic = myDialog2.findViewById(R.id.ivImage);
-                                Picasso.with(getActivity()).load(downloadUri).fit().into(ivExpandedPic);
+                                Glide.with(getActivity()).load(noteMyMaterials.getDownloadUri()).apply(options).into(ivExpandedPic);
                                 myDialog2.show();
                             }
                         });
@@ -394,7 +379,7 @@ public class MyMaterialsFragment extends Fragment {
 
         String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-        StorageReference imageReference = storageReference.child(firebaseAuth.getCurrentUser().getEmail()).child("bookimages").child(entryName);
+        StorageReference imageReference = storageReference.child(firebaseAuth.getCurrentUser().getEmail()).child("bookimages").child("thumb_" + entryName);
 
         imageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

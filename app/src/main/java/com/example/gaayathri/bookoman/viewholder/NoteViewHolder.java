@@ -8,12 +8,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.gaayathri.bookoman.R;
+import com.victor.loading.book.BookLoading;
 
 public class NoteViewHolder extends RecyclerView.ViewHolder {
 
     public TextView title, author, degree, specialization, location, mrp, price;
     public ImageView bookpic;
     public LinearLayout onclicklinearLayout;
+
+    BookLoading bookLoading1;
 
     public NoteViewHolder(View view) {
         super(view);
@@ -30,5 +33,8 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         onclicklinearLayout = view.findViewById(R.id.llOnClick);
 
         mrp.setPaintFlags(mrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+        bookLoading1 = view.findViewById(R.id.bookloading1);
+        bookLoading1.start();
     }
 }

@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ImageStep="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.gaayathri.bookoman.SellTestActivity">
+
+    <com.bluehomestudio.steps.CircleImageSteps
+        android:id="@+id/cis_steps"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        ImageStep:step_size="40dp"
+        ImageStep:active_step_color="@color/colorAccent"
+        ImageStep:inActive_step_color="@android:color/darker_gray"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/cis_steps"
+        android:layout_above="@+id/btnsLL">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:layout_height="400dp"
+                    android:layout_width="300dp"
+                    fresco:actualImageScaleType="centerCrop"
+                    android:layout_marginTop="30dp"
+                    android:id="@+id/bookPic"
+                    fresco:roundAsCircle="false"
+                    fresco:roundedCornerRadius="1dp"
+                    fresco:roundingBorderWidth="2dp"
+                    fresco:backgroundImage="@drawable/add_imge"/>
+
+                <LinearLayout
+                    android:id="@+id/bookDetails"
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:context="com.example.gaayathri.logindemo.SellActivity"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="Please enter the details of your study material"
+                        android:textAlignment="center"
+                        android:textSize="20sp"/>
+
+
+                    <EditText
+                        android:id="@+id/etMaterialTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/text_view_border"
+                        android:hint="Title"
+                        android:inputType="textCapWords"
+                        android:padding="10dp"
+                        android:textAlignment="center" />
+
+                    <EditText
+                        android:id="@+id/etAuthor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/text_view_border"
+                        android:hint="Author"
+                        android:inputType="textCapWords"
+                        android:padding="10dp"
+                        android:textAlignment="center" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center">
+
+                        <EditText
+                            android:id="@+id/etMrp"
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:textAlignment="center"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/text_view_border"
+                            android:hint="MRP"
+                            android:padding="10dp"
+                            android:layout_weight="1"
+                            android:inputType="number"/>
+
+                        <EditText
+                            android:id="@+id/etExpectedPrice"
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:textAlignment="center"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/text_view_border"
+                            android:hint="Asking price"
+                            android:padding="10dp"
+                            android:layout_weight="1"
+                            android:inputType="number"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center">
+
+                        <EditText
+                            android:id="@+id/etDegree"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/text_view_border"
+                            android:hint="Degree"
+                            android:inputType="textCapCharacters"
+                            android:padding="10dp"
+                            android:textAlignment="center" />
+
+                        <EditText
+                            android:id="@+id/etSpecialization"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/text_view_border"
+                            android:hint="Specialization"
+                            android:inputType="textCapWords"
+                            android:padding="10dp"
+                            android:textAlignment="center" />
+
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/etNoteToBuyer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/text_view_border"
+                        android:hint="Your message to buyer..."
+                        android:inputType="textCapSentences"
+                        android:padding="10dp"
+                        android:textAlignment="center" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/barCodeScannerBtn"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:background="@color/white"
+                            android:src="@drawable/barcode"
+                            android:text="Scan barcode"
+                            android:padding="5dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:scaleType="fitCenter"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="2dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Scan Barcode"
+                            android:padding="5dp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <ScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/adLookLike"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="This is how your ad will look like"
+                            android:textAlignment="center"
+                            android:layout_gravity="center"
+                            android:textSize="20sp"
+                            android:gravity="center"
+                            android:layout_marginBottom="20dp"
+                            android:padding="5dp"/>
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:foregroundGravity="center"
+                            android:elevation="10dp"
+                            android:padding="2dp">
+
+                            <LinearLayout
+                                android:id="@+id/sampleAd"
+                                xmlns:android="http://schemas.android.com/apk/res/android"
+                                xmlns:tools="http://schemas.android.com/tools"
+                                android:layout_width="350dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:elevation="10dp"
+                                android:gravity="center">
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <com.facebook.drawee.view.SimpleDraweeView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="200dp"
+                                        fresco:actualImageScaleType="centerCrop"
+                                        android:id="@+id/sampleBookPic"
+                                        fresco:roundAsCircle="false"
+                                        fresco:roundedCornerRadius="1dp"
+                                        fresco:roundingBorderWidth="2dp"
+                                        android:layout_marginTop="0dp"
+                                        android:layout_marginLeft="0dp"
+                                        android:layout_marginRight="0dp"/>
+
+                                    <TextView
+                                        android:id="@+id/sampleTitle"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginStart="8dp"
+                                        android:textAlignment="center"
+                                        android:text="Title"
+                                        android:textSize="20sp"
+                                        android:textStyle="bold"
+                                        android:layout_gravity="center_horizontal"
+                                        android:layout_marginTop="10dp"/>
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:layout_gravity="center"
+                                        android:layout_margin="5dp">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginEnd="8dp"
+                                            android:layout_marginStart="8dp"
+                                            android:text="written by"
+                                            android:textSize="10sp"
+                                            android:layout_gravity="center" />
+
+                                        <TextView
+                                            android:id="@+id/sampleAuthor"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Author"
+                                            android:textSize="15sp"
+                                            android:textStyle="italic"
+                                            android:layout_gravity="center_horizontal" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="horizontal"
+                                        android:layout_gravity="center_horizontal"
+                                        android:gravity="center">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginEnd="3dp"
+                                            android:layout_marginStart="3dp"
+                                            android:text="for"
+                                            android:textSize="18sp"
+                                            android:layout_gravity="center" />
+
+                                        <TextView
+                                            android:id="@+id/sampleDegree"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginEnd="3dp"
+                                            android:layout_marginStart="3dp"
+                                            android:text="Degree"
+                                            android:textSize="20sp"
+                                            android:textStyle="bold"
+                                            android:layout_gravity="center" />
+                                        <TextView
+                                            android:id="@+id/sampleSpecial"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginEnd="3dp"
+                                            android:layout_marginStart="3dp"
+                                            android:text="Specialization"
+                                            android:textSize="18sp"
+                                            android:layout_gravity="center" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:layout_gravity="center"
+                                        android:layout_margin="5dp">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginEnd="8dp"
+                                            android:layout_marginStart="8dp"
+                                            android:text="available at"
+                                            android:textSize="18sp"
+                                            android:layout_gravity="center" />
+
+                                        <TextView
+                                            android:id="@+id/sampleLocation"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginEnd="3dp"
+                                            android:layout_marginStart="3dp"
+                                            android:text="Location"
+                                            android:textSize="20sp"
+                                            android:textStyle="bold"
+                                            android:layout_gravity="center_horizontal" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:orientation="horizontal"
+                                        android:layout_margin="10dp"
+                                        android:layout_gravity="center_horizontal"
+                                        android:gravity="center">
+
+                                        <TextView
+                                            android:id="@+id/sampleMrp"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginEnd="8dp"
+                                            android:layout_marginStart="8dp"
+                                            android:text="MRP"
+                                            android:textSize="15sp"
+                                            android:textStyle="bold"
+                                            android:layout_gravity="center"
+                                            android:textColor="@color/red"/>
+                                        <TextView
+                                            android:id="@+id/samplePrice"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginEnd="8dp"
+                                            android:layout_marginStart="8dp"
+                                            android:text="Price"
+                                            android:textSize="20sp"
+                                            android:textStyle="bold"
+                                            android:layout_gravity="center" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:layout_gravity="center">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Posted by  "
+                                            android:textSize="15sp"
+                                            android:layout_gravity="center_horizontal" />
+
+                                        <TextView
+                                            android:id="@+id/sampleUser"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textStyle="italic"
+                                            android:textColor="@color/black"
+                                            android:textSize="15sp"
+                                            android:layout_gravity="center_horizontal" />
+
+                                    </LinearLayout>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:paddingTop="5dp"
+                                        android:layout_margin="5dp"
+                                        android:text="Message from seller"
+                                        android:layout_gravity="center"
+                                        android:textStyle="bold"/>
+
+                                    <TextView
+                                        android:id="@+id/sampleSellerMsg"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_gravity="center"/>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:layout_marginTop="10dp"
+                                        android:layout_marginBottom="10dp"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginRight="10dp"
+                                        android:layout_gravity="center_horizontal"
+                                        android:padding="5dp">
+
+                                        <Button
+                                            android:id="@+id/btnCallSeller"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginRight="5dp"
+                                            android:layout_marginBottom="2dp"
+                                            android:layout_marginLeft="5dp"
+                                            android:layout_marginTop="2dp"
+                                            android:layout_weight="1"
+                                            android:background="@drawable/google_button"
+                                            android:text="Call seller"
+                                            android:padding="5dp"/>
+
+                                        <Button
+                                            android:id="@+id/btnChatSeller"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="5dp"
+                                            android:layout_marginBottom="2dp"
+                                            android:layout_marginTop="2dp"
+                                            android:layout_marginRight="5dp"
+                                            android:layout_weight="1"
+                                            android:background="@drawable/button_background"
+                                            android:text="Chat with seller"
+                                            android:textColor="@android:color/white" />
+                                    </LinearLayout>
+
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="10dp"
+                            android:layout_gravity="center"
+                            android:gravity="center">
+
+                            <TextView
+                                android:id="@+id/imageLookLike"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="This is how your book image will appear"
+                                android:textAlignment="center"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:textSize="20sp"
+                                android:layout_marginBottom="20dp"
+                                android:padding="5dp"/>
+
+                            <android.support.v7.widget.CardView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:foregroundGravity="center"
+                                android:elevation="10dp"
+                                android:padding="2dp"
+                                android:layout_gravity="center">
+
+                                <com.facebook.drawee.view.SimpleDraweeView
+                                    android:layout_height="400dp"
+                                    android:layout_width="300dp"
+                                    fresco:actualImageScaleType="centerCrop"
+                                    android:id="@+id/sampleApprovalImage"
+                                    fresco:roundAsCircle="false"
+                                    android:layout_gravity="center"
+                                    fresco:roundedCornerRadius="1dp"
+                                    fresco:roundingBorderWidth="2dp"
+                                    fresco:backgroundImage="@drawable/add_imge"/>
+
+                            </android.support.v7.widget.CardView>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </ScrollView>
+
+            </RelativeLayout>
+
+        </FrameLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/btnsLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_gravity="center_horizontal"
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/previous"
+            android:background="@drawable/google_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:onClick="onClick"
+            android:drawableLeft="@drawable/ic_arrow_back_black_24dp"
+            android:text="Previous"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:paddingLeft="30dp"/>
+        <Button
+            android:id="@+id/previous1"
+            android:background="@drawable/google_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:drawableLeft="@drawable/ic_arrow_back_black_24dp"
+            android:onClick="onClick"
+            android:text="Previous"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:paddingLeft="30dp"/>
+
+
+        <Button
+            android:id="@+id/next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/google_button"
+            android:textColor="@android:color/black"
+            android:layout_alignParentBottom="true"
+            android:drawableRight="@drawable/ic_arrow_forward_black_24dp"
+            android:onClick="onClick"
+            android:text="Next"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:paddingRight="30dp"/>
+        <Button
+            android:id="@+id/next1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/google_button"
+            android:textColor="@android:color/black"
+            android:layout_alignParentBottom="true"
+            android:onClick="onClick"
+            android:drawableRight="@drawable/ic_arrow_forward_black_24dp"
+            android:text="Next"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:paddingRight="30dp"/>
+
+        <Button
+            android:id="@+id/finish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background"
+            android:textColor="@android:color/white"
+            android:layout_alignParentBottom="true"
+            android:onClick="onClick"
+            android:text="Finish"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+</RelativeLayout >

@@ -4,35 +4,23 @@ package com.example.gaayathri.bookoman;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Paint;
-import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.gaayathri.bookoman.model.Note;
 import com.example.gaayathri.bookoman.viewholder.NoteViewHolder;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -40,7 +28,6 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -53,8 +40,6 @@ import com.google.firebase.firestore.SetOptions;
 import com.like.LikeButton;
 import com.like.OnAnimationEndListener;
 import com.like.OnLikeListener;
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,6 +70,8 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
         View view;
 
         view = inflater.inflate(R.layout.fragment_my_favorites, container, false);
+
+        setRetainInstance(true);
 
         myDialog = new Dialog(getActivity());
         myDialog.setContentView(R.layout.expandeddialog);
@@ -287,7 +274,10 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
                 holder.price.setText(note.getPrice());
                 holder.location.setText(note.getLocation());
 
-                Picasso.with(getActivity()).load(note.getDownloadUri()).fit().centerCrop().into(holder.bookpic);
+                final RequestOptions options = new RequestOptions();
+                options.centerCrop();
+
+                Glide.with(getActivity()).load(note.getDownloadUri()).apply(options).into(holder.bookpic);
 
                 holder.onclicklinearLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -322,7 +312,7 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
 
                         mrpFav.setPaintFlags(mrpFav.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-                        Picasso.with(getActivity()).load(note.getDownloadUri()).fit().centerCrop().into(bookpic);
+                        Glide.with(getActivity()).load(note.getDownloadUri()).apply(options).into(bookpic);
 
                         myDialog.show();
 
@@ -330,7 +320,7 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
                             @Override
                             public void onClick(View v) {
                                 ImageView ivExpandedPic = myDialog2.findViewById(R.id.ivImage);
-                                Picasso.with(getActivity()).load(note.getDownloadUri()).fit().into(ivExpandedPic);
+                                Glide.with(getActivity()).load(note.getDownloadUri()).apply(options).into(ivExpandedPic);
                                 myDialog2.show();
                             }
                         });

@@ -24,14 +24,29 @@
             android:layout_marginLeft="0dp"
             android:layout_marginRight="0dp">
 
-            <ImageView
-                android:id="@+id/ivBookPic"
+
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="0dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginRight="0dp"/>
+                android:layout_height="match_parent">
+
+                <com.victor.loading.book.BookLoading
+                    android:id="@+id/bookloading"
+                    android:layout_width="150dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"/>
+
+                <ImageView
+                    android:id="@+id/ivBookPic"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"/>
+
+            </FrameLayout>
+
+
 
             <com.like.LikeButton
                 android:id="@+id/heart_button"
@@ -51,6 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:textAlignment="center"
             android:text="Title"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -70,7 +86,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:text="written by"
-                android:textSize="18sp"
+                android:textSize="10sp"
                 android:layout_gravity="center" />
 
             <TextView
@@ -78,8 +94,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Author"
-                android:textSize="20sp"
-                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textStyle="italic"
                 android:layout_gravity="center_horizontal" />
 
         </LinearLayout>

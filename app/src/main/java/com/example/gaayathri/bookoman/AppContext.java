@@ -30,6 +30,7 @@ public class AppContext extends Application {
 
     private static AppContext instance;
 
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -42,6 +43,7 @@ public class AppContext extends Application {
         instance = this;
 
         initChatSDK();
+
     }
 
     public void initChatSDK() {

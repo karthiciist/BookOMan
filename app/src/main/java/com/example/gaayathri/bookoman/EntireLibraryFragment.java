@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.gaayathri.bookoman.model.Note;
 import com.example.gaayathri.bookoman.viewholder.NoteViewHolder;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -42,7 +44,7 @@ import com.google.firebase.firestore.SetOptions;
 import com.like.LikeButton;
 import com.like.OnAnimationEndListener;
 import com.like.OnLikeListener;
-import com.squareup.picasso.Picasso;
+import com.victor.loading.book.BookLoading;
 
 import org.chat21.android.core.ChatManager;
 import org.chat21.android.core.users.models.ChatUser;
@@ -73,6 +75,9 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
     String entryName;
     String downloadUri;
 
+    BookLoading bookLoading;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -81,13 +86,14 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
 
         view = inflater.inflate(R.layout.fragment_entire_library, container, false);
 
+        setRetainInstance(true);
+
         // Initiating dialog windows
         myDialog = new Dialog(getActivity());
         myDialog.setContentView(R.layout.expandeddialog);
 
         myDialog2 = new Dialog(getActivity());
         myDialog2.setContentView(R.layout.imageexpanded);
-
 
         // Initiating views in dialogs
         TextView userName = myDialog.findViewById(R.id.userExp);
@@ -294,7 +300,7 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
 
     private void fabClicked() {
 
-        Intent intent = new Intent(getActivity(), SellActivity.class);
+        Intent intent = new Intent(getActivity(), SellTestActivity.class);
         startActivity(intent);
 
     }
@@ -320,8 +326,10 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
                 holder.price.setText(note.getPrice());
                 holder.location.setText(note.getLocation());
 
-                Picasso.with(getActivity()).load(note.getDownloadUri()).fit().centerCrop().into(holder.bookpic);
+                final RequestOptions options = new RequestOptions();
+                options.centerCrop();
 
+                Glide.with(getActivity()).load(note.getDownloadUri()).apply(options).into(holder.bookpic);
 
                 holder.onclicklinearLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -329,6 +337,9 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
 
                         progressDialog.setMessage("Loading your favorite material...");
                         progressDialog.show();
+
+                        bookLoading = myDialog.findViewById(R.id.bookloading);
+                        bookLoading.start();
 
                         TextView titleExp = myDialog.findViewById(R.id.titleExp);
                         TextView authExp = myDialog.findViewById(R.id.authorExp);
@@ -364,7 +375,7 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
                             }
                         });
 
-                        Picasso.with(getActivity()).load(note.getDownloadUri()).fit().centerCrop().into(bookpic);
+                        Glide.with(getActivity()).load(note.getDownloadUri()).apply(options).into(bookpic);
 
                         entryName = note.getEntryName();
                         downloadUri = note.getDownloadUri();
@@ -379,7 +390,7 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
                             @Override
                             public void onClick(View v) {
                                 ImageView ivExpandedPic = myDialog2.findViewById(R.id.ivImage);
-                                Picasso.with(getActivity()).load(note.getDownloadUri()).fit().into(ivExpandedPic);
+                                Glide.with(getActivity()).load(note.getDownloadUri()).apply(options).into(ivExpandedPic);
                                 myDialog2.show();
                             }
                         });
@@ -397,6 +408,7 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
 
                     }
                 });
+
             }
 
             @Override
