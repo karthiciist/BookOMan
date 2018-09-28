@@ -77,7 +77,6 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
 
     BookLoading bookLoading;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -289,6 +288,7 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
     public void onStop() {
         super.onStop();
         adapter.stopListening();
+        progressDialog.dismiss();
     }
 
     @Override
@@ -299,6 +299,10 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
     }
 
     private void fabClicked() {
+
+        progressDialog = new ProgressDialog(getActivity());
+
+        progressDialog.setMessage("Loading...");
 
         Intent intent = new Intent(getActivity(), SellTestActivity.class);
         startActivity(intent);
@@ -335,7 +339,7 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
                     @Override
                     public void onClick(View v) {
 
-                        progressDialog.setMessage("Loading your favorite material...");
+                        progressDialog.setMessage("Loading...");
                         progressDialog.show();
 
                         bookLoading = myDialog.findViewById(R.id.bookloading);

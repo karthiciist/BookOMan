@@ -1,7 +1,9 @@
 package com.example.gaayathri.bookoman;
 
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,6 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import org.chat21.android.core.ChatManager;
@@ -19,10 +24,20 @@ import org.chat21.android.core.users.models.ChatUser;
 import org.chat21.android.core.users.models.IChatUser;
 import org.chat21.android.ui.ChatUI;
 
+import static com.example.gaayathri.bookoman.EntryActivity.degree;
+import static com.example.gaayathri.bookoman.HomeFragment.city;
+import static com.example.gaayathri.bookoman.HomeFragment.mypreference;
+
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth firebaseAuth;
+
+    TextView navUserName;
+    TextView navUserEmail;
+    ImageView navUserProfilePic;
+
+    SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +45,8 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        sharedpreferences = HomeActivity.this.getSharedPreferences(mypreference, Context.MODE_PRIVATE);
 
         ImageView imageView = findViewById(R.id.mysearch);
 
@@ -58,7 +75,11 @@ public class HomeActivity extends AppCompatActivity
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        IChatUser iChatUser = new ChatUser(user.getUid(), user.getDisplayName());
+        String userName = user.getDisplayName();
+        String userEmail = user.getEmail();
+        String userProfilePic = user.getPhotoUrl().toString();
+
+        IChatUser iChatUser = new ChatUser(user.getUid(), userName);
 
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
@@ -73,6 +94,15 @@ public class HomeActivity extends AppCompatActivity
         ChatUI.getInstance().setContext(this);
 
         ChatUI.getInstance().processRemoteNotification(getIntent());
+
+        TextView txtProfileName = navigationView.getHeaderView(0).findViewById(R.id.navUserName);
+        TextView txtProfileEmail = navigationView.getHeaderView(0).findViewById(R.id.navUserEmail);
+        ImageView imgProfilePic = navigationView.getHeaderView(0).findViewById(R.id.navUserProfilePic);
+
+        txtProfileName.setText(userName);
+        txtProfileEmail.setText(userEmail);
+
+        Glide.with(HomeActivity.this).load(userProfilePic).into(imgProfilePic);
 
     }
 
@@ -152,8 +182,15 @@ public class HomeActivity extends AppCompatActivity
 
     private void Logout() {
         firebaseAuth.signOut();
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.remove(city);
+        editor.remove(degree);
+        editor.commit();
+
         finish();
         startActivity(new Intent(HomeActivity.this, EntryActivity.class));
+
     }
 
 }

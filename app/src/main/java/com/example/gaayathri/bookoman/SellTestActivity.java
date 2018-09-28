@@ -33,6 +33,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.algolia.search.saas.Client;
+import com.algolia.search.saas.Index;
 import com.bluehomestudio.steps.CircleImageSteps;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -48,6 +50,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -157,6 +162,9 @@ public class SellTestActivity extends AppCompatActivity {
         adLookLike = findViewById(R.id.adLookLike);
 
         imageLookLike = findViewById(R.id.imageLookLike);
+
+        final Client client = new Client("H9P3XBA9GD", "3058fee363b2c4b8afe53e9d9eab642f");
+        Index index = client.getIndex("books");
 
         sharedPreferences = SellTestActivity.this.getSharedPreferences(mypreference, Context.MODE_PRIVATE);
 
@@ -352,6 +360,37 @@ public class SellTestActivity extends AppCompatActivity {
                                                 firestore.collection("users").document(email).collection("books").document(ltitle).set(bookMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
+
+                                                        Index index = client.initIndex("books");
+
+                                                        try {
+                                                            index.addObjectAsync(new JSONObject()
+
+                                                                    .put("title", ltitle)
+                                                                    .put("author", lauthor)
+                                                                    .put("degree", ldegree)
+                                                                    .put("specialization", lspecialization)
+                                                                    .put("mrp", "₹ " + lmrp)
+                                                                    .put("price", "₹ " + lprice)
+                                                                    .put("user", name)
+                                                                    .put("location", llocation)
+                                                                    .put("timestamp", timeStamp)
+                                                                    .put("entryName", entryName)
+                                                                    .put("sellerMsg", lsellerMsg)
+                                                                    .put("downloadUri", downloadUri)
+                                                                    .put("uid", uid)
+                                                                    .put("objectID", entryName)
+                                                                    .put("email", email), null);
+
+                                                        } catch (JSONException e) {
+
+                                                            e.printStackTrace();
+
+                                                            Toast.makeText(SellTestActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                                                        }
+
+                                                        progressDialog.dismiss();
 
                                                         myDialog.show();
                                                     }

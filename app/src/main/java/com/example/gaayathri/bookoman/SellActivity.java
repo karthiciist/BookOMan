@@ -29,6 +29,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.algolia.search.saas.Client;
+import com.algolia.search.saas.Index;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -96,6 +98,9 @@ public class SellActivity extends AppCompatActivity {
         firebaseStorage = FirebaseStorage.getInstance();
 
         storageReference = firebaseStorage.getReference();
+
+        final Client client = new Client("H9P3XBA9GD", "3058fee363b2c4b8afe53e9d9eab642f");
+        Index index = client.getIndex("books");
 
         picDialog = new Dialog(this);
         picDialog.setContentView(R.layout.selectphotodialog);
@@ -255,7 +260,36 @@ public class SellActivity extends AppCompatActivity {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
 
+                                                        Index index = client.initIndex("contacts");
+                                                        try {
+                                                            index.addObjectAsync(new JSONObject()
+
+                                                                    .put("title", ltitle)
+                                                                    .put("author", lauthor)
+                                                                    .put("degree", ldegree)
+                                                                    .put("specialization", lspecialization)
+                                                                    .put("mrp", "₹ " + lmrp)
+                                                                    .put("price", "₹ " + lprice)
+                                                                    .put("user", name)
+                                                                    .put("location", llocation)
+                                                                    .put("timestamp", timeStamp)
+                                                                    .put("entryName", entryName)
+                                                                    .put("sellerMsg", lsellerMsg)
+                                                                    .put("downloadUri", downloadUri)
+                                                                    .put("uid", uid)
+                                                                    .put("objectID", entryName)
+                                                                    .put("email", email), null);
+
+                                                        } catch (JSONException e) {
+
+                                                            e.printStackTrace();
+
+                                                        }
+
+                                                        progressDialog.dismiss();
+
                                                         myDialog.show();
+
                                                     }
                                                 }).addOnFailureListener(new OnFailureListener() {
                                                     @Override

@@ -232,6 +232,12 @@ public class InstantSearchActivity extends AppCompatActivity implements VoiceDia
         searcher.search(intent);
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        startActivity(new Intent(InstantSearchActivity.this, HomeActivity.class));
+        super.onBackPressed();  // optional depending on your needs
+    }
 
     @Override
     protected void onStop() {
@@ -399,4 +405,5 @@ public class InstantSearchActivity extends AppCompatActivity implements VoiceDia
     public void unLiked(LikeButton likeButton) {
 
     }
+
 }

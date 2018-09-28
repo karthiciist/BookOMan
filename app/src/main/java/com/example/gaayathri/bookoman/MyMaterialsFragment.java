@@ -21,6 +21,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.algolia.search.saas.Client;
+import com.algolia.search.saas.Index;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.gaayathri.bookoman.model.Note;
@@ -101,6 +104,9 @@ public class MyMaterialsFragment extends Fragment {
 
         myDialog3 = new Dialog(getActivity());
         myDialog3.setContentView(R.layout.dialog_confirm_delete);
+
+        final Client client = new Client("H9P3XBA9GD", "3058fee363b2c4b8afe53e9d9eab642f");
+        Index index = client.getIndex("books");
 
         progressDialog = new ProgressDialog(getActivity());
 
@@ -407,6 +413,12 @@ public class MyMaterialsFragment extends Fragment {
                 .collection("books")
                 .document(UpdateNoteTitle)
                 .delete();
+
+        final Client client = new Client("H9P3XBA9GD", "3058fee363b2c4b8afe53e9d9eab642f");
+
+        Index index = client.getIndex("books");
+
+        index.deleteObjectAsync(entryName, null);
 
         myDialog.dismiss();
     }
