@@ -29,6 +29,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="2dp"
             android:layout_marginTop="2dp"
+            android:onClick="onClick"
             android:background="@drawable/google_button"
             android:text="Camera" />
 
@@ -41,6 +42,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginRight="2dp"
             android:background="@drawable/button_background"
+            android:onClick="onClick"
             android:text="Gallery"
             android:textColor="@android:color/white" />
 

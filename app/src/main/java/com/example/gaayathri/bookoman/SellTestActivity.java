@@ -9,10 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -22,20 +19,21 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
 import com.bluehomestudio.steps.CircleImageSteps;
+import com.bumptech.glide.Glide;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -50,7 +48,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -59,25 +60,25 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
-public class SellTestActivity extends AppCompatActivity {
+
+public class SellTestActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     CircleImageSteps circleImageSteps;
 
-    Button prvBtn;
-    Button nextBtn;
-    Button prv1Btn;
-    Button next1Btn;
-    Button finishbtn;
-    LinearLayout bookDetails;
-    LinearLayout sampleAd;
-    private SimpleDraweeView swView;
-    private SimpleDraweeView sampleView;
-
-    private SimpleDraweeView sampleApprovalView;
+    Button prvBtn, nextBtn, prv1Btn, next1Btn, finishbtn;
+    LinearLayout firstLayout, bookDetails, sampleAd;
+    private SimpleDraweeView swView, sampleView, sampleApprovalView;
 
     public static final int MY_REQUEST_CAMERA   = 10;
     public static final int MY_REQUEST_WRITE_CAMERA   = 11;
@@ -90,22 +91,12 @@ public class SellTestActivity extends AppCompatActivity {
     public File filen = null;
 
     private FirebaseAuth firebaseAuth;
-    private EditText title;
-    private EditText author;
-    private EditText degree;
-    private EditText specialization;
-    private EditText mrp;
-    private EditText price;
-    private EditText sellerMsg;
-    private Button placead;
+    private EditText title, author, degree, spec45ialization, mrp, price, sellerMsg;
     private FirebaseFirestore firestore;
     private FirebaseStorage firebaseStorage;
     private ProgressDialog progressDialog;
-    Toolbar toolbarSell;
-    Dialog picDialog;
-    Dialog myDialog;
+    Dialog picDialog, myDialog;
     private StorageReference storageReference;
-    Uri photocUri;
     String downloadUri;
 
     SharedPreferences sharedPreferences;
@@ -114,16 +105,9 @@ public class SellTestActivity extends AppCompatActivity {
     public static final String city = "cityKey";
     public static final String name = "nameKey";
 
-    ImageView sampleImage;
-    TextView sampleTitle;
-    TextView sampleAuthor;
-    TextView sampleDegree;
-    TextView sampleSpecial;
-    TextView sampleMrp;
-    TextView samplePrice;
-    TextView sampleSellerMsg;
-    TextView adLookLike;
-    TextView imageLookLike;
+    Spinner spinner, spinner1;
+
+    TextView sampleTitle, sampleAuthor, sampleDegree, sampleSpecial, sampleMrp, samplePrice, sampleSellerMsg, adLookLike, imageLookLike;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,33 +119,38 @@ public class SellTestActivity extends AppCompatActivity {
         circleImageSteps.addSteps(R.drawable.ic_camera_enhance_white_24dp, R.drawable.ic_format_list_bulleted_white_24dp
                 , R.drawable.ic_check_white_24dp);
 
-        prvBtn = findViewById(R.id.previous);
-        nextBtn = findViewById(R.id.next);
+        picDialog = new Dialog(this);
+        picDialog.setContentView(R.layout.selectphotodialog);
 
-        prv1Btn = findViewById(R.id.previous1);
-        next1Btn = findViewById(R.id.next1);
+        myDialog = new Dialog(this);
+        myDialog.setContentView(R.layout.adplaceddialog);
 
-        finishbtn = findViewById(R.id.finish);
 
-        bookDetails = findViewById(R.id.bookDetails);
-        swView = findViewById(R.id.bookPic);
-        sampleView = findViewById(R.id.sampleBookPic);
 
-        sampleApprovalView = findViewById(R.id.sampleApprovalImage);
 
-        sampleAd = findViewById(R.id.sampleAd);
+        Spinner degreeSpinner = findViewById(R.id.etDegree);
+        Spinner specialSpinner = findViewById(R.id.etSpecialization);
 
-        sampleTitle = findViewById(R.id.sampleTitle);
-        sampleAuthor = findViewById(R.id.sampleAuthor);
-        sampleDegree = findViewById(R.id.sampleDegree);
-        sampleSpecial = findViewById(R.id.sampleSpecial);
-        sampleMrp = findViewById(R.id.sampleMrp);
-        samplePrice = findViewById(R.id.samplePrice);
-        sampleSellerMsg = findViewById(R.id.sampleSellerMsg);
+        specialSpinner.setVisibility(View.GONE);
 
-        adLookLike = findViewById(R.id.adLookLike);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.degrees_array, android.R.layout.simple_spinner_item);
 
-        imageLookLike = findViewById(R.id.imageLookLike);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        degreeSpinner.setAdapter(adapter);
+
+        degreeSpinner.setOnItemSelectedListener(this);
+
+        setViews();
+
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
+        firebaseAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
 
         final Client client = new Client("H9P3XBA9GD", "3058fee363b2c4b8afe53e9d9eab642f");
         Index index = client.getIndex("books");
@@ -180,102 +169,9 @@ public class SellTestActivity extends AppCompatActivity {
 
         }
 
-
-        prvBtn.setVisibility(View.GONE);
-        prv1Btn.setVisibility(View.GONE);
-        next1Btn.setVisibility(View.GONE);
-        sampleAd.setVisibility(View.GONE);
-
-        finishbtn.setVisibility(View.GONE);
-
-        adLookLike.setVisibility(View.GONE);
-
-        sampleApprovalView.setVisibility(View.GONE);
-        imageLookLike.setVisibility(View.GONE);
-
-        nextBtn.setVisibility(View.GONE);
-
-        bookDetails.setVisibility(View.GONE);
-        sampleAd = findViewById(R.id.sampleAd);
-
-        firebaseStorage = FirebaseStorage.getInstance();
-
-        storageReference = firebaseStorage.getReference();
-
-        picDialog = new Dialog(this);
-        picDialog.setContentView(R.layout.selectphotodialog);
-
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
-
-        //swView = findViewById(R.id.img1);
-
-        swView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                picDialog.show();
-
-            }
-        });
-
-        Button btnCamera = picDialog.findViewById(R.id.btnCamera);
-        Button btnGallery = picDialog.findViewById(R.id.btnGallery);
-
-        btnCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkPermissionCW();
-                picDialog.dismiss();
-            }
-        });
-
-        btnGallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkPermissionRG();
-                picDialog.dismiss();
-            }
-        });
-
-
-        myDialog = new Dialog(this);
-        myDialog.setContentView(R.layout.adplaceddialog);
-
-        Button btnLHome = myDialog.findViewById(R.id.btnHome);
-        Button btnLAnotherAd = myDialog.findViewById(R.id.btnAnotherAd);
-
-        btnLHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SellTestActivity.this, HomeActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        btnLAnotherAd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SellTestActivity.this, SellTestActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        firestore = FirebaseFirestore.getInstance();
+        setVisiblity();
 
         progressDialog = new ProgressDialog(this);
-
-        title = findViewById(R.id.etMaterialTitle);
-        author = findViewById(R.id.etAuthor);
-        degree = findViewById(R.id.etDegree);
-        specialization = findViewById(R.id.etSpecialization);
-        mrp = findViewById(R.id.etMrp);
-        price = findViewById(R.id.etExpectedPrice);
-        placead = findViewById(R.id.finish);
-        sellerMsg = findViewById(R.id.etNoteToBuyer);
 
         Long tsLong = System.currentTimeMillis()/1000;
         final String timeStamp = tsLong.toString();
@@ -297,7 +193,7 @@ public class SellTestActivity extends AppCompatActivity {
                         final String llocation = document.getString("city");
 
 
-                        placead.setOnClickListener(new View.OnClickListener() {
+                        finishbtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(final View view) {
 
@@ -324,6 +220,9 @@ public class SellTestActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
+                                        Spinner degreeSpinner = findViewById(R.id.etDegree);
+                                        Spinner specialSpinner = findViewById(R.id.etSpecialization);
+
                                         downloadUri = taskSnapshot.getDownloadUrl().toString();
 
                                         final String uid = firebaseAuth.getCurrentUser().getUid();
@@ -332,8 +231,8 @@ public class SellTestActivity extends AppCompatActivity {
 
                                         final String ltitle = title.getText().toString();
                                         final String lauthor = author.getText().toString();
-                                        final String ldegree = degree.getText().toString();
-                                        final String lspecialization = specialization.getText().toString();
+                                        final String ldegree = degreeSpinner.getSelectedItem().toString();
+                                        final String lspecialization = specialSpinner.getSelectedItem().toString();
                                         final String lmrp = mrp.getText().toString();
                                         final String lprice = price.getText().toString();
                                         final String entryName = timeStamp + email;
@@ -420,6 +319,56 @@ public class SellTestActivity extends AppCompatActivity {
             }
         });
 
+
+
+    }
+
+    public void setViews(){
+
+        prvBtn = findViewById(R.id.previous);
+        nextBtn = findViewById(R.id.next);
+        prv1Btn = findViewById(R.id.previous1);
+        next1Btn = findViewById(R.id.next1);
+        finishbtn = findViewById(R.id.finish);
+        bookDetails = findViewById(R.id.bookDetails);
+        firstLayout = findViewById(R.id.firstLayout);
+        swView = findViewById(R.id.bookPic);
+        sampleView = findViewById(R.id.sampleBookPic);
+        sampleApprovalView = findViewById(R.id.sampleApprovalImage);
+        sampleAd = findViewById(R.id.sampleAd);
+        sampleTitle = findViewById(R.id.sampleTitle);
+        sampleAuthor = findViewById(R.id.sampleAuthor);
+        sampleDegree = findViewById(R.id.sampleDegree);
+        sampleSpecial = findViewById(R.id.sampleSpecial);
+        sampleMrp = findViewById(R.id.sampleMrp);
+        samplePrice = findViewById(R.id.samplePrice);
+        sampleSellerMsg = findViewById(R.id.sampleSellerMsg);
+        adLookLike = findViewById(R.id.adLookLike);
+        imageLookLike = findViewById(R.id.imageLookLike);
+        sampleAd = findViewById(R.id.sampleAd);
+        title = findViewById(R.id.etMaterialTitle);
+        author = findViewById(R.id.etAuthor);
+        //degree = findViewById(R.id.etDegree);
+        //specialization = findViewById(R.id.etSpecialization);
+        mrp = findViewById(R.id.etMrp);
+        price = findViewById(R.id.etExpectedPrice);
+        sellerMsg = findViewById(R.id.etNoteToBuyer);
+
+    }
+
+    public void setVisiblity(){
+
+        prvBtn.setVisibility(View.GONE);
+        prv1Btn.setVisibility(View.GONE);
+        next1Btn.setVisibility(View.GONE);
+        sampleAd.setVisibility(View.GONE);
+        finishbtn.setVisibility(View.GONE);
+        adLookLike.setVisibility(View.GONE);
+        sampleApprovalView.setVisibility(View.GONE);
+        imageLookLike.setVisibility(View.GONE);
+        nextBtn.setVisibility(View.GONE);
+        bookDetails.setVisibility(View.GONE);
+
     }
 
     public void onClick(View view) {
@@ -429,7 +378,7 @@ public class SellTestActivity extends AppCompatActivity {
             case R.id.next:
                 circleImageSteps.nextStep();
                 prvBtn.setVisibility(View.VISIBLE);
-                swView.setVisibility(View.INVISIBLE);
+                firstLayout.setVisibility(View.GONE);
                 bookDetails.setVisibility(View.VISIBLE);
                 prv1Btn.setVisibility(View.GONE);
                 nextBtn.setVisibility(View.GONE);
@@ -442,7 +391,10 @@ public class SellTestActivity extends AppCompatActivity {
 
             case R.id.next1:
 
-                if ((title.getText().toString().equals("")) && (author.getText().toString().equals("")) && (degree.getText().toString().equals("")) && (specialization.getText().toString().equals("")) && (mrp.getText().toString().equals("")) && (price.getText().toString().equals("")) && (sellerMsg.getText().toString().equals(""))){
+                Spinner degreeSpinner = findViewById(R.id.etDegree);
+                Spinner specialSpinner = findViewById(R.id.etSpecialization);
+
+                if ((title.getText().toString().equals("")) && (author.getText().toString().equals("")) && (degreeSpinner.getSelectedItem().toString().equals("")) && (specialSpinner.getSelectedItem().toString().equals("")) && (mrp.getText().toString().equals("")) && (price.getText().toString().equals("")) && (sellerMsg.getText().toString().equals(""))){
 
                     Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
 
@@ -452,7 +404,7 @@ public class SellTestActivity extends AppCompatActivity {
                     next1Btn.setVisibility(View.GONE);
                     prvBtn.setVisibility(View.GONE);
                     bookDetails.setVisibility(View.GONE);
-                    swView.setVisibility(View.INVISIBLE);
+                    firstLayout.setVisibility(View.GONE);
                     sampleApprovalView.setVisibility(View.VISIBLE);
                     imageLookLike.setVisibility(View.VISIBLE);
 
@@ -463,8 +415,14 @@ public class SellTestActivity extends AppCompatActivity {
 
                     final String ltitle = title.getText().toString();
                     final String lauthor = author.getText().toString();
-                    final String ldegree = degree.getText().toString();
-                    final String lspecialization = specialization.getText().toString();
+                    final String ldegree = degreeSpinner.getSelectedItem().toString();
+                    if (specialSpinner.isShown()){
+                        final String lspecialization = specialSpinner.getSelectedItem().toString();
+                        sampleSpecial.setText(lspecialization);
+                    } else {
+                        final String lspecialization = "";
+                        sampleSpecial.setText(lspecialization);
+                    }
                     final String lmrp = mrp.getText().toString();
                     final String lprice = price.getText().toString();
                     final String lsellerMsg = sellerMsg.getText().toString();
@@ -473,7 +431,6 @@ public class SellTestActivity extends AppCompatActivity {
                     sampleTitle.setText(ltitle);
                     sampleAuthor.setText(lauthor);
                     sampleDegree.setText(ldegree);
-                    sampleSpecial.setText(lspecialization);
                     sampleMrp.setText("₹" + lmrp);
                     samplePrice.setText("₹" + lprice);
                     sampleSellerMsg.setText(lsellerMsg);
@@ -496,7 +453,7 @@ public class SellTestActivity extends AppCompatActivity {
                 sampleApprovalView.setVisibility(View.GONE);
                 imageLookLike.setVisibility(View.GONE);
 
-                swView.setVisibility(View.VISIBLE);
+                firstLayout.setVisibility(View.VISIBLE);
                 nextBtn.setVisibility(View.VISIBLE);
 
                 break;
@@ -505,7 +462,7 @@ public class SellTestActivity extends AppCompatActivity {
                 circleImageSteps.previousStep();
                 prv1Btn.setVisibility(View.GONE);
                 finishbtn.setVisibility(View.GONE);
-                swView.setVisibility(View.INVISIBLE);
+                firstLayout.setVisibility(View.GONE);
                 sampleAd.setVisibility(View.GONE);
                 adLookLike.setVisibility(View.GONE);
                 sampleApprovalView.setVisibility(View.GONE);
@@ -521,6 +478,45 @@ public class SellTestActivity extends AppCompatActivity {
                 Toast.makeText(this, "Uploading ad!!!", Toast.LENGTH_SHORT).show();
                 break;
 
+            case R.id.barCodeScannerBtn:
+                swView.setImageBitmap(null);
+                title.setText("");
+                author.setText("");
+
+                IntentIntegrator integrator = new IntentIntegrator(SellTestActivity.this);
+                integrator.setPrompt("Scan a barcode");
+                integrator.setCameraId(0);  // Use a specific camera of the device
+                integrator.setOrientationLocked(true);
+                integrator.setBeepEnabled(true);
+                integrator.setCaptureActivity(CaptureActivityPortrait.class);
+                integrator.initiateScan();
+                break;
+
+            case R.id.bookPic:
+                picDialog.show();
+                break;
+
+            case R.id.btnCamera:
+                checkPermissionCW();
+                picDialog.dismiss();
+                break;
+
+            case R.id.btnGallery:
+                checkPermissionRG();
+                picDialog.dismiss();
+                break;
+
+            case R.id.btnHome:
+                Intent intent = new Intent(SellTestActivity.this, HomeActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+
+            case R.id.btnAnotherAd:
+                Intent backintent = new Intent(SellTestActivity.this, SellTestActivity.class);
+                startActivity(backintent);
+                finish();
+                break;
         }
 
     }
@@ -528,6 +524,35 @@ public class SellTestActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        final IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Log.d("MainActivity", "Cancelled scan");
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Log.d("MainActivity", "Scanned");
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        checkinOpenLibrary(result.getContents());
+
+                        EditText tvTitle = findViewById(R.id.etMaterialTitle);
+                        if (tvTitle.getText().length() == 0) {
+                            checkinGoogleAPI(result.getContents());
+                        }
+
+                    }
+                });
+
+            }
+        } else {
+            // This is important, otherwise the result will not be passed to the fragment
+            super.onActivityResult(requestCode, resultCode, data);
+        }
 
         if (resultCode != RESULT_OK){
             Log.e("msg", "photo not get");
@@ -677,4 +702,264 @@ public class SellTestActivity extends AppCompatActivity {
         }
     }
 
+
+    private void checkinOpenLibrary(String contents) {
+
+        final String isbn = contents;
+
+        String bookOpenApi = "https://openlibrary.org/api/books?bibkeys=ISBN:" + isbn + "&jscmd=data&format=json";
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(bookOpenApi)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                // ... check for failure using `isSuccessful` before proceeding
+
+                // Read data on the worker thread
+                final String responseData = response.body().string();
+                JSONObject resultObject = null;
+
+                try {
+
+                    resultObject = new JSONObject(responseData);
+                    final JSONObject isbnObject = resultObject.getJSONObject("ISBN:" + isbn);
+
+                    try{
+                        final String titleL = isbnObject.getString("title");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                EditText tvTitle = findViewById(R.id.etMaterialTitle);
+                                tvTitle.setText(titleL);
+                            }
+                        });
+
+                    } catch(JSONException jse){
+                        jse.printStackTrace();
+                    }
+
+                    try{
+
+                        JSONArray authors = isbnObject.getJSONArray("authors");
+                        JSONObject author = authors.getJSONObject(0);
+
+                        final String authorName = author.getString("name");
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                EditText tvAuthor = findViewById(R.id.etAuthor);
+                                tvAuthor.setText(authorName);
+                            }
+                        });
+
+                    } catch(JSONException jse){
+                        jse.printStackTrace();
+                    }
+
+                    try{
+
+                        JSONObject imageObject = isbnObject.getJSONObject("cover");
+                        final String imageUrl = imageObject.getString("large");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SimpleDraweeView ivBookImage = findViewById(R.id.bookPic);
+                                SimpleDraweeView sampleBookPic = findViewById(R.id.sampleBookPic);
+                                SimpleDraweeView sampleApprovalImage = findViewById(R.id.sampleApprovalImage);
+                                Glide.with(SellTestActivity.this).load(imageUrl).into(ivBookImage);
+                                Glide.with(SellTestActivity.this).load(imageUrl).into(sampleApprovalImage);
+                                Glide.with(SellTestActivity.this).load(imageUrl).into(sampleBookPic);
+
+                                nextBtn.setVisibility(View.VISIBLE);
+                            }
+                        });
+
+                    } catch(JSONException jse){
+                        jse.printStackTrace();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+    }
+
+    private void checkinGoogleAPI(String contents){
+
+        String bookSearchString = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + contents;
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(bookSearchString)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                final String googleResponseData = response.body().string();
+                JSONObject resultObject = null;
+
+                try {
+
+                    resultObject = new JSONObject(googleResponseData);
+                    JSONArray items = resultObject.getJSONArray("items");
+                    JSONObject volumeInfo = items.getJSONObject(0);
+                    JSONObject volumeObject = volumeInfo.getJSONObject("volumeInfo");
+                    final String TitleL = volumeObject.getString("title");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            EditText tvTitle = findViewById(R.id.etMaterialTitle);
+                            tvTitle.setText(TitleL);
+                        }
+                    });
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+
+                    JSONArray items = resultObject.getJSONArray("items");
+                    JSONObject volumeInfo = items.getJSONObject(0);
+                    JSONObject volumeObject = volumeInfo.getJSONObject("volumeInfo");
+                    JSONArray authorsArray = volumeObject.getJSONArray("authors");
+                    final String authorName = authorsArray.getString(0);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            EditText tvAuthor = findViewById(R.id.etAuthor);
+                            tvAuthor.setText(authorName);
+                        }
+                    });
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                try{
+                    JSONArray items = resultObject.getJSONArray("items");
+                    JSONObject volumeInfo = items.getJSONObject(0);
+                    JSONObject volumeObject = volumeInfo.getJSONObject("volumeInfo");
+                    JSONObject imageObject = volumeObject.getJSONObject("imageLinks");
+                    final String bookImageUrl = imageObject.getString("thumbnail");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            SimpleDraweeView ivBookImage = findViewById(R.id.bookPic);
+                            SimpleDraweeView sampleBookPic = findViewById(R.id.sampleBookPic);
+                            SimpleDraweeView sampleApprovalImage = findViewById(R.id.sampleApprovalImage);
+                            Glide.with(SellTestActivity.this).load(bookImageUrl).into(ivBookImage);
+                            Glide.with(SellTestActivity.this).load(bookImageUrl).into(sampleApprovalImage);
+                            Glide.with(SellTestActivity.this).load(bookImageUrl).into(sampleBookPic);
+                            nextBtn.setVisibility(View.VISIBLE);
+                        }
+                    });
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        String degree = parent.getItemAtPosition(position).toString();
+
+        Toast.makeText(this, degree, Toast.LENGTH_SHORT).show();
+
+        Spinner specialSpinner = findViewById(R.id.etSpecialization);
+
+        if(degree.contentEquals("Engineering")) {
+
+            specialSpinner.setVisibility(View.VISIBLE);
+
+            List<String> list = new ArrayList<String>();
+            list.add("Select specialization");
+            list.add("All branches");
+            list.add("CSE");
+            list.add("ECE");
+            list.add("EEE");
+            list.add("E&I");
+            list.add("Information Technology");
+            list.add("ICE");
+            list.add("Mechanical Engineering");
+            list.add("Mechatronics");
+            list.add("Production Engineering");
+            list.add("Others");
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_item, list);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            dataAdapter.notifyDataSetChanged();
+            specialSpinner.setAdapter(dataAdapter);
+        }
+        if(degree.contentEquals("Medical")) {
+
+            specialSpinner.setVisibility(View.VISIBLE);
+
+            List<String> list = new ArrayList<String>();
+            list.add("Select specialization");
+            list.add("General Medicine");
+            list.add("Dental");
+            list.add("Pharmacy");
+            list.add("Nursing");
+            list.add("Sidha & Ayurvedha");
+            list.add("Others");
+            ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_item, list);
+            dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            dataAdapter2.notifyDataSetChanged();
+            specialSpinner.setAdapter(dataAdapter2);
+        }
+
+        if(degree.contentEquals("Architecture")) {
+
+            specialSpinner.setVisibility(View.VISIBLE);
+
+            List<String> list = new ArrayList<String>();
+            list.add("Select specialization");
+            list.add("Landscape Architecture");
+            list.add("Urban Planner");
+            list.add("Restoration Architecture");
+            list.add("Research Architecture");
+            list.add("Lighting Architecture");
+            list.add("Political Architecture");
+            list.add("Others");
+            ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_item, list);
+            dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            dataAdapter2.notifyDataSetChanged();
+            specialSpinner.setAdapter(dataAdapter2);
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }

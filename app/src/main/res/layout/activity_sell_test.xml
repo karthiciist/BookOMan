@@ -32,16 +32,53 @@
                 android:layout_gravity="center"
                 android:gravity="center">
 
-                <com.facebook.drawee.view.SimpleDraweeView
-                    android:layout_height="400dp"
-                    android:layout_width="300dp"
-                    fresco:actualImageScaleType="centerCrop"
-                    android:layout_marginTop="30dp"
-                    android:id="@+id/bookPic"
-                    fresco:roundAsCircle="false"
-                    fresco:roundedCornerRadius="1dp"
-                    fresco:roundingBorderWidth="2dp"
-                    fresco:backgroundImage="@drawable/add_imge"/>
+                <LinearLayout
+                    android:id="@+id/firstLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Scan Barcode"
+                        android:padding="5dp"/>
+
+                    <ImageButton
+                        android:id="@+id/barCodeScannerBtn"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:onClick="onClick"
+                        android:background="@color/white"
+                        android:src="@drawable/barcode"
+                        android:text="Scan barcode"
+                        android:padding="5dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:scaleType="fitCenter"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Or"
+                        android:textSize="10sp"
+                        android:padding="5dp"/>
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:layout_height="400dp"
+                        android:layout_width="300dp"
+                        fresco:actualImageScaleType="centerCrop"
+                        android:layout_marginTop="30dp"
+                        android:id="@+id/bookPic"
+                        android:onClick="onClick"
+                        fresco:roundAsCircle="false"
+                        fresco:roundedCornerRadius="1dp"
+                        fresco:roundingBorderWidth="2dp"
+                        fresco:backgroundImage="@drawable/add_imge"/>
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/bookDetails"
@@ -125,29 +162,25 @@
                         android:layout_gravity="center_horizontal"
                         android:gravity="center">
 
-                        <EditText
+                        <Spinner
                             android:id="@+id/etDegree"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:layout_weight="1"
                             android:background="@drawable/text_view_border"
-                            android:hint="Degree"
-                            android:inputType="textCapCharacters"
                             android:padding="10dp"
-                            android:textAlignment="center" />
+                            android:textAlignment="center"/>
 
-                        <EditText
+                        <Spinner
                             android:id="@+id/etSpecialization"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:layout_weight="1"
                             android:background="@drawable/text_view_border"
-                            android:hint="Specialization"
-                            android:inputType="textCapWords"
                             android:padding="10dp"
-                            android:textAlignment="center" />
+                            android:textAlignment="center"/>
 
                     </LinearLayout>
 
@@ -161,32 +194,6 @@
                         android:inputType="textCapSentences"
                         android:padding="10dp"
                         android:textAlignment="center" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <ImageButton
-                            android:id="@+id/barCodeScannerBtn"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
-                            android:background="@color/white"
-                            android:src="@drawable/barcode"
-                            android:text="Scan barcode"
-                            android:padding="5dp"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:scaleType="fitCenter"
-                            android:paddingLeft="2dp"
-                            android:paddingRight="2dp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Scan Barcode"
-                            android:padding="5dp"/>
-                    </LinearLayout>
 
                 </LinearLayout>
 
