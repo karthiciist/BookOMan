@@ -1,0 +1,183 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:1:1-114:12
+INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:1:1-114:12
+INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:1:1-114:12
+INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:1:1-114:12
+INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:1:1-114:12
+INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:1:1-114:12
+INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:1:1-114:12
+	package
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:3:5-33
+		INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:1:1-114:12
+		INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml
+	xmlns:tools
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:2:5-51
+	android:versionCode
+		INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:1:1-114:12
+		INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:1:11-69
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:5:5-79
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:5:22-76
+application
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:6:5-113:19
+	android:allowBackup
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:7:9-35
+	android:theme
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:8:9-40
+activity#org.chat21.android.ui.login.activities.ChatLoginActivity
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:10:9-102
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:10:19-90
+activity#org.chat21.android.ui.login.activities.ChatSignUpActivity
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:12:9-103
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:12:19-91
+activity#org.chat21.android.ui.contacts.activites.ContactListActivity
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:15:9-32:20
+	android:label
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:17:13-71
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:16:13-88
+meta-data#android.app.searchable
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:19:13-21:63
+	android:resource
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:21:17-60
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:20:17-54
+intent-filter#action:name:android.intent.action.SEARCH
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:23:13-25:29
+action#android.intent.action.SEARCH
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:24:17-71
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:24:25-68
+activity#org.chat21.android.ui.conversations.activities.ConversationListActivity
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:35:9-37:79
+	android:label
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:37:13-76
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:36:13-99
+activity#org.chat21.android.ui.messages.activities.MessageListActivity
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:40:9-49:20
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:40:19-95
+intent-filter#action:name:ACTION_DEFAULT_CHAT_INTENT+category:name:android.intent.category.DEFAULT
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:45:13-48:29
+action#ACTION_DEFAULT_CHAT_INTENT
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:46:17-69
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:46:25-66
+category#android.intent.category.DEFAULT
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:47:17-76
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:47:27-73
+activity#org.chat21.android.ui.messages.activities.ImageDetailsActivity
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:51:9-99
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:51:19-96
+activity#org.chat21.android.ui.chat_groups.activities.NewGroupActivity
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:53:9-55:83
+	android:label
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:55:13-71
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:54:13-89
+activity#org.chat21.android.ui.chat_groups.activities.AddMemberToChatGroupActivity
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:57:9-59:82
+	android:label
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:59:13-70
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:58:13-101
+activity#org.chat21.android.ui.chat_groups.activities.GroupAdminPanelActivity
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:62:9-114
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:62:19-102
+activity#org.chat21.android.ui.users.activities.PublicProfileActivity
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:65:9-97
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:65:19-94
+activity#org.chat21.android.ui.chat_groups.activities.ChatGroupsListActivity
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:67:9-69:83
+	android:label
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:69:13-71
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:68:13-95
+service#org.chat21.android.notifications.ChatFirebaseMessagingService
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:73:9-77:19
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:73:18-94
+intent-filter#action:name:com.google.firebase.MESSAGING_EVENT
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:74:13-76:29
+action#com.google.firebase.MESSAGING_EVENT
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:75:17-78
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:75:25-75
+meta-data#com.google.firebase.messaging.default_notification_icon
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:81:9-83:66
+	android:resource
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:83:13-63
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:82:13-83
+meta-data#com.google.firebase.messaging.default_notification_color
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:86:9-88:50
+	android:resource
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:88:13-47
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:87:13-84
+service#org.chat21.android.instanceid.service.SaveFirebaseInstanceIdService
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:93:9-99:19
+	tools:ignore
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:95:13-43
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:94:13-95
+intent-filter#action:name:com.google.firebase.INSTANCE_ID_EVENT
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:96:13-98:29
+action#com.google.firebase.INSTANCE_ID_EVENT
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:97:17-80
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:97:25-77
+receiver#org.chat21.android.connectivity.NetworkReceiver
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:101:9-105:20
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:101:19-81
+intent-filter#action:name:android.net.conn.CONNECTIVITY_CHANGE
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:102:13-104:29
+action#android.net.conn.CONNECTIVITY_CHANGE
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:103:17-79
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:103:25-76
+receiver#org.chat21.android.core.receivers.ShutdownReceiver
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:107:9-112:20
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:107:19-84
+intent-filter#action:name:android.intent.action.ACTION_SHUTDOWN+action:name:android.intent.action.QUICKBOOT_POWEROFF
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:108:13-111:29
+action#android.intent.action.ACTION_SHUTDOWN
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:109:17-80
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:109:25-77
+action#android.intent.action.QUICKBOOT_POWEROFF
+ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:110:17-83
+	android:name
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml:110:25-80
+uses-sdk
+INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Gaayathri\Desktop\bookOman\BookOMan\chat21\src\main\AndroidManifest.xml

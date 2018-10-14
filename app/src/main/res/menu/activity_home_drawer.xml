@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:id="@+id/grp1" android:checkableBehavior="single" >
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_entire_library"
+            android:icon="@drawable/ic_library_books_black_24dp"
+            android:title="Entire library" />
+        <item
+            android:id="@+id/nav_categories"
+            android:icon="@drawable/ic_view_comfy_black_24dp"
+            android:title="Categories" />
+    </group>
+
+    <group android:id="@+id/grp2" android:checkableBehavior="single" >
+        <item
+            android:id="@+id/nav_my_profile"
+            android:icon="@drawable/ic_account_box_black_24dp"
+            android:title="My profile" />
+        <item
+            android:id="@+id/nav_my_materials"
+            android:icon="@drawable/ic_description_black_24dp"
+            android:title="My materials" />
+        <item
+            android:id="@+id/nav_my_favorites"
+            android:icon="@drawable/ic_favorite_black_24dp"
+            android:title="My favorites" />
+        <item
+            android:id="@+id/nav_conversations"
+            android:icon="@drawable/ic_chat_black_24dp"
+            android:title="Conversations" />
+    </group>
+
+    <group android:id="@+id/grp3" android:checkableBehavior="single" >
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Settings" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_exit_to_app_black_24dp"
+            android:title="Logout" />
+    </group>
+
+</menu>

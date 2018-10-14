@@ -24,7 +24,7 @@ import org.chat21.android.core.users.models.ChatUser;
 import org.chat21.android.core.users.models.IChatUser;
 import org.chat21.android.ui.ChatUI;
 
-import static com.example.gaayathri.bookoman.EntryActivity.degree;
+import static com.example.gaayathri.bookoman.HomeFragment.background;
 import static com.example.gaayathri.bookoman.HomeFragment.city;
 import static com.example.gaayathri.bookoman.HomeFragment.mypreference;
 
@@ -169,6 +169,7 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_settings) {
 
+            startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
 
         } else if (id == R.id.nav_logout) {
 
@@ -185,7 +186,7 @@ public class HomeActivity extends AppCompatActivity
 
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.remove(city);
-        editor.remove(degree);
+        editor.remove(background);
         editor.commit();
 
         finish();

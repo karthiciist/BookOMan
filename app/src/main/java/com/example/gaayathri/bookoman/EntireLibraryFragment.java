@@ -46,7 +46,6 @@ import com.like.OnAnimationEndListener;
 import com.like.OnLikeListener;
 import com.victor.loading.book.BookLoading;
 
-import org.chat21.android.core.ChatManager;
 import org.chat21.android.core.users.models.ChatUser;
 import org.chat21.android.core.users.models.IChatUser;
 import org.chat21.android.ui.ChatUI;
@@ -89,10 +88,10 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
 
         // Initiating dialog windows
         myDialog = new Dialog(getActivity());
-        myDialog.setContentView(R.layout.expandeddialog);
+        myDialog.setContentView(R.layout.dialog_expanded);
 
         myDialog2 = new Dialog(getActivity());
-        myDialog2.setContentView(R.layout.imageexpanded);
+        myDialog2.setContentView(R.layout.dialog_image_expanded);
 
         // Initiating views in dialogs
         TextView userName = myDialog.findViewById(R.id.userExp);

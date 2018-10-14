@@ -39,36 +39,31 @@
                     android:orientation="vertical"
                     android:gravity="center">
 
-                    <TextView
+                    <Button
+                        android:id="@+id/barCodeScannerBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Scan Barcode"
-                        android:padding="5dp"/>
-
-                    <ImageButton
-                        android:id="@+id/barCodeScannerBtn"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
                         android:onClick="onClick"
                         android:background="@color/white"
-                        android:src="@drawable/barcode"
+                        android:drawableLeft="@drawable/barcodescanner48"
                         android:text="Scan barcode"
                         android:padding="5dp"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:scaleType="fitCenter"
-                        android:paddingLeft="2dp"
-                        android:paddingRight="2dp"/>
+                        android:paddingRight="20dp"
+                        android:paddingLeft="20dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
                         android:text="Or"
-                        android:textSize="10sp"
-                        android:padding="5dp"/>
+                        android:textSize="20sp" />
 
                     <com.facebook.drawee.view.SimpleDraweeView
-                        android:layout_height="400dp"
+                        android:layout_height="380dp"
                         android:layout_width="300dp"
                         fresco:actualImageScaleType="centerCrop"
                         android:layout_marginTop="30dp"

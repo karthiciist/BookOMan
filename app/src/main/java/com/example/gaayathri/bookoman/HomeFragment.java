@@ -11,7 +11,6 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,10 +18,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,55 +68,26 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
     private Slider slider;
 
     private RecyclerView recyclerView, recyclerView1, recyclerView2;
-    private ListenerRegistration firestoreListener;
-    private ListenerRegistration firestoreListener1;
-    private ListenerRegistration firestoreListener2;
-    private List<Note> notesList;
-    private List<Note> notesList1;
-    private List<Note> notesList2;
-    private FirestoreRecyclerAdapter adapter;
-    private FirestoreRecyclerAdapter adapter1;
-    private FirestoreRecyclerAdapter adapter2;
-    Dialog myDialog;
-    Dialog myDialog2;
-    Dialog myDialog3;
-    Dialog myDialog4;
+    private ListenerRegistration firestoreListener, firestoreListener1, firestoreListener2;
+    private List<Note> notesList, notesList1, notesList2;
+    private FirestoreRecyclerAdapter adapter, adapter1, adapter2;
+
+    Dialog myDialog, myDialog2, userDataDialog;
 
     // For first recycler view
-    String UpdateNoteTitle;
-    String UpdateNoteAuthor;
-    String UpdateNoteDegree;
-    String UpdateNoteSpecialization;
-    String UpdateNotePrice;
-    String UpdateNoteLocation;
-    String UpdateNoteUser;
-    String UpdateNoteMrp;
-    String UpdateNoteSellerMsg;
-    String entryName;
-    String downloadUri;
+    String UpdateNoteTitle, UpdateNoteAuthor, UpdateNoteDegree, UpdateNoteSpecialization, UpdateNotePrice, UpdateNoteLocation, UpdateNoteUser, UpdateNoteMrp, UpdateNoteSellerMsg, entryName, downloadUri;
 
-    String userNameL;
-    String userPhoneL;
-    String userDegreeL;
-    String userSpecialL;
-    String userCityL;
+    String userNameL, userPhoneL, userBackgroundL, userCityL;
 
     BookLoading bookLoading;
 
     SharedPreferences sharedpreferences;
 
-    public static final String mypreference = "mypref";
-    public static final String city = "cityKey";
-    public static final String degree = "degreeKey";
-    public static final String name = "nameKey";
-    public static final String email = "emailKey";
-    public static final String phone = "phoneKey";
-    public static final String specialization = "specializationKey";
+    public static final String mypreference = "mypref", city = "cityKey", phone = "phoneKey", background = "backgroundKey";
     private int count;
     private static final String SAVE_COUNT = "save_count";
     public static final String DonotShow = "false";
-    private ProgressDialog progressDialog1;
-    private ProgressDialog progressDialog2;
+    private ProgressDialog progressDialog1, progressDialog2;
     private FirebaseFirestore firestore;
 
 
@@ -135,29 +108,38 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
 
         sharedpreferences = getActivity().getSharedPreferences(mypreference, Context.MODE_PRIVATE);
 
-        if ((sharedpreferences.contains(city)) & (sharedpreferences.contains(degree))) {
+        if ((sharedpreferences.contains(city)) & (sharedpreferences.contains(background))) {
 
             userCityL = sharedpreferences.getString(city, "");
             TextView userCity = view.findViewById(R.id.userCity);
             userCity.setText(userCityL);
 
-            userDegreeL = sharedpreferences.getString(degree, "");
-            TextView userDegree = view.findViewById(R.id.userDegree);
-            userDegree.setText(userDegreeL);
+            userBackgroundL = sharedpreferences.getString(background, "");
+            TextView userBackground = view.findViewById(R.id.userBackground);
+            userBackground.setText(userBackgroundL);
 
         } else {
 
             SharedPreferences sharedpreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-
             String showDialog = sharedpreferences.getString(DonotShow, "");
-
             if (!showDialog.equals("true") ) {
-
                 showFillProfileDialog();
-
             }
-
         }
+
+        Spinner citySpinner = userDataDialog.findViewById(R.id.spinnerCity);
+        Spinner degreeSpinner = userDataDialog.findViewById(R.id.spinnerBackground);
+
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.cities_array, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        ArrayAdapter<CharSequence> spinnerAdapter2 = ArrayAdapter.createFromResource(getActivity(),
+                R.array.degrees_array, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        citySpinner.setAdapter(spinnerAdapter);
+        degreeSpinner.setAdapter(spinnerAdapter2);
 
         // Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance();
@@ -227,7 +209,7 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
 
         loadNotesList2();
 
-        firestoreListener2 = firestore.collection("books").whereEqualTo("degree", userDegreeL)
+        firestoreListener2 = firestore.collection("books").whereEqualTo("degree", userBackgroundL)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
@@ -274,26 +256,16 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
         imSell1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 progressDialog1.show();
-
                 callSellActivity();
-
-                //progressDialog1.dismiss();
-
             }
         });
 
         imSell2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 progressDialog1.show();
-
                 callSellActivity();
-
-                //progressDialog1.dismiss();
-
             }
         });
 
@@ -301,17 +273,14 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
 
     private void setDialogs() {
 
+        userDataDialog = new Dialog(getActivity());
+        userDataDialog.setContentView(R.layout.dialog_userdata_entry);
+
         myDialog = new Dialog(getActivity());
-        myDialog.setContentView(R.layout.expandeddialog);
+        myDialog.setContentView(R.layout.dialog_expanded);
 
         myDialog2 = new Dialog(getActivity());
-        myDialog2.setContentView(R.layout.imageexpanded);
-
-        myDialog3 = new Dialog(getActivity());
-        myDialog3.setContentView(R.layout.fillprofiledialog);
-
-        myDialog4 = new Dialog(getActivity());
-        myDialog4.setContentView(R.layout.edit_profile_dialog);
+        myDialog2.setContentView(R.layout.dialog_image_expanded);
 
     }
 
@@ -426,7 +395,7 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
 
     private void loadNotesList2() {
 
-        final Query query = firestore.collection("books").whereEqualTo("degree", userDegreeL);
+        final Query query = firestore.collection("books").whereEqualTo("degree", userBackgroundL);
 
         FirestoreRecyclerOptions<Note> response = new FirestoreRecyclerOptions.Builder<Note>()
                 .setQuery(query, Note.class)
@@ -619,16 +588,16 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
     @Override
     public void onDetach() {
         Log.d(TAG, "onDetach: ");
-        ((AppCompatActivity)getActivity()).setTitle(getActivity().getTitle());
+        (getActivity()).setTitle(getActivity().getTitle());
         super.onDetach();
     }
 
     private void showFillProfileDialog() {
 
-        Button btnDismiss = myDialog3.findViewById(R.id.btnDismiss);
-        Button btnUpdate = myDialog3.findViewById(R.id.btnUpdate);
+        Button btnDismiss = userDataDialog.findViewById(R.id.btnDismiss);
+        Button btnUpdate = userDataDialog.findViewById(R.id.btnUpdate);
 
-        final CheckBox simpleCheckBox = myDialog3.findViewById(R.id.cbDonotShow);
+        final CheckBox simpleCheckBox = userDataDialog.findViewById(R.id.cbDonotShow);
 
         btnDismiss.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -646,7 +615,7 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
 
                 }
 
-                myDialog3.dismiss();
+                userDataDialog.dismiss();
             }
         });
 
@@ -654,98 +623,64 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
             @Override
             public void onClick(View v) {
 
-                myDialog3.dismiss();
-
                 progressDialog2 = new ProgressDialog(getActivity());
 
                 progressDialog2.setMessage("Updating profile...");
                 progressDialog2.show();
 
-                final EditText et_name = myDialog4.findViewById(R.id.et_name);
-                final EditText et_email = myDialog4.findViewById(R.id.et_email);
-                final EditText et_phone = myDialog4.findViewById(R.id.et_phone);
-                final EditText et_city = myDialog4.findViewById(R.id.et_city);
-                final EditText et_degree = myDialog4.findViewById(R.id.et_degree);
-                final EditText et_special = myDialog4.findViewById(R.id.et_special);
+                final EditText et_phone = userDataDialog.findViewById(R.id.et_phone);
+                final Spinner et_city = userDataDialog.findViewById(R.id.spinnerCity);
+                final Spinner et_background = userDataDialog.findViewById(R.id.spinnerBackground);
 
-                String userNameLL = sharedpreferences.getString(name, "");
-                String userEmailLL = sharedpreferences.getString(email, "");
-                String userPhoneLL = sharedpreferences.getString(phone, "");
-                String userCityLL = sharedpreferences.getString(city, "");
-                String userDegreeLL = sharedpreferences.getString(degree, "");
-                String userSpecialLL = sharedpreferences.getString(specialization, "");
+                String phoneL = et_phone.getText().toString();
+                String cityL = et_city.getSelectedItem().toString();
+                String backgroundL = et_background.getSelectedItem().toString();
 
-                et_name.setText(userNameLL);
-                et_email.setText(userEmailLL);
-                et_phone.setText(userPhoneLL);
-                et_city.setText(userCityLL);
-                et_degree.setText(userDegreeLL);
-                et_special.setText(userSpecialLL);
+                String email = firebaseAuth.getCurrentUser().getEmail();
 
-                Button btnCancel = myDialog4.findViewById(R.id.btnCancel);
-                Button btnUpdate = myDialog4.findViewById(R.id.btnUpdate);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString(phone, phoneL);
+                editor.putString(city, cityL);
+                editor.putString(background, backgroundL);
+                editor.commit();
 
-                btnCancel.setOnClickListener(new View.OnClickListener() {
+                Map<String, String> userMap = new HashMap<>();
+
+                userMap.put("phone", phoneL);
+                userMap.put("city", cityL);
+                userMap.put("background", backgroundL);
+
+                firestore.collection("users").document(email).set(userMap, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onClick(View v) {
-                        myDialog4.dismiss();
+                    public void onSuccess(Void aVoid) {
+
+                        progressDialog2.dismiss();
+
+                        userDataDialog.dismiss();
+
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.replace(R.id.frm,new HomeFragment()).addToBackStack(null).commit();
+
+                        Toast.makeText(getActivity(), "Profile updated successfully!!!", Toast.LENGTH_SHORT).show();
                     }
-                });
-
-                btnUpdate.setOnClickListener(new View.OnClickListener() {
+                }).addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onFailure(@NonNull Exception e) {
 
-                        String name = et_name.getText().toString();
-                        String email = et_email.getText().toString();
-                        String phone = et_phone.getText().toString();
-                        String city = et_city.getText().toString();
-                        String degree = et_degree.getText().toString();
-                        String specialization = et_special.getText().toString();
+                        progressDialog2.dismiss();
 
-                        Map<String, String> userMap = new HashMap<>();
-
-                        userMap.put("name", name);
-                        userMap.put("email", email );
-                        userMap.put("phone", phone);
-                        userMap.put("city", city);
-                        userMap.put("degree", degree);
-                        userMap.put("specialization", specialization);
-
-                        firestore.collection("users").document(email).set(userMap, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-
-                                progressDialog2.dismiss();
-
-                                myDialog4.dismiss();
-
-                                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                ft.detach(HomeFragment.this).attach(HomeFragment.this).commit();
-
-
-                                Toast.makeText(getActivity(), "Profile updated successfully!!!", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                                progressDialog2.dismiss();
-
-                                String error = e.getMessage();
-                                Toast.makeText(getActivity(), "Cannot update profile. Error:" + error, Toast.LENGTH_SHORT).show();
-
-                            }
-                        });
+                        String error = e.getMessage();
+                        Toast.makeText(getActivity(), "Cannot update profile. Error:" + error, Toast.LENGTH_SHORT).show();
 
                     }
                 });
 
-                myDialog4.show();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.detach(HomeFragment.this).attach(HomeFragment.this).commit();
             }
         });
 
-        myDialog3.show();
+        userDataDialog.show();
 
     }
 

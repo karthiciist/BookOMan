@@ -68,44 +68,19 @@ public class MyProfileFragment extends Fragment {
     private ProgressDialog progressDialog1;
     private ProgressDialog progressDialog2;
 
-    Dialog myDialog;
-    Dialog myDialog2;
-    Dialog myDialog3;
-    Dialog myDialog4;
+    Dialog myDialog, myDialog2, myDialog3, myDialog4;
     String entryName;
     String downloadUri;
 
-    String UpdateNoteTitle;
-    String UpdateNoteAuthor;
-    String UpdateNoteDegree;
-    String UpdateNoteSpecialization;
-    String UpdateNotePrice;
-    String UpdateNoteLocation;
-    String UpdateNoteUser;
-    String UpdateNoteMrp;
-    String UpdateNoteSellerMsg;
+    String UpdateNoteTitle, UpdateNoteAuthor, UpdateNoteDegree, UpdateNoteSpecialization, UpdateNotePrice, UpdateNoteLocation, UpdateNoteUser, UpdateNoteMrp, UpdateNoteSellerMsg;
 
-    String userName;
-    String name;
+    String nameL, emailL, uidL;
 
-    String userNameL;
-    String userPhoneL;
-    String userDegreeL;
-    String userSpecialL;
-    String userCityL;
-    String userProfilePicL;
+    String userNameL, userPhoneL, userBackgroundL, userCityL, userProfilePicL;
 
-    LinearLayout llAds;
-    LinearLayout llFavs;
+    LinearLayout llAds, llFavs;
 
-    TextView noAdsPlaced;
-    TextView noLikes;
-    TextView userNametv;
-    TextView userCity;
-    TextView userDegree;
-    TextView userSpecial;
-    TextView userPhoneNo;
-    TextView userEmailId;
+    TextView noAdsPlaced, noLikes, userNametv, userCity, userBackground, userSpecial, userPhoneNo, userEmailId;
 
     CircularImageView profilePic;
 
@@ -115,6 +90,13 @@ public class MyProfileFragment extends Fragment {
 
     public static final String mypreference = "mypref";
     public static final String DonotShow = "false";
+
+    public static String name = "nameKey";
+    public static String phone = "phoneKey";
+    public static String background = "backgroundKey";
+    public static String city = "cityKey";
+    public static String profilePicUrl = "profilePicUrlKey";
+    public static String email = "emailKey";
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
@@ -132,8 +114,8 @@ public class MyProfileFragment extends Fragment {
         progressDialog.show();
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String uid = user.getUid();
-        String name = user.getEmail();
+        uidL = user.getUid();
+        emailL = user.getEmail();
 
         firestore = FirebaseFirestore.getInstance();
 
@@ -141,24 +123,23 @@ public class MyProfileFragment extends Fragment {
 
         userNametv = view.findViewById(R.id.tv_name);
         userCity = view.findViewById(R.id.tv_city);
-        userDegree = view.findViewById(R.id.tv_degree);
-        userSpecial = view.findViewById(R.id.tv_specialization);
+        userBackground = view.findViewById(R.id.tv_background);
         userPhoneNo = view.findViewById(R.id.tv_phone);
         userEmailId = view.findViewById(R.id.tv_email);
 
         profilePic = view.findViewById(R.id.profile_pic);
 
         myDialog = new Dialog(getActivity());
-        myDialog.setContentView(R.layout.expandeddialog);
+        myDialog.setContentView(R.layout.dialog_expanded);
 
         myDialog2 = new Dialog(getActivity());
-        myDialog2.setContentView(R.layout.imageexpanded);
+        myDialog2.setContentView(R.layout.dialog_image_expanded);
 
         myDialog3 = new Dialog(getActivity());
-        myDialog3.setContentView(R.layout.fillprofiledialog);
+        myDialog3.setContentView(R.layout.dialog_fill_profile);
 
         myDialog4 = new Dialog(getActivity());
-        myDialog4.setContentView(R.layout.edit_profile_dialog);
+        myDialog4.setContentView(R.layout.dialog_edit_profile);
 
         noAdsPlaced = view.findViewById(R.id.tv_materials);
         noLikes = view.findViewById(R.id.tv_favorites);
@@ -188,56 +169,84 @@ public class MyProfileFragment extends Fragment {
 
         final String profilePicUrl = firebaseAuth.getCurrentUser().getPhotoUrl().toString();
 
-        DocumentReference docRef = firestoreDB.collection("users").document(mail);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
 
-                        userNameL = document.getString("name");
-                        userPhoneL = document.getString("phone");
-                        userDegreeL = document.getString("degree");
-                        userSpecialL = document.getString("specialization");
-                        userCityL = document.getString("city");
-                        userProfilePicL = document.getString("downloadUri");
+        final SharedPreferences sharedpreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
 
-                        userNametv.setText(userNameL);
-                        userCity.setText(userCityL);
-                        userDegree.setText(userDegreeL);
-                        userSpecial.setText(userSpecialL);
-                        userPhoneNo.setText(userPhoneL);
-                        userEmailId.setText(mail);
+        name = sharedpreferences.getString(name, "");
+        phone = sharedpreferences.getString(phone, "");
+        background = sharedpreferences.getString(background, "");
+        city = sharedpreferences.getString(city, "");
 
-                        final RequestOptions options = new RequestOptions();
-                        options.centerCrop();
+        userNametv.setText(name);
+        userCity.setText(city);
+        userBackground.setText(background);
+        userPhoneNo.setText(phone);
+        userEmailId.setText(mail);
 
-                        Glide.with(getActivity()).load(profilePicUrl).apply(options).into(profilePic);
+        final RequestOptions options = new RequestOptions();
+        options.centerCrop();
 
-                        if ((userNameL == null) || (userPhoneL == null) || (userDegreeL == null) || (userSpecialL == null) || (userCityL == null)) {
+        Glide.with(getActivity()).load(profilePicUrl).apply(options).into(profilePic);
 
-                            SharedPreferences sharedpreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        if (!(sharedpreferences.contains(phone)) || !(sharedpreferences.contains(background)) || !(sharedpreferences.contains(city))) {
 
-                            String showDialog = sharedpreferences.getString(DonotShow, "");
+            DocumentReference docRef = firestoreDB.collection("users").document(mail);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
 
-                            if (!showDialog.equals("true") ) {
+                            userNameL = document.getString("name");
+                            userPhoneL = document.getString("phone");
+                            userBackgroundL = document.getString("background");
+                            userCityL = document.getString("city");
+                            userProfilePicL = document.getString("downloadUri");
 
-                                showFillProfileDialog();
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                            editor.putString(name, userNameL);
+                            editor.putString(phone, userPhoneL);
+                            editor.putString(background, userBackgroundL);
+                            editor.putString(city, userCityL);
+                            editor.commit();
+
+                            userNametv.setText(userNameL);
+                            userCity.setText(userCityL);
+                            userBackground.setText(userBackgroundL);
+                            userPhoneNo.setText(userPhoneL);
+                            userEmailId.setText(mail);
+
+                            final RequestOptions options = new RequestOptions();
+                            options.centerCrop();
+
+                            Glide.with(getActivity()).load(profilePicUrl).apply(options).into(profilePic);
+
+                            if ((userNameL == null) || (userPhoneL == null) || (userBackgroundL == null) || (userCityL == null)) {
+
+                                SharedPreferences sharedpreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+
+                                String showDialog = sharedpreferences.getString(DonotShow, "");
+
+                                if (!showDialog.equals("true") ) {
+
+                                    showFillProfileDialog();
+
+                                }
 
                             }
 
+                        } else {
+                            Log.d(TAG, "No such document");
                         }
-
                     } else {
-                        Log.d(TAG, "No such document");
+                        Log.d(TAG, "get failed with ", task.getException());
                     }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
                 }
-            }
-        });
+            });
+
+        }
 
         recyclerView = view.findViewById(R.id.rvNoteList);
 
@@ -247,7 +256,7 @@ public class MyProfileFragment extends Fragment {
 
         loadNotesList();
 
-        firestoreListener = firestoreDB.collection("books").whereEqualTo("uid", uid)
+        firestoreListener = firestoreDB.collection("books").whereEqualTo("uid", uidL)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
@@ -270,7 +279,7 @@ public class MyProfileFragment extends Fragment {
                 });
 
         firestoreDB.collection("books")
-                .whereEqualTo("uid", uid)
+                .whereEqualTo("uid", uidL)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -286,7 +295,7 @@ public class MyProfileFragment extends Fragment {
                     }
                 });
 
-        firestoreDB.collection("users").document(name).collection("favorites")
+        firestoreDB.collection("users").document(email).collection("favorites")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -315,15 +324,13 @@ public class MyProfileFragment extends Fragment {
                 final EditText et_email = myDialog4.findViewById(R.id.et_email);
                 final EditText et_phone = myDialog4.findViewById(R.id.et_phone);
                 final EditText et_city = myDialog4.findViewById(R.id.et_city);
-                final EditText et_degree = myDialog4.findViewById(R.id.et_degree);
-                final EditText et_special = myDialog4.findViewById(R.id.et_special);
+                final EditText et_background = myDialog4.findViewById(R.id.et_background);
 
-                et_name.setText(userNameL);
+                et_name.setText(name);
                 et_email.setText(mail);
-                et_phone.setText(userPhoneL);
-                et_city.setText(userCityL);
-                et_degree.setText(userDegreeL);
-                et_special.setText(userSpecialL);
+                et_phone.setText(phone);
+                et_city.setText(city);
+                et_background.setText(background);
 
                 Button btnCancel = myDialog4.findViewById(R.id.btnCancel);
                 Button btnUpdate = myDialog4.findViewById(R.id.btnUpdate);
@@ -344,21 +351,26 @@ public class MyProfileFragment extends Fragment {
                         progressDialog2.setMessage("Updating profile...");
                         progressDialog2.show();
 
-                        String name = et_name.getText().toString();
-                        String email = et_email.getText().toString();
-                        String phone = et_phone.getText().toString();
-                        String city = et_city.getText().toString();
-                        String degree = et_degree.getText().toString();
-                        String specialization = et_special.getText().toString();
+                        String namel = et_name.getText().toString();
+                        String emaill = et_email.getText().toString();
+                        String phonel = et_phone.getText().toString();
+                        String cityl = et_city.getText().toString();
+                        String backgroundl = et_background.getText().toString();
+
+                        SharedPreferences.Editor editor = sharedpreferences.edit();
+                        editor.putString(name, namel);
+                        editor.putString(phone, phonel);
+                        editor.putString(background, backgroundl);
+                        editor.putString(city, cityl);
+                        editor.commit();
 
                         Map<String, String> userMap = new HashMap<>();
 
-                        userMap.put("name", name);
-                        userMap.put("email", email );
-                        userMap.put("phone", phone);
-                        userMap.put("city", city);
-                        userMap.put("degree", degree);
-                        userMap.put("specialization", specialization);
+                        userMap.put("name", namel);
+                        userMap.put("email", emaill );
+                        userMap.put("phone", phonel);
+                        userMap.put("city", cityl);
+                        userMap.put("background", backgroundl);
 
                         firestore.collection("users").document(email).set(userMap, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -443,17 +455,15 @@ public class MyProfileFragment extends Fragment {
                 final EditText et_email = myDialog4.findViewById(R.id.et_email);
                 final EditText et_phone = myDialog4.findViewById(R.id.et_phone);
                 final EditText et_city = myDialog4.findViewById(R.id.et_city);
-                final EditText et_degree = myDialog4.findViewById(R.id.et_degree);
-                final EditText et_special = myDialog4.findViewById(R.id.et_special);
+                final EditText et_background = myDialog4.findViewById(R.id.et_background);
 
                 final String mail = firebaseAuth.getCurrentUser().getEmail();
 
-                et_name.setText(userNameL);
+                et_name.setText(name);
                 et_email.setText(mail);
-                et_phone.setText(userPhoneL);
-                et_city.setText(userCityL);
-                et_degree.setText(userDegreeL);
-                et_special.setText(userSpecialL);
+                et_phone.setText(phone);
+                et_city.setText(city);
+                et_background.setText(background);
 
                 Button btnCancel = myDialog4.findViewById(R.id.btnCancel);
                 Button btnUpdate = myDialog4.findViewById(R.id.btnUpdate);
@@ -469,21 +479,26 @@ public class MyProfileFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        String name = et_name.getText().toString();
-                        String email = et_email.getText().toString();
-                        String phone = et_phone.getText().toString();
-                        String city = et_city.getText().toString();
-                        String degree = et_degree.getText().toString();
-                        String specialization = et_special.getText().toString();
+                        String nameLL = et_name.getText().toString();
+                        String emailLL = et_email.getText().toString();
+                        String phoneLL = et_phone.getText().toString();
+                        String cityLL = et_city.getText().toString();
+                        String backgroundLL = et_background.getText().toString();
+
+                        SharedPreferences.Editor editor = sharedpreferences.edit();
+                        editor.putString(name, nameLL);
+                        editor.putString(phone, phoneLL);
+                        editor.putString(background, backgroundLL);
+                        editor.putString(city, cityLL);
+                        editor.commit();
 
                         Map<String, String> userMap = new HashMap<>();
 
-                        userMap.put("name", name);
-                        userMap.put("email", email );
-                        userMap.put("phone", phone);
-                        userMap.put("city", city);
-                        userMap.put("degree", degree);
-                        userMap.put("specialization", specialization);
+                        userMap.put("name", nameLL);
+                        userMap.put("email", emailLL );
+                        userMap.put("phone", phoneLL);
+                        userMap.put("city", cityLL);
+                        userMap.put("background", backgroundLL);
 
                         firestore.collection("users").document(email).set(userMap, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -524,10 +539,10 @@ public class MyProfileFragment extends Fragment {
 
     private void loadNotesList() {
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String uid = user.getUid();
+        //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        //String uid = user.getUid();
 
-        final Query query = firestoreDB.collection("books").whereEqualTo("uid", uid);
+        final Query query = firestoreDB.collection("books").whereEqualTo("uid", uidL);
 
         FirestoreRecyclerOptions<Note> response = new FirestoreRecyclerOptions.Builder<Note>()
                 .setQuery(query, Note.class)

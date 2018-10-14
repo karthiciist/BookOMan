@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
@@ -48,7 +49,7 @@ import java.util.Map;
 
 public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnAnimationEndListener {
 
-    private RecyclerView recyclerView;
+    private EmptyRecyclerView recyclerView;
     private FirestoreRecyclerAdapter adapter;
 
     private FirebaseAuth firebaseAuth;
@@ -74,10 +75,10 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
         setRetainInstance(true);
 
         myDialog = new Dialog(getActivity());
-        myDialog.setContentView(R.layout.expandeddialog);
+        myDialog.setContentView(R.layout.dialog_expanded);
 
         myDialog2 = new Dialog(getActivity());
-        myDialog2.setContentView(R.layout.imageexpanded);
+        myDialog2.setContentView(R.layout.dialog_image_expanded);
 
         LikeButton likeButton = myDialog.findViewById(R.id.heart_button);
         likeButton.setOnLikeListener(this);
@@ -107,8 +108,10 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
         firestoreDB = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
 
-
         recyclerView = view.findViewById(R.id.rvNoteList);
+
+        LinearLayout tvEmpty = view.findViewById(R.id.tvEmpty);
+        recyclerView.setEmptyView(tvEmpty);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -222,7 +225,9 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+
                         Toast.makeText(getActivity(), "Removed from favorites", Toast.LENGTH_SHORT).show();
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -239,8 +244,9 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
                 .set(data, SetOptions.merge());
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(MyFavoritesFragment.this).attach(MyFavoritesFragment.this).commit();
+        ft.replace(R.id.frm,new MyFavoritesFragment()).addToBackStack(null).commit();
 
+        myDialog.dismiss();
     }
 
     @Override
@@ -337,6 +343,8 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
                         progressDialog.dismiss();
                     }
                 });
+
+
             }
 
             @Override
@@ -351,9 +359,12 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
             public void onError(FirebaseFirestoreException e) {
                 Log.e("error", e.getMessage());
             }
+
         };
 
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
+
     }
+
 }

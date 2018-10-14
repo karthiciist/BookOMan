@@ -8,17 +8,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +50,7 @@ import java.util.List;
 
 public class MyMaterialsFragment extends Fragment {
 
-    private RecyclerView recyclerView;
+    private EmptyRecyclerView recyclerView;
     private FirestoreRecyclerAdapter adapter;
 
     private FirebaseFirestore firestoreDB;
@@ -97,10 +96,10 @@ public class MyMaterialsFragment extends Fragment {
         storageReference = firebaseStorage.getReference();
 
         myDialog = new Dialog(getActivity());
-        myDialog.setContentView(R.layout.mymaterialexpandeddialog);
+        myDialog.setContentView(R.layout.dialog_my_material_expanded);
 
         myDialog2 = new Dialog(getActivity());
-        myDialog2.setContentView(R.layout.imageexpanded);
+        myDialog2.setContentView(R.layout.dialog_image_expanded);
 
         myDialog3 = new Dialog(getActivity());
         myDialog3.setContentView(R.layout.dialog_confirm_delete);
@@ -118,6 +117,9 @@ public class MyMaterialsFragment extends Fragment {
         String uid = user.getUid();
 
         recyclerView = view.findViewById(R.id.rvNoteList);
+
+        LinearLayout tvEmpty = view.findViewById(R.id.tvEmpty);
+        recyclerView.setEmptyView(tvEmpty);
 
         // FAB setup
         fab = view.findViewById(R.id.fab);
@@ -263,7 +265,7 @@ public class MyMaterialsFragment extends Fragment {
 
                         mrpExp.setPaintFlags(mrpExp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-                        Glide.with(getActivity()).load(noteMyMaterials.getDownloadUri()).apply(options).into(bookpic);
+                        Glide.with(getActivity()).load(downloadUri).apply(options).into(bookpic);
 
                         myDialog.show();
 
@@ -271,7 +273,7 @@ public class MyMaterialsFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 ImageView ivExpandedPic = myDialog2.findViewById(R.id.ivImage);
-                                Glide.with(getActivity()).load(noteMyMaterials.getDownloadUri()).apply(options).into(ivExpandedPic);
+                                Glide.with(getActivity()).load(downloadUri).apply(options).into(ivExpandedPic);
                                 myDialog2.show();
                             }
                         });
@@ -364,7 +366,7 @@ public class MyMaterialsFragment extends Fragment {
 
     private void updateNote() {
 
-        /*Intent intent = new Intent(this, EditMyMaterialsActivity.class);
+        Intent intent = new Intent(getActivity(), SellTestActivity.class);
 
         intent.putExtra("UpdateNoteEntryName", entryName);
         intent.putExtra("UpdateNoteTitle", UpdateNoteTitle);
@@ -378,7 +380,7 @@ public class MyMaterialsFragment extends Fragment {
         intent.putExtra("UpdateNoteSellerMsg", UpdateNoteSellerMsg);
         intent.putExtra("UpdateNoteDownloadUri", downloadUri);
         startActivity(intent);
-        myDialog.dismiss();*/
+        myDialog.dismiss();
     }
 
     private void deleteNote() {
@@ -425,7 +427,7 @@ public class MyMaterialsFragment extends Fragment {
 
     private void fabClicked() {
 
-        Intent intent = new Intent(getActivity(), SellActivity.class);
+        Intent intent = new Intent(getActivity(), SellTestActivity.class);
         startActivity(intent);
 
     }

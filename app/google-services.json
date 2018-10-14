@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "737796002286",
+    "firebase_url": "https://bookoman-3f038.firebaseio.com",
+    "project_id": "bookoman-3f038",
+    "storage_bucket": "bookoman-3f038.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:737796002286:android:c2960ecbf1cbd247",
+        "android_client_info": {
+          "package_name": "com.example.gaayathri.bookoman"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "737796002286-ges7anco1sfq8f410114a1bht1o73rsj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gaayathri.bookoman",
+            "certificate_hash": "7740d64611c4c731fcf25a959b6e1ee82b748a90"
+          }
+        },
+        {
+          "client_id": "737796002286-9nvnm2iqa0ma5nv6i3f1705l7aoeevqs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjLbKe9skRJohCLyAqzCOohMv4gIjdEl0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "737796002286-9nvnm2iqa0ma5nv6i3f1705l7aoeevqs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

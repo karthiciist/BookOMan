@@ -48,10 +48,8 @@ public class AppContext extends Application {
 
     public void initChatSDK() {
 
-        //enable persistence must be made before any other usage of FirebaseDatabase instance.
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
-        // it creates the chat configurations
         ChatManager.Configuration mChatConfiguration =
                 new ChatManager.Configuration.Builder(getString(R.string.chat_firebase_appId))
                         .firebaseUrl("https://bookoman-3f038.firebaseio.com/")
@@ -60,20 +58,14 @@ public class AppContext extends Application {
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        // assuming you have a login, check if the logged user (converted to IChatUser) is valid
-//        if (currentUser != null) {
         if (currentUser != null) {
             IChatUser iChatUser = (IChatUser) IOUtils.getObjectFromFile(instance,
                     _SERIALIZED_CHAT_CONFIGURATION_LOGGED_USER);
 
-//            IChatUser iChatUser = new ChatUser();
-//            iChatUser.setId(currentUser.getUid());
-//            iChatUser.setEmail(currentUser.getEmail());
+
 
             ChatManager.start(this, mChatConfiguration, iChatUser);
             Log.i(TAG, "chat has been initialized with success");
-
-//            ChatManager.getInstance().initContactsSyncronizer();
 
             ChatUI.getInstance().setContext(instance);
             ChatUI.getInstance().enableGroups(true);
@@ -90,8 +82,6 @@ public class AppContext extends Application {
                 }
             });
 
-            // set on new conversation click listener
-//            final IChatUser support = new ChatUser("support", "Chat21 Support");
             final IChatUser support = null;
             ChatUI.getInstance().setOnNewConversationClickListener(new OnNewConversationClickListener() {
                 @Override
@@ -107,21 +97,6 @@ public class AppContext extends Application {
                 }
             });
 
-//            // on attach button click listener
-//            ChatUI.getInstance().setOnAttachClickListener(new OnAttachClickListener() {
-//                @Override
-//                public void onAttachClicked(Object object) {
-//                    Toast.makeText(instance, "onAttachClickListener", Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//
-//            // on create group button click listener
-//            ChatUI.getInstance().setOnCreateGroupClickListener(new OnCreateGroupClickListener() {
-//                @Override
-//                public void onCreateGroupClicked() {
-//                    Toast.makeText(instance, "setOnCreateGroupClickListener", Toast.LENGTH_SHORT).show();
-//                }
-//            });
             Log.i(TAG, "ChatUI has been initialized with success");
 
         } else {

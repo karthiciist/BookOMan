@@ -91,13 +91,13 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
     public File filen = null;
 
     private FirebaseAuth firebaseAuth;
-    private EditText title, author, degree, spec45ialization, mrp, price, sellerMsg;
+    private EditText title, author, mrp, price, sellerMsg;
     private FirebaseFirestore firestore;
     private FirebaseStorage firebaseStorage;
     private ProgressDialog progressDialog;
     Dialog picDialog, myDialog;
     private StorageReference storageReference;
-    String downloadUri;
+    String downloadUri, oldEntryName;
 
     SharedPreferences sharedPreferences;
 
@@ -120,13 +120,10 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                 , R.drawable.ic_check_white_24dp);
 
         picDialog = new Dialog(this);
-        picDialog.setContentView(R.layout.selectphotodialog);
+        picDialog.setContentView(R.layout.dialog_select_photo);
 
         myDialog = new Dialog(this);
-        myDialog.setContentView(R.layout.adplaceddialog);
-
-
-
+        myDialog.setContentView(R.layout.dialog_adplaced);
 
         Spinner degreeSpinner = findViewById(R.id.etDegree);
         Spinner specialSpinner = findViewById(R.id.etSpecialization);
@@ -148,6 +145,7 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
         storageReference = firebaseStorage.getReference();
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -166,22 +164,20 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
             String userNameL = sharedPreferences.getString(name, "");
             TextView sampleUser = findViewById(R.id.sampleUser);
             sampleUser.setText(userNameL);
-
         }
 
         setVisiblity();
+
+        setBundleViews();
 
         progressDialog = new ProgressDialog(this);
 
         Long tsLong = System.currentTimeMillis()/1000;
         final String timeStamp = tsLong.toString();
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final String email = user.getEmail();
         final String name = user.getDisplayName();
-
         final String entryName = timeStamp + email;
-
 
         DocumentReference docRef = firestore.collection("users").document(email);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -199,6 +195,35 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
 
                                 progressDialog.setMessage("Placing your ad...");
                                 progressDialog.show();
+
+                                if (oldEntryName != null) {
+
+                                    firestore.collection("books")
+                                            .document(oldEntryName)
+                                            .delete()
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    Toast.makeText(getApplicationContext(), "Old material has been deleted!", Toast.LENGTH_SHORT).show();
+
+                                                    StorageReference imageReference1 = storageReference.child(firebaseAuth.getCurrentUser().getEmail()).child("bookimages").child(oldEntryName);
+
+                                                    imageReference1.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            Toast.makeText(SellTestActivity.this, "Book image deleted successfully!!!", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception exception) {
+                                                            Toast.makeText(SellTestActivity.this, "Cannot delete book image", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+
+                                                }
+                                            });
+
+                                }
 
                                 sampleApprovalView.setDrawingCacheEnabled(true);
                                 sampleApprovalView.buildDrawingCache();
@@ -232,7 +257,11 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                                         final String ltitle = title.getText().toString();
                                         final String lauthor = author.getText().toString();
                                         final String ldegree = degreeSpinner.getSelectedItem().toString();
-                                        final String lspecialization = specialSpinner.getSelectedItem().toString();
+                                        String lspecialization = null;
+                                        if (specialSpinner.isShown()) {
+                                            lspecialization = specialSpinner.getSelectedItem().toString();
+                                            bookMap.put("specialization", lspecialization);
+                                        }
                                         final String lmrp = mrp.getText().toString();
                                         final String lprice = price.getText().toString();
                                         final String entryName = timeStamp + email;
@@ -241,7 +270,7 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                                         bookMap.put("title", ltitle);
                                         bookMap.put("author", lauthor);
                                         bookMap.put("degree", ldegree);
-                                        bookMap.put("specialization", lspecialization);
+                                        //bookMap.put("specialization", lspecialization);
                                         bookMap.put("mrp", "₹ " + lmrp);
                                         bookMap.put("price", "₹ " + lprice);
                                         bookMap.put("user", name);
@@ -253,6 +282,7 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                                         bookMap.put("uid", uid);
                                         bookMap.put("email", email);
 
+                                        final String finalLspecialization = lspecialization;
                                         firestore.collection("books").document(timeStamp + email).set(bookMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
@@ -268,7 +298,7 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                                                                     .put("title", ltitle)
                                                                     .put("author", lauthor)
                                                                     .put("degree", ldegree)
-                                                                    .put("specialization", lspecialization)
+                                                                    .put("specialization", finalLspecialization)
                                                                     .put("mrp", "₹ " + lmrp)
                                                                     .put("price", "₹ " + lprice)
                                                                     .put("user", name)
@@ -304,7 +334,6 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                                         });
                                     }
                                 });
-
                             }
                         });
 
@@ -318,8 +347,28 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                 }
             }
         });
+    }
 
+    private void setBundleViews() {
 
+        final Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+
+            Glide.with(SellTestActivity.this).load(bundle.getString("UpdateNoteDownloadUri")).into(swView);
+            Glide.with(SellTestActivity.this).load(bundle.getString("UpdateNoteDownloadUri")).into(sampleApprovalView);
+            Glide.with(SellTestActivity.this).load(bundle.getString("UpdateNoteDownloadUri")).into(sampleView);
+
+            title.setText(bundle.getString("UpdateNoteTitle"));
+            author.setText(bundle.getString("UpdateNoteAuthor"));
+            price.setText(bundle.getString("UpdateNotePrice"));
+            mrp.setText(bundle.getString("UpdateNoteMrp"));
+            sellerMsg.setText(bundle.getString("UpdateNoteSellerMsg"));
+
+            oldEntryName = bundle.getString("UpdateNoteEntryName");
+
+            nextBtn.setVisibility(View.VISIBLE);
+
+        }
 
     }
 
@@ -394,7 +443,7 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                 Spinner degreeSpinner = findViewById(R.id.etDegree);
                 Spinner specialSpinner = findViewById(R.id.etSpecialization);
 
-                if ((title.getText().toString().equals("")) && (author.getText().toString().equals("")) && (degreeSpinner.getSelectedItem().toString().equals("")) && (specialSpinner.getSelectedItem().toString().equals("")) && (mrp.getText().toString().equals("")) && (price.getText().toString().equals("")) && (sellerMsg.getText().toString().equals(""))){
+                if ((title.getText().toString().equals("")) || (author.getText().toString().equals("")) || (degreeSpinner.getSelectedItem().toString().equals("")) || (specialSpinner.getSelectedItem().toString().equals("")) || (mrp.getText().toString().equals("")) || (price.getText().toString().equals("")) || (sellerMsg.getText().toString().equals(""))){
 
                     Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
 
@@ -484,7 +533,7 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                 author.setText("");
 
                 IntentIntegrator integrator = new IntentIntegrator(SellTestActivity.this);
-                integrator.setPrompt("Scan a barcode");
+                integrator.setPrompt("Scan the barcode at the back cover of your book");
                 integrator.setCameraId(0);  // Use a specific camera of the device
                 integrator.setOrientationLocked(true);
                 integrator.setBeepEnabled(true);
@@ -637,7 +686,6 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
             Toast.makeText(SellTestActivity.this, "please check your sdcard status", Toast.LENGTH_SHORT).show();
         }
     }
-
     private void checkPermissionRG(){
         int permissionCheck = ContextCompat.checkSelfPermission(SellTestActivity.this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -701,7 +749,6 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                 break;
         }
     }
-
 
     private void checkinOpenLibrary(String contents) {
 
@@ -954,6 +1001,48 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
             dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             dataAdapter2.notifyDataSetChanged();
             specialSpinner.setAdapter(dataAdapter2);
+        }
+
+        if (degree.contentEquals("Arts")) {
+
+            specialSpinner.setVisibility(View.GONE);
+
+        }
+
+        if (degree.contentEquals("Commerce")) {
+
+            specialSpinner.setVisibility(View.GONE);
+
+        }
+
+        if (degree.contentEquals("Computer Applications")) {
+
+            specialSpinner.setVisibility(View.GONE);
+
+        }
+
+        if (degree.contentEquals("Education")) {
+
+            specialSpinner.setVisibility(View.GONE);
+
+        }
+
+        if (degree.contentEquals("Literature")) {
+
+            specialSpinner.setVisibility(View.GONE);
+
+        }
+
+        if (degree.contentEquals("Law")) {
+
+            specialSpinner.setVisibility(View.GONE);
+
+        }
+
+        if (degree.contentEquals("Science")) {
+
+            specialSpinner.setVisibility(View.GONE);
+
         }
 
     }
