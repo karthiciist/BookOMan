@@ -2,13 +2,13 @@ package com.example.gaayathri.bookoman;
 
 import java.util.ArrayList;
 
-public class Team {
+public class Degree {
 
     public String Name;
     public String Image;
     public ArrayList<String> players=new ArrayList<String>();
 
-    public Team(String Name)
+    public Degree(String Name)
     {
         this.Name=Name;
     }

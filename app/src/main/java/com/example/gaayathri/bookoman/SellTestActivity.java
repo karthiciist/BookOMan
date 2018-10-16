@@ -443,7 +443,14 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                 Spinner degreeSpinner = findViewById(R.id.etDegree);
                 Spinner specialSpinner = findViewById(R.id.etSpecialization);
 
-                if ((title.getText().toString().equals("")) || (author.getText().toString().equals("")) || (degreeSpinner.getSelectedItem().toString().equals("")) || (specialSpinner.getSelectedItem().toString().equals("")) || (mrp.getText().toString().equals("")) || (price.getText().toString().equals("")) || (sellerMsg.getText().toString().equals(""))){
+                String a = title.getText().toString();
+                String b = author.getText().toString();
+                String c = degreeSpinner.getSelectedItem().toString();
+                String e = mrp.getText().toString();
+                String f = price.getText().toString();
+                String g = sellerMsg.getText().toString();
+
+                if ((a.equals("")) || (b.equals("")) || (c.equals("")) || (e.equals("")) || (f.equals("")) || (g.equals(""))){
 
                     Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
 
@@ -462,9 +469,9 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                     sampleAd.setVisibility(View.VISIBLE);
                     prv1Btn.setVisibility(View.VISIBLE);
 
-                    final String ltitle = title.getText().toString();
-                    final String lauthor = author.getText().toString();
-                    final String ldegree = degreeSpinner.getSelectedItem().toString();
+                    final String ltitle = a;
+                    final String lauthor = b;
+                    final String ldegree = c;
                     if (specialSpinner.isShown()){
                         final String lspecialization = specialSpinner.getSelectedItem().toString();
                         sampleSpecial.setText(lspecialization);
@@ -472,9 +479,9 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                         final String lspecialization = "";
                         sampleSpecial.setText(lspecialization);
                     }
-                    final String lmrp = mrp.getText().toString();
-                    final String lprice = price.getText().toString();
-                    final String lsellerMsg = sellerMsg.getText().toString();
+                    final String lmrp = e;
+                    final String lprice = f;
+                    final String lsellerMsg = g;
 
 
                     sampleTitle.setText(ltitle);

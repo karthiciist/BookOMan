@@ -38,9 +38,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SellActivity"
-            android:parentActivityName=".HomeActivity" />
         <activity android:name=".InstantSearchActivity">
             <meta-data
                 android:name="android.app.searchable"

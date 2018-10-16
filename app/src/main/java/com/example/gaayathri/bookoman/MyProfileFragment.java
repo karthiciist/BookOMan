@@ -116,6 +116,7 @@ public class MyProfileFragment extends Fragment {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         uidL = user.getUid();
         emailL = user.getEmail();
+        nameL = user.getDisplayName();
 
         firestore = FirebaseFirestore.getInstance();
 
@@ -126,6 +127,9 @@ public class MyProfileFragment extends Fragment {
         userBackground = view.findViewById(R.id.tv_background);
         userPhoneNo = view.findViewById(R.id.tv_phone);
         userEmailId = view.findViewById(R.id.tv_email);
+
+        userEmailId.setText(emailL);
+        userNametv.setText(nameL);
 
         profilePic = view.findViewById(R.id.profile_pic);
 
@@ -170,18 +174,17 @@ public class MyProfileFragment extends Fragment {
         final String profilePicUrl = firebaseAuth.getCurrentUser().getPhotoUrl().toString();
 
 
-        final SharedPreferences sharedpreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        sharedpreferences = getActivity().getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+        //final SharedPreferences sharedpreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
 
         name = sharedpreferences.getString(name, "");
         phone = sharedpreferences.getString(phone, "");
         background = sharedpreferences.getString(background, "");
         city = sharedpreferences.getString(city, "");
 
-        userNametv.setText(name);
         userCity.setText(city);
         userBackground.setText(background);
         userPhoneNo.setText(phone);
-        userEmailId.setText(mail);
 
         final RequestOptions options = new RequestOptions();
         options.centerCrop();
@@ -212,11 +215,9 @@ public class MyProfileFragment extends Fragment {
                             editor.putString(city, userCityL);
                             editor.commit();
 
-                            userNametv.setText(userNameL);
                             userCity.setText(userCityL);
                             userBackground.setText(userBackgroundL);
                             userPhoneNo.setText(userPhoneL);
-                            userEmailId.setText(mail);
 
                             final RequestOptions options = new RequestOptions();
                             options.centerCrop();

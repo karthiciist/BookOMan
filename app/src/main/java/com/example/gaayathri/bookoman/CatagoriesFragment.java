@@ -1,6 +1,5 @@
 package com.example.gaayathri.bookoman;
 
-import android.app.FragmentTransaction;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -41,7 +40,7 @@ public class CatagoriesFragment extends Fragment {
             elv.setIndicatorBoundsRelative(width - px, width);
         }
 
-        final ArrayList<Team> team = getData();
+        final ArrayList<Degree> team = getData();
 
         //CREATE AND BIND TO ADAPTER
         CustomAdapter adapter = new CustomAdapter((HomeActivity) getActivity(), team);
@@ -74,10 +73,10 @@ public class CatagoriesFragment extends Fragment {
         return view;
     }
 
-    private ArrayList<Team> getData ()
+    private ArrayList<Degree> getData ()
     {
 
-        Team t1 = new Team("Architecture");
+        Degree t1 = new Degree("Architecture");
 
         t1.players.add("All Architecture books");
         t1.players.add("Landscape Architecture");
@@ -87,19 +86,19 @@ public class CatagoriesFragment extends Fragment {
         t1.players.add("Lighting Architecture");
         t1.players.add("Political Architecture");
 
-        Team t2 = new Team("Arts");
+        Degree t2 = new Degree("Arts");
         t2.players.add("All Arts Books");
 
-        Team t3 = new Team("Commerce");
+        Degree t3 = new Degree("Commerce");
         t3.players.add("All Commerce Books");
 
-        Team t4 = new Team("Computer Applications");
+        Degree t4 = new Degree("Computer Applications");
         t4.players.add("All Computer_Applications Books");
 
-        Team t5 = new Team("Education");
+        Degree t5 = new Degree("Education");
         t5.players.add("All Education Books");
 
-        Team t6 = new Team("Engineering");
+        Degree t6 = new Degree("Engineering");
         t6.players.add("All Engineering books");
         t6.players.add("CSE");
         t6.players.add("ECE");
@@ -111,17 +110,17 @@ public class CatagoriesFragment extends Fragment {
         t6.players.add("Mechatronics");
         t6.players.add("Production Engineering");
 
-        Team t7 = new Team("Law");
+        Degree t7 = new Degree("Law");
         t7.players.add("All Law Books");
 
-        Team t8 = new Team("Literature");
+        Degree t8 = new Degree("Literature");
         t8.players.add("English");
         t8.players.add("Tamil");
         t8.players.add("Telugu");
         t8.players.add("Malayalam");
         t8.players.add("Others");
 
-        Team t9 = new Team("Medical");
+        Degree t9 = new Degree("Medical");
         t9.players.add("All Medicine Books");
         t9.players.add("General Medicine");
         t9.players.add("Dental");
@@ -129,16 +128,16 @@ public class CatagoriesFragment extends Fragment {
         t9.players.add("Nursing");
         t9.players.add("Siddha & Ayurvedha");
 
-        Team t10 = new Team("Science");
+        Degree t10 = new Degree("Science");
         t10.players.add("Physics");
         t10.players.add("Chemistry");
         t10.players.add("Mathematics");
         t10.players.add("Life Science");
 
-        Team t11 = new Team("Others");
+        Degree t11 = new Degree("Others");
         t11.players.add("All Other Books");
 
-        ArrayList<Team> allTeams = new ArrayList<Team>();
+        ArrayList<Degree> allTeams = new ArrayList<Degree>();
         allTeams.add(t1);
         allTeams.add(t2);
         allTeams.add(t3);

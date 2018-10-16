@@ -12,10 +12,10 @@ import java.util.ArrayList;
 
 public class CustomAdapter extends BaseExpandableListAdapter {
     private Context c;
-    private ArrayList<Team> team;
+    private ArrayList<Degree> team;
     private LayoutInflater inflater;
 
-    public CustomAdapter(HomeActivity c, ArrayList<Team> team)
+    public CustomAdapter(HomeActivity c, ArrayList<Degree> team)
     {
         this.c=c;
         this.team=team;
@@ -150,7 +150,7 @@ public class CustomAdapter extends BaseExpandableListAdapter {
         }
 
         //GET GROUP/TEAM ITEM
-        Team t=(Team) getGroup(groupPosition);
+        Degree t=(Degree) getGroup(groupPosition);
 
         //SET GROUP NAME
         TextView nameTv=(TextView) convertView.findViewById(R.id.textView1);
