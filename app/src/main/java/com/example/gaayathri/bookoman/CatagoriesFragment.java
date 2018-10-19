@@ -64,7 +64,7 @@ public class CatagoriesFragment extends Fragment {
 
                 getFragmentManager().beginTransaction().replace(R.id.frm, catagoriesExpandedFragment).addToBackStack(null).commit();
 
-                Toast.makeText(getActivity(), team.get(groupPos).players.get(childPos), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), team.get(groupPos).players.get(childPos), Toast.LENGTH_SHORT).show();
 
                 return false;
             }
@@ -93,7 +93,7 @@ public class CatagoriesFragment extends Fragment {
         t3.players.add("All Commerce Books");
 
         Degree t4 = new Degree("Computer Applications");
-        t4.players.add("All Computer_Applications Books");
+        t4.players.add("All Computer Applications Books");
 
         Degree t5 = new Degree("Education");
         t5.players.add("All Education Books");
@@ -114,6 +114,7 @@ public class CatagoriesFragment extends Fragment {
         t7.players.add("All Law Books");
 
         Degree t8 = new Degree("Literature");
+        t8.players.add("All Literature books");
         t8.players.add("English");
         t8.players.add("Tamil");
         t8.players.add("Telugu");
@@ -129,6 +130,7 @@ public class CatagoriesFragment extends Fragment {
         t9.players.add("Siddha & Ayurvedha");
 
         Degree t10 = new Degree("Science");
+        t10.players.add("All Science Books");
         t10.players.add("Physics");
         t10.players.add("Chemistry");
         t10.players.add("Mathematics");

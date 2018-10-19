@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,7 +63,7 @@ public class CatagoriesExpandedFragment extends Fragment implements OnLikeListen
 
     private static final String TAG = "EntireLibraryFragment";
 
-    private RecyclerView recyclerView;
+    private EmptyRecyclerView recyclerView;
     private FirestoreRecyclerAdapter adapter;
 
     private FirebaseAuth firebaseAuth;
@@ -145,6 +146,9 @@ public class CatagoriesExpandedFragment extends Fragment implements OnLikeListen
         // Setting up recycler view
         recyclerView = view.findViewById(R.id.rvNoteList);
 
+        LinearLayout tvEmpty = view.findViewById(R.id.tvEmpty);
+        recyclerView.setEmptyView(tvEmpty);
+
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -153,7 +157,33 @@ public class CatagoriesExpandedFragment extends Fragment implements OnLikeListen
 
         loadNotesList(value);
 
-        firestoreListener = firestoreDB.collection("books").orderBy("timestamp", Query.Direction.DESCENDING)
+        String question = null;
+
+        if (value.equals("All Architecture books")) {
+            question = "Architecture";
+        } else if ((value.equals("All Arts Books"))) {
+            question = "Arts";
+        } else if ((value.equals("All Commerce Books"))) {
+            question = "Commerce";
+        } else if ((value.equals("All Computer Applications Books"))) {
+            question = "Computer Applications";
+        } else if ((value.equals("All Education Books"))) {
+            question = "Education";
+        } else if ((value.equals("All Engineering books"))) {
+            question = "Engineering";
+        } else if ((value.equals("All Law Books"))) {
+            question = "Law";
+        } else if ((value.equals("All Literature books"))) {
+            question = "Literature";
+        } else if ((value.equals("All Medicine Books"))) {
+            question = "Medicine";
+        } else if ((value.equals("All Science Books"))) {
+            question = "Science";
+        } else if ((value.equals("All Other Books"))) {
+            question = "Others";
+        }
+
+        firestoreListener = firestoreDB.collection("books").whereEqualTo("degree", question)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
@@ -314,7 +344,35 @@ public class CatagoriesExpandedFragment extends Fragment implements OnLikeListen
 
     private void loadNotesList(String value) {
 
-        Query query = firestoreDB.collection("books").whereEqualTo("specialization", value);
+        String question = null;
+
+        if (value.equals("All Architecture books")) {
+            question = "Architecture";
+        } else if ((value.equals("All Arts Books"))) {
+            question = "Arts";
+        } else if ((value.equals("All Commerce Books"))) {
+            question = "Commerce";
+        } else if ((value.equals("All Computer Applications Books"))) {
+            question = "Computer Applications";
+        } else if ((value.equals("All Education Books"))) {
+            question = "Education";
+        } else if ((value.equals("All Engineering books"))) {
+            question = "Engineering";
+        } else if ((value.equals("All Law Books"))) {
+            question = "Law";
+        } else if ((value.equals("All Literature books"))) {
+            question = "Literature";
+        } else if ((value.equals("All Medicine Books"))) {
+            question = "Medicine";
+        } else if ((value.equals("All Science Books"))) {
+            question = "Science";
+        } else if ((value.equals("All Other Books"))) {
+            question = "Others";
+        }
+
+        Query query = firestoreDB.collection("books").whereEqualTo("degree", question);
+
+        Toast.makeText(getActivity(), question, Toast.LENGTH_SHORT).show();
 
         FirestoreRecyclerOptions<Note> response = new FirestoreRecyclerOptions.Builder<Note>()
                 .setQuery(query, Note.class)
