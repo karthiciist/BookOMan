@@ -24,9 +24,6 @@ import org.chat21.android.core.users.models.ChatUser;
 import org.chat21.android.core.users.models.IChatUser;
 import org.chat21.android.ui.ChatUI;
 
-import static com.example.gaayathri.bookoman.HomeFragment.background;
-import static com.example.gaayathri.bookoman.HomeFragment.city;
-import static com.example.gaayathri.bookoman.HomeFragment.mypreference;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -45,8 +42,6 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        sharedpreferences = HomeActivity.this.getSharedPreferences(mypreference, Context.MODE_PRIVATE);
 
         ImageView imageView = findViewById(R.id.mysearch);
 
@@ -183,15 +178,7 @@ public class HomeActivity extends AppCompatActivity
 
     private void Logout() {
         firebaseAuth.signOut();
-
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.remove(city);
-        editor.remove(background);
-        editor.commit();
-
         finish();
         startActivity(new Intent(HomeActivity.this, EntryActivity.class));
-
     }
-
 }

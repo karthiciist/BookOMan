@@ -3,11 +3,18 @@
 
     <PreferenceCategory android:title="General">
 
-        <CheckBoxPreference
+        <Preference
+            android:key="editMyProfile"
+            android:summary="Click to edit your phone number, name, email etc."
+            android:title="Edit my profile">
+        </Preference>
+
+        <!--<CheckBoxPreference
+            android:id="@+id/anonymousCB"
             android:defaultValue="true"
             android:key="@string/key_upload_over_wifi"
             android:summary="@string/summary_make_me_anonymous"
-            android:title="@string/make_me_anonymous" />
+            android:title="@string/make_me_anonymous" />-->
 
     </PreferenceCategory>
 

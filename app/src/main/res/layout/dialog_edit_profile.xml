@@ -36,9 +36,13 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"
                 android:inputType="textCapWords"
-                android:text=""
+                android:background="@drawable/text_view_border"
+                android:padding="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:textColor="#000000"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textAlignment="center"/>
 
         </LinearLayout>
 
@@ -61,9 +65,13 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"
                 android:inputType="textEmailAddress"
-                android:text=""
                 android:textColor="#000000"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:background="@drawable/text_view_border"
+                android:padding="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:textAlignment="center"/>
 
         </LinearLayout>
 
@@ -88,7 +96,12 @@
                 android:inputType="number"
                 android:text=""
                 android:textColor="#000000"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:background="@drawable/text_view_border"
+                android:padding="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:textAlignment="center"/>
 
         </LinearLayout>
 
@@ -105,15 +118,16 @@
                 android:textColor="@color/headings"
                 android:textSize="13sp" />
 
-            <EditText
-                android:id="@+id/et_city"
+            <Spinner
+                android:id="@+id/spCity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-light"
-                android:inputType="textCapWords"
-                android:text=""
-                android:textColor="#000000"
-                android:textSize="18sp" />
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/text_view_border"
+                android:padding="10dp"
+                android:textAlignment="center"/>
 
         </LinearLayout>
 
@@ -130,15 +144,16 @@
                 android:textColor="@color/headings"
                 android:textSize="13sp" />
 
-            <EditText
-                android:id="@+id/et_background"
+            <Spinner
+                android:id="@+id/spBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-light"
-                android:inputType="textCapWords"
-                android:text=""
-                android:textColor="#000000"
-                android:textSize="18sp" />
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/text_view_border"
+                android:padding="10dp"
+                android:textAlignment="center"/>
 
         </LinearLayout>
 

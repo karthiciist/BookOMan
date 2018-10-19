@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,12 +17,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,17 +89,11 @@ public class MyProfileFragment extends Fragment {
 
     private FirebaseFirestore firestore;
 
-    SharedPreferences sharedpreferences;
 
     public static final String mypreference = "mypref";
     public static final String DonotShow = "false";
 
-    public static String name = "nameKey";
-    public static String phone = "phoneKey";
-    public static String background = "backgroundKey";
-    public static String city = "cityKey";
-    public static String profilePicUrl = "profilePicUrlKey";
-    public static String email = "emailKey";
+    SharedPreferences sharedpreferences;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
@@ -173,81 +170,52 @@ public class MyProfileFragment extends Fragment {
 
         final String profilePicUrl = firebaseAuth.getCurrentUser().getPhotoUrl().toString();
 
-
-        sharedpreferences = getActivity().getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-        //final SharedPreferences sharedpreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-
-        name = sharedpreferences.getString(name, "");
-        phone = sharedpreferences.getString(phone, "");
-        background = sharedpreferences.getString(background, "");
-        city = sharedpreferences.getString(city, "");
-
-        userCity.setText(city);
-        userBackground.setText(background);
-        userPhoneNo.setText(phone);
-
         final RequestOptions options = new RequestOptions();
         options.centerCrop();
 
         Glide.with(getActivity()).load(profilePicUrl).apply(options).into(profilePic);
 
-        if (!(sharedpreferences.contains(phone)) || !(sharedpreferences.contains(background)) || !(sharedpreferences.contains(city))) {
+        DocumentReference docRef = firestoreDB.collection("users").document(mail);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
 
-            DocumentReference docRef = firestoreDB.collection("users").document(mail);
-            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        userNameL = document.getString("name");
+                        userPhoneL = document.getString("phone");
+                        userBackgroundL = document.getString("background");
+                        userCityL = document.getString("city");
+                        userProfilePicL = document.getString("downloadUri");
 
-                            userNameL = document.getString("name");
-                            userPhoneL = document.getString("phone");
-                            userBackgroundL = document.getString("background");
-                            userCityL = document.getString("city");
-                            userProfilePicL = document.getString("downloadUri");
+                        userCity.setText(userCityL);
+                        userBackground.setText(userBackgroundL);
+                        userPhoneNo.setText(userPhoneL);
 
-                            SharedPreferences.Editor editor = sharedpreferences.edit();
-                            editor.putString(name, userNameL);
-                            editor.putString(phone, userPhoneL);
-                            editor.putString(background, userBackgroundL);
-                            editor.putString(city, userCityL);
-                            editor.commit();
+                        if ((userNameL == null) || (userPhoneL == null) || (userBackgroundL == null) || (userCityL == null)) {
 
-                            userCity.setText(userCityL);
-                            userBackground.setText(userBackgroundL);
-                            userPhoneNo.setText(userPhoneL);
+                            sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-                            final RequestOptions options = new RequestOptions();
-                            options.centerCrop();
+                            String showDialog = sharedpreferences.getString(DonotShow, "");
 
-                            Glide.with(getActivity()).load(profilePicUrl).apply(options).into(profilePic);
+                            if (!showDialog.equals("true") ) {
 
-                            if ((userNameL == null) || (userPhoneL == null) || (userBackgroundL == null) || (userCityL == null)) {
-
-                                SharedPreferences sharedpreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-
-                                String showDialog = sharedpreferences.getString(DonotShow, "");
-
-                                if (!showDialog.equals("true") ) {
-
-                                    showFillProfileDialog();
-
-                                }
+                                showFillProfileDialog();
 
                             }
 
-                        } else {
-                            Log.d(TAG, "No such document");
                         }
-                    } else {
-                        Log.d(TAG, "get failed with ", task.getException());
-                    }
-                }
-            });
 
-        }
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
 
         recyclerView = view.findViewById(R.id.rvNoteList);
 
@@ -296,7 +264,7 @@ public class MyProfileFragment extends Fragment {
                     }
                 });
 
-        firestoreDB.collection("users").document(email).collection("favorites")
+        firestoreDB.collection("users").document(emailL).collection("favorites")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -321,86 +289,7 @@ public class MyProfileFragment extends Fragment {
                 progressDialog1.setMessage("Loading edit window...");
                 progressDialog1.show();
 
-                final EditText et_name = myDialog4.findViewById(R.id.et_name);
-                final EditText et_email = myDialog4.findViewById(R.id.et_email);
-                final EditText et_phone = myDialog4.findViewById(R.id.et_phone);
-                final EditText et_city = myDialog4.findViewById(R.id.et_city);
-                final EditText et_background = myDialog4.findViewById(R.id.et_background);
-
-                et_name.setText(name);
-                et_email.setText(mail);
-                et_phone.setText(phone);
-                et_city.setText(city);
-                et_background.setText(background);
-
-                Button btnCancel = myDialog4.findViewById(R.id.btnCancel);
-                Button btnUpdate = myDialog4.findViewById(R.id.btnUpdate);
-
-                btnCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        myDialog4.dismiss();
-                    }
-                });
-
-                btnUpdate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        progressDialog2 = new ProgressDialog(getActivity());
-
-                        progressDialog2.setMessage("Updating profile...");
-                        progressDialog2.show();
-
-                        String namel = et_name.getText().toString();
-                        String emaill = et_email.getText().toString();
-                        String phonel = et_phone.getText().toString();
-                        String cityl = et_city.getText().toString();
-                        String backgroundl = et_background.getText().toString();
-
-                        SharedPreferences.Editor editor = sharedpreferences.edit();
-                        editor.putString(name, namel);
-                        editor.putString(phone, phonel);
-                        editor.putString(background, backgroundl);
-                        editor.putString(city, cityl);
-                        editor.commit();
-
-                        Map<String, String> userMap = new HashMap<>();
-
-                        userMap.put("name", namel);
-                        userMap.put("email", emaill );
-                        userMap.put("phone", phonel);
-                        userMap.put("city", cityl);
-                        userMap.put("background", backgroundl);
-
-                        firestore.collection("users").document(email).set(userMap, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-
-                                progressDialog2.dismiss();
-
-                                myDialog4.dismiss();
-
-                                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                ft.detach(MyProfileFragment.this).attach(MyProfileFragment.this).commit();
-
-
-                                Toast.makeText(getActivity(), "Profile updated successfully!!!", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                                progressDialog2.dismiss();
-
-                                String error = e.getMessage();
-                                Toast.makeText(getActivity(), "Cannot update profile. Error:" + error, Toast.LENGTH_SHORT).show();
-
-                            }
-                        });
-
-                    }
-                });
+                updateUserData();
 
                 progressDialog1.dismiss();
 
@@ -429,7 +318,7 @@ public class MyProfileFragment extends Fragment {
 
                 if (checkBoxState) {
 
-                    SharedPreferences sharedpreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+                    sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
                     SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.putString(DonotShow, "true");
@@ -452,83 +341,7 @@ public class MyProfileFragment extends Fragment {
                 progressDialog2.setMessage("Updating profile...");
                 progressDialog2.show();
 
-                final EditText et_name = myDialog4.findViewById(R.id.et_name);
-                final EditText et_email = myDialog4.findViewById(R.id.et_email);
-                final EditText et_phone = myDialog4.findViewById(R.id.et_phone);
-                final EditText et_city = myDialog4.findViewById(R.id.et_city);
-                final EditText et_background = myDialog4.findViewById(R.id.et_background);
-
-                final String mail = firebaseAuth.getCurrentUser().getEmail();
-
-                et_name.setText(name);
-                et_email.setText(mail);
-                et_phone.setText(phone);
-                et_city.setText(city);
-                et_background.setText(background);
-
-                Button btnCancel = myDialog4.findViewById(R.id.btnCancel);
-                Button btnUpdate = myDialog4.findViewById(R.id.btnUpdate);
-
-                btnCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        myDialog4.dismiss();
-                    }
-                });
-
-                btnUpdate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        String nameLL = et_name.getText().toString();
-                        String emailLL = et_email.getText().toString();
-                        String phoneLL = et_phone.getText().toString();
-                        String cityLL = et_city.getText().toString();
-                        String backgroundLL = et_background.getText().toString();
-
-                        SharedPreferences.Editor editor = sharedpreferences.edit();
-                        editor.putString(name, nameLL);
-                        editor.putString(phone, phoneLL);
-                        editor.putString(background, backgroundLL);
-                        editor.putString(city, cityLL);
-                        editor.commit();
-
-                        Map<String, String> userMap = new HashMap<>();
-
-                        userMap.put("name", nameLL);
-                        userMap.put("email", emailLL );
-                        userMap.put("phone", phoneLL);
-                        userMap.put("city", cityLL);
-                        userMap.put("background", backgroundLL);
-
-                        firestore.collection("users").document(email).set(userMap, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-
-                                progressDialog2.dismiss();
-
-                                myDialog4.dismiss();
-
-                                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                ft.detach(MyProfileFragment.this).attach(MyProfileFragment.this).commit();
-
-
-                                Toast.makeText(getActivity(), "Profile updated successfully!!!", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                                progressDialog2.dismiss();
-
-                                String error = e.getMessage();
-                                Toast.makeText(getActivity(), "Cannot update profile. Error:" + error, Toast.LENGTH_SHORT).show();
-
-                            }
-                        });
-
-                    }
-                });
+                updateUserData();
 
                 myDialog4.show();
             }
@@ -675,6 +488,174 @@ public class MyProfileFragment extends Fragment {
     public void onStop() {
         super.onStop();
         adapter.stopListening();
+    }
+
+    public void updateUserData() {
+
+        final EditText et_name = myDialog4.findViewById(R.id.et_name);
+        final EditText et_email = myDialog4.findViewById(R.id.et_email);
+        final EditText et_phone = myDialog4.findViewById(R.id.et_phone);
+        final Spinner spCity = myDialog4.findViewById(R.id.spCity);
+        final Spinner spBackground = myDialog4.findViewById(R.id.spBackground);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.degrees_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spBackground.setAdapter(adapter);
+
+        ArrayAdapter<CharSequence> cityadapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.cities_array, android.R.layout.simple_spinner_item);
+        cityadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spCity.setAdapter(cityadapter);
+
+        final String mail = firebaseAuth.getCurrentUser().getEmail();
+
+        et_name.setText(userNameL);
+        et_email.setText(mail);
+        et_phone.setText(userPhoneL);
+
+        if (userBackgroundL.equals("Architecture")){
+            spBackground.setSelection(1);
+        } else if (userBackgroundL.equals("Arts")) {
+            spBackground.setSelection(2);
+        } else if (userBackgroundL.equals("Commerce")) {
+            spBackground.setSelection(3);
+        } else if (userBackgroundL.equals("Computer Applications")) {
+            spBackground.setSelection(4);
+        } else if (userBackgroundL.equals("Education")) {
+            spBackground.setSelection(5);
+        } else if (userBackgroundL.equals("Engineering")) {
+            spBackground.setSelection(6);
+        } else if (userBackgroundL.equals("Literature")) {
+            spBackground.setSelection(7);
+        } else if (userBackgroundL.equals("Law")) {
+            spBackground.setSelection(8);
+        } else if (userBackgroundL.equals("Medical")) {
+            spBackground.setSelection(9);
+        } else if (userBackgroundL.equals("Science")) {
+            spBackground.setSelection(10);
+        }
+
+        if (userCityL.equals("Ariyalur")){
+            spCity.setSelection(1);
+        } else if (userCityL.equals("Chennai")) {
+            spCity.setSelection(2);
+        } else if (userCityL.equals("Coimbatore")) {
+            spCity.setSelection(3);
+        } else if (userCityL.equals("Cuddalore")) {
+            spCity.setSelection(4);
+        } else if (userCityL.equals("Dharmapuri")) {
+            spCity.setSelection(5);
+        } else if (userCityL.equals("Dindigul")) {
+            spCity.setSelection(6);
+        } else if (userCityL.equals("Erode")) {
+            spCity.setSelection(7);
+        } else if (userCityL.equals("Kancheepuram")) {
+            spCity.setSelection(8);
+        } else if (userCityL.equals("Karur")) {
+            spCity.setSelection(9);
+        } else if (userCityL.equals("Krishnagiri")) {
+            spCity.setSelection(10);
+        } else if (userCityL.equals("Madurai")) {
+            spCity.setSelection(11);
+        } else if (userCityL.equals("Nagapattinam")) {
+            spCity.setSelection(12);
+        } else if (userCityL.equals("Kanyakumari")) {
+            spCity.setSelection(13);
+        } else if (userCityL.equals("Namakkal")) {
+            spCity.setSelection(14);
+        } else if (userCityL.equals("Perambalur")) {
+            spCity.setSelection(15);
+        } else if (userCityL.equals("Pudukottai")) {
+            spCity.setSelection(16);
+        } else if (userCityL.equals("Ramanathapuram")) {
+            spCity.setSelection(17);
+        } else if (userCityL.equals("Salem")) {
+            spCity.setSelection(18);
+        } else if (userCityL.equals("Sivagangai")) {
+            spCity.setSelection(19);
+        } else if (userCityL.equals("Thanjavur")) {
+            spCity.setSelection(20);
+        } else if (userCityL.equals("Theni")) {
+            spCity.setSelection(21);
+        } else if (userCityL.equals("Thiruvallur")) {
+            spCity.setSelection(22);
+        } else if (userCityL.equals("Thiruvarur")) {
+            spCity.setSelection(23);
+        } else if (userCityL.equals("Tuticorin")) {
+            spCity.setSelection(24);
+        } else if (userCityL.equals("Trichirappalli")) {
+            spCity.setSelection(25);
+        } else if (userCityL.equals("Thirunelveli")) {
+            spCity.setSelection(26);
+        } else if (userCityL.equals("Tiruppur")) {
+            spCity.setSelection(27);
+        } else if (userCityL.equals("Thiruvannamalai")) {
+            spCity.setSelection(28);
+        } else if (userCityL.equals("The Nilgiris")) {
+            spCity.setSelection(29);
+        } else if (userCityL.equals("Vellore")) {
+            spCity.setSelection(30);
+        } else if (userCityL.equals("Virudhunagar")) {
+            spCity.setSelection(31);
+        }
+
+        Button btnCancel = myDialog4.findViewById(R.id.btnCancel);
+        Button btnUpdate = myDialog4.findViewById(R.id.btnUpdate);
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog4.dismiss();
+            }
+        });
+
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String nameLL = et_name.getText().toString();
+                String emailLL = et_email.getText().toString();
+                String phoneLL = et_phone.getText().toString();
+                String cityLL = spCity.getSelectedItem().toString();
+                String backgroundLL = spBackground.getSelectedItem().toString();
+
+                Map<String, String> userMap = new HashMap<>();
+
+                userMap.put("name", nameLL);
+                userMap.put("email", emailLL );
+                userMap.put("phone", phoneLL);
+                userMap.put("city", cityLL);
+                userMap.put("background", backgroundLL);
+
+                final String mailid = firebaseAuth.getCurrentUser().getEmail();
+
+                firestore.collection("users").document(mailid).set(userMap, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                        myDialog4.dismiss();
+
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.replace(R.id.frm,new MyProfileFragment()).addToBackStack(null).commit();
+
+                        Toast.makeText(getActivity(), "Profile updated successfully!!!", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                        progressDialog2.dismiss();
+
+                        String error = e.getMessage();
+                        Toast.makeText(getActivity(), "Cannot update profile. Error:" + error, Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+        });
+
     }
 
 }
