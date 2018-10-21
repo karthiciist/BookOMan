@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.NonNull;
@@ -158,32 +159,131 @@ public class CatagoriesExpandedFragment extends Fragment implements OnLikeListen
         loadNotesList(value);
 
         String question = null;
+        String degree = null;
 
         if (value.equals("All Architecture books")) {
             question = "Architecture";
+            degree = "degree";
         } else if ((value.equals("All Arts Books"))) {
             question = "Arts";
+            degree = "degree";
         } else if ((value.equals("All Commerce Books"))) {
             question = "Commerce";
+            degree = "degree";
         } else if ((value.equals("All Computer Applications Books"))) {
             question = "Computer Applications";
+            degree = "degree";
         } else if ((value.equals("All Education Books"))) {
             question = "Education";
+            degree = "degree";
         } else if ((value.equals("All Engineering books"))) {
             question = "Engineering";
+            degree = "degree";
         } else if ((value.equals("All Law Books"))) {
             question = "Law";
+            degree = "degree";
         } else if ((value.equals("All Literature books"))) {
             question = "Literature";
+            degree = "degree";
         } else if ((value.equals("All Medicine Books"))) {
             question = "Medicine";
+            degree = "degree";
         } else if ((value.equals("All Science Books"))) {
             question = "Science";
+            degree = "degree";
         } else if ((value.equals("All Other Books"))) {
             question = "Others";
+            degree = "degree";
+        } else if ((value.equals("Landscape Architecture"))) {
+            question = "Landscape Architecture";
+            degree = "specialization";
+        } else if ((value.equals("Urban Planner"))) {
+            question = "Urban Planner";
+            degree = "specialization";
+        } else if ((value.equals("Restoration Architecture"))) {
+            question = "Restoration Architecture";
+            degree = "specialization";
+        } else if ((value.equals("Research Architecture"))) {
+            question = "Research Architecture";
+            degree = "specialization";
+        } else if ((value.equals("Lighting Architecture"))) {
+            question = "Lighting Architecture";
+            degree = "specialization";
+        } else if ((value.equals("Political Architecture"))) {
+            question = "Political Architecture";
+            degree = "specialization";
+        } else if ((value.equals("CSE"))) {
+            question = "CSE";
+            degree = "specialization";
+        } else if ((value.equals("ECE"))) {
+            question = "ECE";
+            degree = "specialization";
+        } else if ((value.equals("EEE"))) {
+            question = "EEE";
+            degree = "specialization";
+        } else if ((value.equals("E&I"))) {
+            question = "E&I";
+            degree = "specialization";
+        } else if ((value.equals("Information Technology"))) {
+            question = "Information Technology";
+            degree = "specialization";
+        } else if ((value.equals("ICE"))) {
+            question = "ICE";
+            degree = "specialization";
+        } else if ((value.equals("Mechanical Engineering"))) {
+            question = "Mechanical Engineering";
+            degree = "specialization";
+        } else if ((value.equals("Mechatronics"))) {
+            question = "Mechatronics";
+            degree = "specialization";
+        } else if ((value.equals("Production Engineering"))) {
+            question = "Production Engineering";
+            degree = "specialization";
+        } else if ((value.equals("English"))) {
+            question = "English";
+            degree = "specialization";
+        } else if ((value.equals("Tamil"))) {
+            question = "Tamil";
+            degree = "specialization";
+        } else if ((value.equals("Telugu"))) {
+            question = "Telugu";
+            degree = "specialization";
+        } else if ((value.equals("Malayalam"))) {
+            question = "Malayalam";
+            degree = "specialization";
+        } else if ((value.equals("Others"))) {
+            question = "Others";
+            degree = "specialization";
+        } else if ((value.equals("General Medicine"))) {
+            question = "General Medicine";
+            degree = "specialization";
+        } else if ((value.equals("Dental"))) {
+            question = "Dental";
+            degree = "specialization";
+        } else if ((value.equals("Pharmacy"))) {
+            question = "Pharmacy";
+            degree = "specialization";
+        } else if ((value.equals("Nursing"))) {
+            question = "Nursing";
+            degree = "specialization";
+        } else if ((value.equals("Siddha & Ayurvedha"))) {
+            question = "Siddha & Ayurvedha";
+            degree = "specialization";
+        } else if ((value.equals("Physics"))) {
+            question = "Physics";
+            degree = "specialization";
+        } else if ((value.equals("Chemistry"))) {
+            question = "Chemistry";
+            degree = "specialization";
+        } else if ((value.equals("Mathematics"))) {
+            question = "Mathematics";
+            degree = "specialization";
+        } else if ((value.equals("Life Science"))) {
+            question = "Life Science";
+            degree = "specialization";
         }
 
-        firestoreListener = firestoreDB.collection("books").whereEqualTo("degree", question)
+        firestoreListener = firestoreDB.collection("books").whereEqualTo(degree, question)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
@@ -345,32 +445,131 @@ public class CatagoriesExpandedFragment extends Fragment implements OnLikeListen
     private void loadNotesList(String value) {
 
         String question = null;
+        String degree = null;
 
         if (value.equals("All Architecture books")) {
             question = "Architecture";
+            degree = "degree";
         } else if ((value.equals("All Arts Books"))) {
             question = "Arts";
+            degree = "degree";
         } else if ((value.equals("All Commerce Books"))) {
             question = "Commerce";
+            degree = "degree";
         } else if ((value.equals("All Computer Applications Books"))) {
             question = "Computer Applications";
+            degree = "degree";
         } else if ((value.equals("All Education Books"))) {
             question = "Education";
+            degree = "degree";
         } else if ((value.equals("All Engineering books"))) {
             question = "Engineering";
+            degree = "degree";
         } else if ((value.equals("All Law Books"))) {
             question = "Law";
+            degree = "degree";
         } else if ((value.equals("All Literature books"))) {
             question = "Literature";
+            degree = "degree";
         } else if ((value.equals("All Medicine Books"))) {
             question = "Medicine";
+            degree = "degree";
         } else if ((value.equals("All Science Books"))) {
             question = "Science";
+            degree = "degree";
         } else if ((value.equals("All Other Books"))) {
             question = "Others";
+            degree = "degree";
+        } else if ((value.equals("Landscape Architecture"))) {
+            question = "Landscape Architecture";
+            degree = "specialization";
+        } else if ((value.equals("Urban Planner"))) {
+            question = "Urban Planner";
+            degree = "specialization";
+        } else if ((value.equals("Restoration Architecture"))) {
+            question = "Restoration Architecture";
+            degree = "specialization";
+        } else if ((value.equals("Research Architecture"))) {
+            question = "Research Architecture";
+            degree = "specialization";
+        } else if ((value.equals("Lighting Architecture"))) {
+            question = "Lighting Architecture";
+            degree = "specialization";
+        } else if ((value.equals("Political Architecture"))) {
+            question = "Political Architecture";
+            degree = "specialization";
+        } else if ((value.equals("CSE"))) {
+            question = "CSE";
+            degree = "specialization";
+        } else if ((value.equals("ECE"))) {
+            question = "ECE";
+            degree = "specialization";
+        } else if ((value.equals("EEE"))) {
+            question = "EEE";
+            degree = "specialization";
+        } else if ((value.equals("E&I"))) {
+            question = "E&I";
+            degree = "specialization";
+        } else if ((value.equals("Information Technology"))) {
+            question = "Information Technology";
+            degree = "specialization";
+        } else if ((value.equals("ICE"))) {
+            question = "ICE";
+            degree = "specialization";
+        } else if ((value.equals("Mechanical Engineering"))) {
+            question = "Mechanical Engineering";
+            degree = "specialization";
+        } else if ((value.equals("Mechatronics"))) {
+            question = "Mechatronics";
+            degree = "specialization";
+        } else if ((value.equals("Production Engineering"))) {
+            question = "Production Engineering";
+            degree = "specialization";
+        } else if ((value.equals("English"))) {
+            question = "English";
+            degree = "specialization";
+        } else if ((value.equals("Tamil"))) {
+            question = "Tamil";
+            degree = "specialization";
+        } else if ((value.equals("Telugu"))) {
+            question = "Telugu";
+            degree = "specialization";
+        } else if ((value.equals("Malayalam"))) {
+            question = "Malayalam";
+            degree = "specialization";
+        } else if ((value.equals("Others"))) {
+            question = "Others";
+            degree = "specialization";
+        } else if ((value.equals("General Medicine"))) {
+            question = "General Medicine";
+            degree = "specialization";
+        } else if ((value.equals("Dental"))) {
+            question = "Dental";
+            degree = "specialization";
+        } else if ((value.equals("Pharmacy"))) {
+            question = "Pharmacy";
+            degree = "specialization";
+        } else if ((value.equals("Nursing"))) {
+            question = "Nursing";
+            degree = "specialization";
+        } else if ((value.equals("Siddha & Ayurvedha"))) {
+            question = "Siddha & Ayurvedha";
+            degree = "specialization";
+        } else if ((value.equals("Physics"))) {
+            question = "Physics";
+            degree = "specialization";
+        } else if ((value.equals("Chemistry"))) {
+            question = "Chemistry";
+            degree = "specialization";
+        } else if ((value.equals("Mathematics"))) {
+            question = "Mathematics";
+            degree = "specialization";
+        } else if ((value.equals("Life Science"))) {
+            question = "Life Science";
+            degree = "specialization";
         }
 
-        Query query = firestoreDB.collection("books").whereEqualTo("degree", question);
+        Query query = firestoreDB.collection("books").whereEqualTo(degree, question);
 
         Toast.makeText(getActivity(), question, Toast.LENGTH_SHORT).show();
 
@@ -430,6 +629,16 @@ public class CatagoriesExpandedFragment extends Fragment implements OnLikeListen
                         final String uid = note.getUid().toString();
 
                         Button chatSeller = myDialog.findViewById(R.id.btnChatSeller);
+                        Button callSeller = myDialog.findViewById(R.id.btnCallSeller);
+
+                        callSeller.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+                                dialIntent.setData(Uri.parse("tel:" + note.getPhone()));
+                                startActivity(dialIntent);
+                            }
+                        });
 
                         chatSeller.setOnClickListener(new View.OnClickListener() {
                             @Override

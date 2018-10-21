@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -368,6 +369,16 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
                         final String uid = note.getUid().toString();
 
                         Button chatSeller = myDialog.findViewById(R.id.btnChatSeller);
+                        Button callSeller = myDialog.findViewById(R.id.btnCallSeller);
+
+                        callSeller.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+                                dialIntent.setData(Uri.parse("tel:" + note.getPhone()));
+                                startActivity(dialIntent);
+                            }
+                        });
 
                         chatSeller.setOnClickListener(new View.OnClickListener() {
                             @Override

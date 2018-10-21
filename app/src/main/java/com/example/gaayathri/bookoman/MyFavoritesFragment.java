@@ -4,7 +4,9 @@ package com.example.gaayathri.bookoman;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.NonNull;
@@ -41,6 +43,11 @@ import com.google.firebase.firestore.SetOptions;
 import com.like.LikeButton;
 import com.like.OnAnimationEndListener;
 import com.like.OnLikeListener;
+
+import org.chat21.android.core.users.models.ChatUser;
+import org.chat21.android.core.users.models.IChatUser;
+import org.chat21.android.ui.ChatUI;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,23 +92,6 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
         likeButton.setOnAnimationEndListener(this);
 
         likeButton.setLiked(true);
-
-        Button btnCallSeller = myDialog.findViewById(R.id.btnCallSeller);
-        Button btnChatSeller = myDialog.findViewById(R.id.btnChatSeller);
-
-        btnCallSeller.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Calling seller!!!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnChatSeller.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Chatting seller!!!", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         progressDialog = new ProgressDialog(getActivity());
 
@@ -314,11 +304,32 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
                         userFav.setText(note.getuser());
                         sellerMsgFav.setText(note.getSellerMsg());
 
+                        final String uid = note.getUid().toString();
+
                         entryName = note.getEntryName();
 
                         mrpFav.setPaintFlags(mrpFav.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
                         Glide.with(getActivity()).load(note.getDownloadUri()).apply(options).into(bookpic);
+
+                        Button btnCallSeller = myDialog.findViewById(R.id.btnCallSeller);
+                        Button btnChatSeller = myDialog.findViewById(R.id.btnChatSeller);
+
+                        btnCallSeller.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+                                dialIntent.setData(Uri.parse("tel:" + note.getPhone()));
+                                startActivity(dialIntent);
+                            }
+                        });
+
+                        btnChatSeller.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                launchOneToOneChat(uid, note.getuser());
+                            }
+                        });
 
                         myDialog.show();
 
@@ -364,6 +375,14 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
 
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
+
+    }
+
+    private void launchOneToOneChat(String uid, String name){
+
+        IChatUser iChatUserRecepient = new ChatUser(uid, name);
+
+        ChatUI.getInstance().openConversationMessagesActivity(iChatUserRecepient);
 
     }
 

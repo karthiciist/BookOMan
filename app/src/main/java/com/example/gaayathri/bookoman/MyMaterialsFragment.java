@@ -75,6 +75,7 @@ public class MyMaterialsFragment extends Fragment {
     String UpdateNoteUser;
     String UpdateNoteMrp;
     String UpdateNoteSellerMsg;
+    String UpdateDownloadUri;
     String downloadUri;
 
     private StorageReference storageReference;
@@ -232,7 +233,7 @@ public class MyMaterialsFragment extends Fragment {
                         TextView userExp = myDialog.findViewById(R.id.userExp);
                         TextView sellerMsgExp = myDialog.findViewById(R.id.sellerMsgExp);
 
-                        ImageView bookpic = myDialog.findViewById(R.id.ivBookPic);
+                        ImageView bookpicdialog = myDialog.findViewById(R.id.ivBookPic);
 
                         UpdateNoteTitle = noteMyMaterials.getTitle();
                         titleExp.setText(UpdateNoteTitle);
@@ -265,15 +266,16 @@ public class MyMaterialsFragment extends Fragment {
 
                         mrpExp.setPaintFlags(mrpExp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-                        Glide.with(getActivity()).load(downloadUri).apply(options).into(bookpic);
+                        UpdateDownloadUri = noteMyMaterials.getDownloadUri();
+                        Glide.with(getActivity()).load(noteMyMaterials.getDownloadUri()).apply(options).into(bookpicdialog);
 
                         myDialog.show();
 
-                        bookpic.setOnClickListener(new View.OnClickListener() {
+                        bookpicdialog.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 ImageView ivExpandedPic = myDialog2.findViewById(R.id.ivImage);
-                                Glide.with(getActivity()).load(downloadUri).apply(options).into(ivExpandedPic);
+                                Glide.with(getActivity()).load(noteMyMaterials.getDownloadUri()).apply(options).into(ivExpandedPic);
                                 myDialog2.show();
                             }
                         });
@@ -378,7 +380,7 @@ public class MyMaterialsFragment extends Fragment {
         intent.putExtra("UpdateNoteUser", UpdateNoteUser);
         intent.putExtra("UpdateNoteMrp", UpdateNoteMrp);
         intent.putExtra("UpdateNoteSellerMsg", UpdateNoteSellerMsg);
-        intent.putExtra("UpdateNoteDownloadUri", downloadUri);
+        intent.putExtra("UpdateNoteDownloadUri", UpdateDownloadUri);
         startActivity(intent);
         myDialog.dismiss();
     }

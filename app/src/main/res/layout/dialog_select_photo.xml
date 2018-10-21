@@ -23,24 +23,28 @@
 
         <Button
             android:id="@+id/btnCamera"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="2dp"
             android:layout_marginTop="2dp"
+            android:paddingRight="70dp"
+            android:paddingLeft="70dp"
             android:onClick="onClick"
             android:background="@drawable/google_button"
             android:text="Camera" />
 
         <Button
             android:id="@+id/btnGallery"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginBottom="2dp"
             android:layout_marginTop="5dp"
             android:layout_marginRight="2dp"
+            android:paddingRight="70dp"
+            android:paddingLeft="70dp"
             android:background="@drawable/button_background"
             android:onClick="onClick"
             android:text="Gallery"

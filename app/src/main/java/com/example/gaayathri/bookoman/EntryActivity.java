@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -77,18 +78,26 @@ public class EntryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_entry);
-
-        btnGoogleSignin = findViewById(R.id.btnGoogleSignin);
-
-        btnGoogleSignin.setVisibility(View.GONE);
-
-        progressDialog = new ProgressDialog(this);
 
         firestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
+
+        progressDialog = new ProgressDialog(this);
+
+        if (user == null) {
+
+            setContentView(R.layout.activity_entry);
+
+            btnGoogleSignin = findViewById(R.id.btnGoogleSignin);
+            btnGoogleSignin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    signIn();
+                }
+            });
+        }
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -96,19 +105,6 @@ public class EntryActivity extends AppCompatActivity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        if (user == null) {
-
-            btnGoogleSignin.setVisibility(View.VISIBLE);
-
-            btnGoogleSignin.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    signIn();
-                }
-            });
-
-        }
 
         LogoLauncher logoLauncher = new LogoLauncher();
         logoLauncher.start();
@@ -145,11 +141,8 @@ public class EntryActivity extends AppCompatActivity {
             }catch (InterruptedException e){
                 e.printStackTrace();
             }
-
         }
-
     }
-
 
     @Override
     protected void onStart() {

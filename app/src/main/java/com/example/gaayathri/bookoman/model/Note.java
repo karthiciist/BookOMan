@@ -19,6 +19,15 @@ public class Note {
     private String sellerMsg;
     private String downloadUri;
     private String email;
+    private String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getEmail() {
         return email;
@@ -63,7 +72,7 @@ public class Note {
     public Note() {
     }
 
-    public Note(String id, String title, String author, String degree, String specialization, String location, String mrp, String price, String entryName, String user, String uid, String sellerMsg, String email) {
+    public Note(String id, String title, String author, String degree, String specialization, String location, String mrp, String price, String entryName, String user, String uid, String sellerMsg, String email, String phone) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -78,10 +87,11 @@ public class Note {
         this.sellerMsg = sellerMsg;
         this.downloadUri = downloadUri;
         this.email = email;
+        this.phone = phone;
     }
 
 
-    public Note(String title, String author, String degree, String specialization, String location, String mrp, String price, String entryName, String user, String uid, String sellerMsg, String email) {
+    public Note(String title, String author, String degree, String specialization, String location, String mrp, String price, String entryName, String user, String uid, String sellerMsg, String email, String phone) {
         this.title = title;
         this.author = author;
         this.degree = degree;
@@ -95,6 +105,7 @@ public class Note {
         this.downloadUri = downloadUri;
         this.uid = uid;
         this.email = email;
+        this.phone = phone;
     }
 
     public String getuser() {
@@ -188,6 +199,7 @@ public class Note {
         result.put("sellerMsg", this.sellerMsg);
         result.put("downloadUri", this.downloadUri);
         result.put("email", this.email);
+        result.put("phone", this.phone);
 
         return result;
     }

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -331,14 +332,13 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
 
     private void setHomeScreeenButtons(View view) {
 
-        ImageView imSell1 = view.findViewById(R.id.imSell1);
-        ImageView imSell2 = view.findViewById(R.id.imSell2);
+        Button sell1 = view.findViewById(R.id.sell1);
+        Button sell2 = view.findViewById(R.id.sell2);
 
         progressDialog1 = new ProgressDialog(getActivity());
-
         progressDialog1.setMessage("Loading...");
 
-        imSell1.setOnClickListener(new View.OnClickListener() {
+        sell1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 progressDialog1.show();
@@ -346,7 +346,7 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
             }
         });
 
-        imSell2.setOnClickListener(new View.OnClickListener() {
+        sell2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 progressDialog1.show();
@@ -856,9 +856,20 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
         Toast.makeText(getActivity(), entryName, Toast.LENGTH_SHORT).show();
 
         Button call = myDialog.findViewById(R.id.btnCallSeller);
-        LikeButton likeButton = myDialog.findViewById(R.id.heart_button);
-
         Button chat = myDialog.findViewById(R.id.btnChatSeller);
+
+        LikeButton likeButton = myDialog.findViewById(R.id.heart_button);
+        likeButton.setOnLikeListener(this);
+        likeButton.setOnAnimationEndListener(this);
+
+        call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+                dialIntent.setData(Uri.parse("tel:" + note.getPhone()));
+                startActivity(dialIntent);
+            }
+        });
 
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
