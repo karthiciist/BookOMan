@@ -58,6 +58,9 @@
             android:name=".SettingsActivity"
             android:parentActivityName=".HomeActivity" />
         <activity android:name=".WelcomeActivity" />
+        <activity
+            android:name="org.chat21.android.ui.conversations.activities.ConversationListActivity"
+            android:parentActivityName=".HomeActivity" />
     </application>
 
 </manifest>

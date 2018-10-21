@@ -1,6 +1,7 @@
 package org.chat21.android.ui.conversations.activities;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -21,7 +22,7 @@ public class ConversationListActivity extends AppCompatActivity {
         // #### BEGIN TOOLBAR ####
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // #### END  TOOLBAR ####
 
         // #### BEGIN CONTAINER ####

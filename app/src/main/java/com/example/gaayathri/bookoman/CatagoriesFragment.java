@@ -24,6 +24,8 @@ public class CatagoriesFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_catagories, container, false);
 
+        getActivity().setTitle("Categories");
+
         //THE EXPANDABLE
         ExpandableListView elv = view.findViewById(R.id.expandableListView2);
 

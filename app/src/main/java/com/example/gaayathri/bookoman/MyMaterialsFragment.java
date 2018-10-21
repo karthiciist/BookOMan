@@ -93,6 +93,8 @@ public class MyMaterialsFragment extends Fragment {
 
         setRetainInstance(true);
 
+        getActivity().setTitle("My materials");
+
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
 

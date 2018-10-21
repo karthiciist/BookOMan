@@ -85,6 +85,8 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
 
         view = inflater.inflate(R.layout.fragment_entire_library, container, false);
 
+        getActivity().setTitle("Entire library");
+
         setRetainInstance(true);
 
         // Initiating dialog windows

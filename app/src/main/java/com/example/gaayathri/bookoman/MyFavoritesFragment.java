@@ -81,6 +81,8 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
 
         setRetainInstance(true);
 
+        getActivity().setTitle("My favorites");
+
         myDialog = new Dialog(getActivity());
         myDialog.setContentView(R.layout.dialog_expanded);
 

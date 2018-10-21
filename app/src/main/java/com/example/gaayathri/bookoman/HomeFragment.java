@@ -109,6 +109,8 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
 
         setRetainInstance(true);
 
+        getActivity().setTitle("Book O Man");
+
         setDialogs();
 
         setHomeScreeenButtons(view);
@@ -833,6 +835,7 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
 
         Glide.with(getActivity()).load(note.getDownloadUri()).apply(options).into(bookpic);
 
+        myDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
         myDialog.show();
 
         bookpic.setOnClickListener(new View.OnClickListener() {

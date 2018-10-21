@@ -73,22 +73,17 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        Toolbar toolbar1 = findViewById(R.id.toolbar1);
+        setSupportActionBar(toolbar1);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        SettingsActivity.this.setTitle("Settings");
+
         firestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
 
-        ImageView back = findViewById(R.id.back);
-
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SettingsActivity.this, HomeActivity.class));
-                finish();
-            }
-        });
-
         // load settings fragment
         getFragmentManager().beginTransaction().replace(R.id.frm, new MainPreferenceFragment()).commit();
-
         
     }
 

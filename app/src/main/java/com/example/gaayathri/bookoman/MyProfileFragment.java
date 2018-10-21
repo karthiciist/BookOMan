@@ -105,6 +105,8 @@ public class MyProfileFragment extends Fragment {
 
         setRetainInstance(true);
 
+        getActivity().setTitle("My profile");
+
         progressDialog = new ProgressDialog(getActivity());
 
         progressDialog.setMessage("Loading your profile...");
