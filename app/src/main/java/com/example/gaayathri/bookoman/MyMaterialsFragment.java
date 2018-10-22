@@ -271,6 +271,7 @@ public class MyMaterialsFragment extends Fragment {
                         UpdateDownloadUri = noteMyMaterials.getDownloadUri();
                         Glide.with(getActivity()).load(noteMyMaterials.getDownloadUri()).apply(options).into(bookpicdialog);
 
+                        myDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
                         myDialog.show();
 
                         bookpicdialog.setOnClickListener(new View.OnClickListener() {
@@ -278,6 +279,7 @@ public class MyMaterialsFragment extends Fragment {
                             public void onClick(View v) {
                                 ImageView ivExpandedPic = myDialog2.findViewById(R.id.ivImage);
                                 Glide.with(getActivity()).load(noteMyMaterials.getDownloadUri()).apply(options).into(ivExpandedPic);
+                                myDialog2.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
                                 myDialog2.show();
                             }
                         });
@@ -364,6 +366,7 @@ public class MyMaterialsFragment extends Fragment {
             }
         });
 
+        myDialog3.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
         myDialog3.show();
 
     }

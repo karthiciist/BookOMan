@@ -295,6 +295,7 @@ public class MyProfileFragment extends Fragment {
 
                 progressDialog1.dismiss();
 
+                myDialog4.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
                 myDialog4.show();
             }
         });
@@ -345,6 +346,7 @@ public class MyProfileFragment extends Fragment {
 
                 updateUserData();
 
+                myDialog4.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
                 myDialog4.show();
             }
         });
@@ -427,6 +429,7 @@ public class MyProfileFragment extends Fragment {
 
                         Glide.with(getActivity()).load(noteHorizontal.getDownloadUri()).apply(options).into(bookpic);
 
+                        myDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
                         myDialog.show();
 
                         bookpic.setOnClickListener(new View.OnClickListener() {
@@ -434,6 +437,7 @@ public class MyProfileFragment extends Fragment {
                             public void onClick(View v) {
                                 ImageView ivExpandedPic = myDialog2.findViewById(R.id.ivImage);
                                 Glide.with(getActivity()).load(noteHorizontal.getDownloadUri()).apply(options).into(ivExpandedPic);
+                                myDialog2.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
                                 myDialog2.show();
                             }
                         });

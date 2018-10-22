@@ -152,6 +152,8 @@ public class InstantSearchActivity extends AppCompatActivity implements VoiceDia
                                 String sellerMsgL = document.getString("sellerMsg");
                                 final String downloadUriL = document.getString("downloadUri");
                                 final String uid = document.getString("uid");
+                                final String phoneL = document.getString("phone");
+                                final String emailL = document.getString("email");
 
                                 Toast.makeText(InstantSearchActivity.this, titleL, Toast.LENGTH_SHORT).show();
 
@@ -171,21 +173,49 @@ public class InstantSearchActivity extends AppCompatActivity implements VoiceDia
                                 Glide.with(InstantSearchActivity.this).load(downloadUriL).apply(options).into(bookpic);
 
                                 Button chatSeller = myDialog.findViewById(R.id.btnChatSeller);
+                                Button callSeller = myDialog.findViewById(R.id.btnCallSeller);
 
-                                chatSeller.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
+                                //String emailCheck = emailL;
+                                String emailCheck1 = firebaseAuth.getCurrentUser().getEmail();
 
-                                        launchOneToOneChat(uid, userL);
+                                if (emailL.equals(emailCheck1)) {
 
-                                    }
-                                });
+                                    callSeller.setVisibility(View.GONE);
+                                    chatSeller.setVisibility(View.GONE);
+
+                                    user.setText("you");
+
+                                } else {
+
+                                    callSeller.setVisibility(View.VISIBLE);
+                                    chatSeller.setVisibility(View.VISIBLE);
+
+                                    callSeller.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+                                            dialIntent.setData(Uri.parse("tel:" + phoneL));
+                                            startActivity(dialIntent);
+                                        }
+                                    });
+
+                                    chatSeller.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+
+                                            launchOneToOneChat(uid, userL);
+
+                                        }
+                                    });
+
+                                }
 
                                 bookpic.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         ImageView ivExpandedPic = myDialog2.findViewById(R.id.ivImage);
                                         Glide.with(InstantSearchActivity.this).load(downloadUriL).apply(options).into(ivExpandedPic);
+                                        myDialog2.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
                                         myDialog2.show();
                                     }
                                 });
@@ -205,6 +235,7 @@ public class InstantSearchActivity extends AppCompatActivity implements VoiceDia
 
                 checkFavorited();
 
+                myDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
                 myDialog.show();
 
                 ImageView tvClose = myDialog2.findViewById(R.id.tvClose);

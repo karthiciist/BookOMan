@@ -116,6 +116,7 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
         setHomeScreeenButtons(view);
 
         firestore = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         String mail = firebaseAuth.getCurrentUser().getEmail();
@@ -861,30 +862,44 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
         Button call = myDialog.findViewById(R.id.btnCallSeller);
         Button chat = myDialog.findViewById(R.id.btnChatSeller);
 
+        String emailCheck = note.getEmail();
+        String emailCheck1 = firebaseAuth.getCurrentUser().getEmail();
+
+        if (emailCheck.equals(emailCheck1)) {
+
+            call.setVisibility(View.GONE);
+            chat.setVisibility(View.GONE);
+
+            userExp.setText("you");
+
+        } else {
+
+            call.setVisibility(View.VISIBLE);
+            chat.setVisibility(View.VISIBLE);
+
+            call.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+                    dialIntent.setData(Uri.parse("tel:" + note.getPhone()));
+                    startActivity(dialIntent);
+                }
+            });
+
+            chat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    launchOneToOneChat(uid, note.getuser());
+
+                }
+            });
+
+        }
+
         LikeButton likeButton = myDialog.findViewById(R.id.heart_button);
         likeButton.setOnLikeListener(this);
         likeButton.setOnAnimationEndListener(this);
-
-        call.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent dialIntent = new Intent(Intent.ACTION_DIAL);
-                dialIntent.setData(Uri.parse("tel:" + note.getPhone()));
-                startActivity(dialIntent);
-            }
-        });
-
-        chat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                launchOneToOneChat(uid, note.getuser());
-
-            }
-        });
-
-        entryName = note.getEntryName();
-        downloadUri = note.getDownloadUri();
 
     }
 }

@@ -317,22 +317,40 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
                         Button btnCallSeller = myDialog.findViewById(R.id.btnCallSeller);
                         Button btnChatSeller = myDialog.findViewById(R.id.btnChatSeller);
 
-                        btnCallSeller.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent dialIntent = new Intent(Intent.ACTION_DIAL);
-                                dialIntent.setData(Uri.parse("tel:" + note.getPhone()));
-                                startActivity(dialIntent);
-                            }
-                        });
+                        String emailCheck = note.getEmail();
+                        String emailCheck1 = firebaseAuth.getCurrentUser().getEmail();
 
-                        btnChatSeller.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                launchOneToOneChat(uid, note.getuser());
-                            }
-                        });
+                        if (emailCheck.equals(emailCheck1)) {
 
+                            btnCallSeller.setVisibility(View.GONE);
+                            btnChatSeller.setVisibility(View.GONE);
+
+                            userFav.setText("you");
+
+                        } else {
+
+                            btnCallSeller.setVisibility(View.VISIBLE);
+                            btnChatSeller.setVisibility(View.VISIBLE);
+
+                            btnCallSeller.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+                                    dialIntent.setData(Uri.parse("tel:" + note.getPhone()));
+                                    startActivity(dialIntent);
+                                }
+                            });
+
+                            btnChatSeller.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    launchOneToOneChat(uid, note.getuser());
+                                }
+                            });
+
+                        }
+
+                        myDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
                         myDialog.show();
 
                         bookpic.setOnClickListener(new View.OnClickListener() {
@@ -340,6 +358,7 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
                             public void onClick(View v) {
                                 ImageView ivExpandedPic = myDialog2.findViewById(R.id.ivImage);
                                 Glide.with(getActivity()).load(note.getDownloadUri()).apply(options).into(ivExpandedPic);
+                                myDialog2.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
                                 myDialog2.show();
                             }
                         });

@@ -224,6 +224,10 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                                                 }
                                             });
 
+                                    final Client client = new Client("H9P3XBA9GD", "3058fee363b2c4b8afe53e9d9eab642f");
+                                    Index index = client.getIndex("books");
+                                    index.deleteObjectAsync(oldEntryName, null);
+
                                 }
 
                                 sampleApprovalView.setDrawingCacheEnabled(true);
@@ -373,8 +377,15 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
 
             title.setText(bundle.getString("UpdateNoteTitle"));
             author.setText(bundle.getString("UpdateNoteAuthor"));
-            price.setText(bundle.getString("UpdateNotePrice"));
-            mrp.setText(bundle.getString("UpdateNoteMrp"));
+
+            String withRupees = bundle.getString("UpdateNotePrice");
+            String withoutRupees = withRupees.replaceAll("₹", "");
+            price.setText(withoutRupees);
+
+            String withRupees1 = bundle.getString("UpdateNotePrice");
+            String withoutRupees1 = withRupees1.replaceAll("₹", "");
+            mrp.setText(withoutRupees1);
+            
             sellerMsg.setText(bundle.getString("UpdateNoteSellerMsg"));
             oldEntryName = bundle.getString("UpdateNoteEntryName");
 
@@ -595,16 +606,19 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                 break;
 
             case R.id.bookPic:
+                picDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
                 picDialog.show();
                 break;
 
             case R.id.btnCamera:
                 checkPermissionCW();
+                picDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
                 picDialog.dismiss();
                 break;
 
             case R.id.btnGallery:
                 checkPermissionRG();
+                picDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
                 picDialog.dismiss();
                 break;
 

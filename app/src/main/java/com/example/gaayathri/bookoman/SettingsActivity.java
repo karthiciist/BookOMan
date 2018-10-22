@@ -308,6 +308,7 @@ public class SettingsActivity extends AppCompatActivity {
             editMyProfile.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
 
+                    userDataDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
                     userDataDialog.show();
                     return true;
                 }

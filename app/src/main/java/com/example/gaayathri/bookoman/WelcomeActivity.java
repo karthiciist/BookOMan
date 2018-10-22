@@ -94,6 +94,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     progressDialog = new ProgressDialog(WelcomeActivity.this);
 
                     progressDialog.setMessage("Building home screen...");
+                    progressDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
                     progressDialog.show();
 
                     launchHomeScreen();
