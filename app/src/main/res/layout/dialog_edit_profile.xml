@@ -24,9 +24,10 @@
             android:padding="5dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Name"
+                android:layout_margin="5dp"
                 android:textColor="@color/headings"
                 android:textSize="13sp" />
 
@@ -38,8 +39,7 @@
                 android:inputType="textCapWords"
                 android:background="@drawable/text_view_border"
                 android:padding="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_margin="5dp"
                 android:textColor="#000000"
                 android:textSize="18sp"
                 android:textAlignment="center"/>
@@ -53,9 +53,10 @@
             android:padding="5dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Email"
+                android:layout_margin="5dp"
                 android:textColor="@color/headings"
                 android:textSize="13sp" />
 
@@ -66,11 +67,10 @@
                 android:fontFamily="sans-serif-light"
                 android:inputType="textEmailAddress"
                 android:textColor="#000000"
+                android:layout_margin="5dp"
                 android:textSize="18sp"
                 android:background="@drawable/text_view_border"
                 android:padding="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
                 android:textAlignment="center"/>
 
         </LinearLayout>
@@ -82,9 +82,10 @@
             android:padding="5dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Phone"
+                android:layout_margin="5dp"
                 android:textColor="@color/headings"
                 android:textSize="13sp" />
 
@@ -99,8 +100,7 @@
                 android:textSize="18sp"
                 android:background="@drawable/text_view_border"
                 android:padding="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_margin="5dp"
                 android:textAlignment="center"/>
 
         </LinearLayout>
@@ -112,9 +112,10 @@
             android:padding="5dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="City"
+                android:layout_margin="5dp"
                 android:textColor="@color/headings"
                 android:textSize="13sp" />
 
@@ -122,8 +123,7 @@
                 android:id="@+id/spCity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/text_view_border"
                 android:padding="10dp"
@@ -138,9 +138,10 @@
             android:padding="5dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Background"
+                android:layout_margin="5dp"
                 android:textColor="@color/headings"
                 android:textSize="13sp" />
 
@@ -148,8 +149,7 @@
                 android:id="@+id/spBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/text_view_border"
                 android:padding="10dp"

@@ -10,11 +10,13 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +37,10 @@ import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
 import com.bluehomestudio.steps.CircleImageSteps;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -99,6 +106,8 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
     private StorageReference storageReference;
     String downloadUri, oldEntryName;
 
+    ProgressBar progressBar;
+
     SharedPreferences sharedPreferences;
 
     public static final String mypreference = "mypref";
@@ -106,6 +115,8 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
     public static final String name = "nameKey";
 
     Spinner spinner, spinner1;
+
+    private ProgressDialog progressDialog1;
 
     TextView sampleTitle, sampleAuthor, sampleDegree, sampleSpecial, sampleMrp, samplePrice, sampleSellerMsg, adLookLike, imageLookLike;
 
@@ -364,6 +375,9 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                 }
             }
         });
+
+        progressBar = findViewById(R.id.progress);
+        progressBar.setVisibility(View.GONE);
     }
 
     private void setBundleViews() {
@@ -385,7 +399,7 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
             String withRupees1 = bundle.getString("UpdateNotePrice");
             String withoutRupees1 = withRupees1.replaceAll("₹", "");
             mrp.setText(withoutRupees1);
-            
+
             sellerMsg.setText(bundle.getString("UpdateNoteSellerMsg"));
             oldEntryName = bundle.getString("UpdateNoteEntryName");
 
@@ -496,7 +510,7 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                 String a = title.getText().toString();
                 String b = author.getText().toString();
                 String c = degreeSpinner.getSelectedItem().toString();
-                String d = null;
+                String d = " ";
                 if (specialSpinner.isShown()){
                     d = specialSpinner.getSelectedItem().toString();
                 }
@@ -591,10 +605,6 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                 break;
 
             case R.id.barCodeScannerBtn:
-                //swView.setImageBitmap(null);
-                Glide.with(SellTestActivity.this).load(R.drawable.add_imge_manually).into(swView);
-                title.setText("");
-                author.setText("");
 
                 IntentIntegrator integrator = new IntentIntegrator(SellTestActivity.this);
                 integrator.setPrompt("Scan the barcode at the back cover of your book");
@@ -603,6 +613,14 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                 integrator.setBeepEnabled(true);
                 integrator.setCaptureActivity(CaptureActivityPortrait.class);
                 integrator.initiateScan();
+
+                //Glide.with(SellTestActivity.this).load(R.drawable.add_imge_manually).into(swView);
+                swView.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
+                title.setText("");
+                author.setText("");
+                nextBtn.setVisibility(View.GONE);
+
                 break;
 
             case R.id.bookPic:
@@ -647,6 +665,7 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 Log.d("MainActivity", "Scanned");
+
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
 
                 runOnUiThread(new Runnable() {
@@ -659,7 +678,6 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                         if (tvTitle.getText().length() == 0) {
                             checkinGoogleAPI(result.getContents());
                         }
-
                     }
                 });
 
@@ -886,20 +904,46 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                SimpleDraweeView ivBookImage = findViewById(R.id.bookPic);
+                                //SimpleDraweeView ivBookImage = findViewById(R.id.bookPic);
                                 SimpleDraweeView sampleBookPic = findViewById(R.id.sampleBookPic);
                                 SimpleDraweeView sampleApprovalImage = findViewById(R.id.sampleApprovalImage);
 
                                 if (!(imageUrl == null)){
-                                    Glide.with(SellTestActivity.this).load(imageUrl).into(ivBookImage);
+
+                                    Glide.with(SellTestActivity.this).load(imageUrl).listener(new RequestListener<Drawable>() {
+                                        @Override
+                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                            progressBar.setVisibility(View.GONE);
+                                            swView.setVisibility(View.VISIBLE);
+                                            return false;
+                                        }
+
+                                        @Override
+                                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                            progressBar.setVisibility(View.GONE);
+                                            swView.setVisibility(View.VISIBLE);
+                                            return false;
+                                        }
+                                    }).into(swView);
+
                                     Glide.with(SellTestActivity.this).load(imageUrl).into(sampleApprovalImage);
                                     Glide.with(SellTestActivity.this).load(imageUrl).into(sampleBookPic);
+
                                 }
                             }
                         });
 
-                    } catch(JSONException jse){
+                    } catch(final JSONException jse){
                         jse.printStackTrace();
+                        /*runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //Toast.makeText(SellTestActivity.this, jse.getMessage(), Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
+                                swView.setVisibility(View.VISIBLE);
+                                Glide.with(SellTestActivity.this).load(R.drawable.add_imge_manually).into(swView);
+                            }
+                        });*/
                     }
 
                 } catch (JSONException e) {
@@ -982,15 +1026,47 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                             SimpleDraweeView ivBookImage = findViewById(R.id.bookPic);
                             SimpleDraweeView sampleBookPic = findViewById(R.id.sampleBookPic);
                             SimpleDraweeView sampleApprovalImage = findViewById(R.id.sampleApprovalImage);
-                            Glide.with(SellTestActivity.this).load(bookImageUrl).into(ivBookImage);
-                            Glide.with(SellTestActivity.this).load(bookImageUrl).into(sampleApprovalImage);
-                            Glide.with(SellTestActivity.this).load(bookImageUrl).into(sampleBookPic);
-                            nextBtn.setVisibility(View.VISIBLE);
+
+                            //Glide.with(SellTestActivity.this).load(bookImageUrl).into(ivBookImage);
+
+                            if (!(bookImageUrl == null)){
+
+                                Glide.with(SellTestActivity.this).load(bookImageUrl).listener(new RequestListener<Drawable>() {
+                                    @Override
+                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                        progressBar.setVisibility(View.GONE);
+                                        swView.setVisibility(View.VISIBLE);
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                        progressBar.setVisibility(View.GONE);
+                                        swView.setVisibility(View.VISIBLE);
+                                        return false;
+                                    }
+                                }).into(swView);
+
+                                Glide.with(SellTestActivity.this).load(bookImageUrl).into(sampleApprovalImage);
+                                Glide.with(SellTestActivity.this).load(bookImageUrl).into(sampleBookPic);
+
+                                nextBtn.setVisibility(View.VISIBLE);
+
+                            }
                         }
                     });
 
-                } catch (JSONException e) {
+                } catch (final JSONException e) {
                     e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressBar.setVisibility(View.GONE);
+                            swView.setVisibility(View.VISIBLE);
+                            Glide.with(SellTestActivity.this).load(R.drawable.add_imge_manually).into(swView);
+                        }
+                    });
+
                 }
 
             }
@@ -1029,7 +1105,38 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             dataAdapter.notifyDataSetChanged();
             specialSpinner.setAdapter(dataAdapter);
+
+            final Bundle bundle = getIntent().getExtras();
+            if (bundle != null) {
+                String UpdateNoteSpecialization = bundle.getString("UpdateNoteSpecialization");
+                if (UpdateNoteSpecialization.equals("All branches")){
+                    specialSpinner.setSelection(1);
+                } else if (UpdateNoteSpecialization.equals("CSE")) {
+                    specialSpinner.setSelection(2);
+                } else if (UpdateNoteSpecialization.equals("ECE")) {
+                    specialSpinner.setSelection(3);
+                } else if (UpdateNoteSpecialization.equals("EEE")) {
+                    specialSpinner.setSelection(4);
+                } else if (UpdateNoteSpecialization.equals("ECE")) {
+                    specialSpinner.setSelection(5);
+                } else if (UpdateNoteSpecialization.equals("E&I")) {
+                    specialSpinner.setSelection(6);
+                } else if (UpdateNoteSpecialization.equals("Information Technology")) {
+                    specialSpinner.setSelection(7);
+                } else if (UpdateNoteSpecialization.equals("ICE")) {
+                    specialSpinner.setSelection(8);
+                } else if (UpdateNoteSpecialization.equals("Mechanical Engineering")) {
+                    specialSpinner.setSelection(9);
+                } else if (UpdateNoteSpecialization.equals("Mechatronics")) {
+                    specialSpinner.setSelection(10);
+                } else if (UpdateNoteSpecialization.equals("Production Engineering")) {
+                    specialSpinner.setSelection(11);
+                } else if (UpdateNoteSpecialization.equals("Others")) {
+                    specialSpinner.setSelection(12);
+                }
+            }
         }
+
         if(degree.contentEquals("Medical")) {
 
             specialSpinner.setVisibility(View.VISIBLE);
@@ -1047,6 +1154,24 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
             dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             dataAdapter2.notifyDataSetChanged();
             specialSpinner.setAdapter(dataAdapter2);
+
+            final Bundle bundle = getIntent().getExtras();
+            if (bundle != null) {
+                String UpdateNoteSpecialization = bundle.getString("UpdateNoteSpecialization");
+                if (UpdateNoteSpecialization.equals("General Medicine")){
+                    specialSpinner.setSelection(1);
+                } else if (UpdateNoteSpecialization.equals("Dental")) {
+                    specialSpinner.setSelection(2);
+                } else if (UpdateNoteSpecialization.equals("Pharmacy")) {
+                    specialSpinner.setSelection(3);
+                } else if (UpdateNoteSpecialization.equals("Nursing")) {
+                    specialSpinner.setSelection(4);
+                } else if (UpdateNoteSpecialization.equals("Sidha & Ayurvedha")) {
+                    specialSpinner.setSelection(5);
+                } else if (UpdateNoteSpecialization.equals("Others")) {
+                    specialSpinner.setSelection(6);
+                }
+            }
         }
 
         if(degree.contentEquals("Architecture")) {
@@ -1062,11 +1187,31 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
             list.add("Lighting Architecture");
             list.add("Political Architecture");
             list.add("Others");
-            ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this,
+            ArrayAdapter<String> dataAdapter3 = new ArrayAdapter<String>(this,
                     android.R.layout.simple_spinner_item, list);
-            dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            dataAdapter2.notifyDataSetChanged();
-            specialSpinner.setAdapter(dataAdapter2);
+            dataAdapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            dataAdapter3.notifyDataSetChanged();
+            specialSpinner.setAdapter(dataAdapter3);
+
+            final Bundle bundle = getIntent().getExtras();
+            if (bundle != null) {
+                String UpdateNoteSpecialization = bundle.getString("UpdateNoteSpecialization");
+                if (UpdateNoteSpecialization.equals("Landscape Architecture")){
+                    specialSpinner.setSelection(1);
+                } else if (UpdateNoteSpecialization.equals("Urban Planner")) {
+                    specialSpinner.setSelection(2);
+                } else if (UpdateNoteSpecialization.equals("Restoration Architecture")) {
+                    specialSpinner.setSelection(3);
+                } else if (UpdateNoteSpecialization.equals("Research Architecture")) {
+                    specialSpinner.setSelection(4);
+                } else if (UpdateNoteSpecialization.equals("Lighting Architecture")) {
+                    specialSpinner.setSelection(5);
+                } else if (UpdateNoteSpecialization.equals("Political Architecture")) {
+                    specialSpinner.setSelection(6);
+                } else if (UpdateNoteSpecialization.equals("Others")) {
+                    specialSpinner.setSelection(6);
+                }
+            }
         }
 
         if (degree.contentEquals("Arts")) {
@@ -1095,7 +1240,36 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
 
         if (degree.contentEquals("Literature")) {
 
-            specialSpinner.setVisibility(View.GONE);
+            specialSpinner.setVisibility(View.VISIBLE);
+
+            List<String> list = new ArrayList<String>();
+            list.add("Select specialization");
+            list.add("English");
+            list.add("Tamil");
+            list.add("Telugu");
+            list.add("Malayalam");
+            list.add("Others");
+            ArrayAdapter<String> dataAdapter4 = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_item, list);
+            dataAdapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            dataAdapter4.notifyDataSetChanged();
+            specialSpinner.setAdapter(dataAdapter4);
+
+            final Bundle bundle = getIntent().getExtras();
+            if (bundle != null) {
+                String UpdateNoteSpecialization = bundle.getString("UpdateNoteSpecialization");
+                if (UpdateNoteSpecialization.equals("English")){
+                    specialSpinner.setSelection(1);
+                } else if (UpdateNoteSpecialization.equals("Tamil")) {
+                    specialSpinner.setSelection(2);
+                } else if (UpdateNoteSpecialization.equals("Telugu")) {
+                    specialSpinner.setSelection(3);
+                } else if (UpdateNoteSpecialization.equals("Malayalam")) {
+                    specialSpinner.setSelection(4);
+                } else if (UpdateNoteSpecialization.equals("Others")) {
+                    specialSpinner.setSelection(6);
+                }
+            }
 
         }
 
@@ -1107,7 +1281,36 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
 
         if (degree.contentEquals("Science")) {
 
-            specialSpinner.setVisibility(View.GONE);
+            specialSpinner.setVisibility(View.VISIBLE);
+
+            List<String> list = new ArrayList<String>();
+            list.add("Select specialization");
+            list.add("Physics");
+            list.add("Chemistry");
+            list.add("Mathematics");
+            list.add("Life Science");
+            list.add("Others");
+            ArrayAdapter<String> dataAdapter5 = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_item, list);
+            dataAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            dataAdapter5.notifyDataSetChanged();
+            specialSpinner.setAdapter(dataAdapter5);
+
+            final Bundle bundle = getIntent().getExtras();
+            if (bundle != null) {
+                String UpdateNoteSpecialization = bundle.getString("UpdateNoteSpecialization");
+                if (UpdateNoteSpecialization.equals("Physics")){
+                    specialSpinner.setSelection(1);
+                } else if (UpdateNoteSpecialization.equals("Chemistry")) {
+                    specialSpinner.setSelection(2);
+                } else if (UpdateNoteSpecialization.equals("Mathematics")) {
+                    specialSpinner.setSelection(3);
+                } else if (UpdateNoteSpecialization.equals("Life Science")) {
+                    specialSpinner.setSelection(4);
+                } else if (UpdateNoteSpecialization.equals("Others")) {
+                    specialSpinner.setSelection(6);
+                }
+            }
 
         }
 

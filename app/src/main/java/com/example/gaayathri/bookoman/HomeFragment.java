@@ -671,12 +671,14 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy: ");
+        progressDialog1.dismiss();
     }
 
     @Override
     public void onDetach() {
         Log.d(TAG, "onDetach: ");
         (getActivity()).setTitle(getActivity().getTitle());
+        progressDialog1.dismiss();
         super.onDetach();
     }
 
@@ -880,6 +882,11 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
             call.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    progressDialog1 = new ProgressDialog(getActivity());
+                    progressDialog1.setMessage("Loading...");
+                    progressDialog1.show();
+
                     Intent dialIntent = new Intent(Intent.ACTION_DIAL);
                     dialIntent.setData(Uri.parse("tel:" + note.getPhone()));
                     startActivity(dialIntent);
@@ -889,6 +896,10 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
             chat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    progressDialog1 = new ProgressDialog(getActivity());
+                    progressDialog1.setMessage("Loading...");
+                    progressDialog1.show();
 
                     launchOneToOneChat(uid, note.getuser());
 

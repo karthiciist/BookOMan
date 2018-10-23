@@ -62,6 +62,12 @@
                         android:text="Or"
                         android:textSize="20sp" />
 
+                    <ProgressBar
+                        android:id="@+id/progress"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:visibility="visible" />
+
                     <com.facebook.drawee.view.SimpleDraweeView
                         android:layout_height="380dp"
                         android:layout_width="300dp"
