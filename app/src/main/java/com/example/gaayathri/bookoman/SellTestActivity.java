@@ -139,7 +139,9 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
         Spinner degreeSpinner = findViewById(R.id.etDegree);
         Spinner specialSpinner = findViewById(R.id.etSpecialization);
 
-        specialSpinner.setVisibility(View.GONE);
+        LinearLayout llSpecialization = findViewById(R.id.llSpecialization);
+
+        llSpecialization.setVisibility(View.GONE);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.degrees_array, android.R.layout.simple_spinner_item);
@@ -461,8 +463,6 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
         sampleAd = findViewById(R.id.sampleAd);
         title = findViewById(R.id.etMaterialTitle);
         author = findViewById(R.id.etAuthor);
-        //degree = findViewById(R.id.etDegree);
-        //specialization = findViewById(R.id.etSpecialization);
         mrp = findViewById(R.id.etMrp);
         price = findViewById(R.id.etExpectedPrice);
         sellerMsg = findViewById(R.id.etNoteToBuyer);
@@ -506,12 +506,13 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
 
                 Spinner degreeSpinner = findViewById(R.id.etDegree);
                 Spinner specialSpinner = findViewById(R.id.etSpecialization);
+                LinearLayout llSpecialization = findViewById(R.id.llSpecialization);
 
                 String a = title.getText().toString();
                 String b = author.getText().toString();
                 String c = degreeSpinner.getSelectedItem().toString();
                 String d = " ";
-                if (specialSpinner.isShown()){
+                if (llSpecialization.isShown()){
                     d = specialSpinner.getSelectedItem().toString();
                 }
                 String e = mrp.getText().toString();
@@ -935,15 +936,6 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
 
                     } catch(final JSONException jse){
                         jse.printStackTrace();
-                        /*runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                //Toast.makeText(SellTestActivity.this, jse.getMessage(), Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.GONE);
-                                swView.setVisibility(View.VISIBLE);
-                                Glide.with(SellTestActivity.this).load(R.drawable.add_imge_manually).into(swView);
-                            }
-                        });*/
                     }
 
                 } catch (JSONException e) {
@@ -1081,10 +1073,12 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
         Toast.makeText(this, degree, Toast.LENGTH_SHORT).show();
 
         Spinner specialSpinner = findViewById(R.id.etSpecialization);
+        LinearLayout llSpecialization = findViewById(R.id.llSpecialization);
 
         if(degree.contentEquals("Engineering")) {
 
-            specialSpinner.setVisibility(View.VISIBLE);
+            //specialSpinner.setVisibility(View.VISIBLE);
+            llSpecialization.setVisibility(View.VISIBLE);
 
             List<String> list = new ArrayList<String>();
             list.add("Select specialization");
@@ -1139,7 +1133,8 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
 
         if(degree.contentEquals("Medical")) {
 
-            specialSpinner.setVisibility(View.VISIBLE);
+            //specialSpinner.setVisibility(View.VISIBLE);
+            llSpecialization.setVisibility(View.VISIBLE);
 
             List<String> list = new ArrayList<String>();
             list.add("Select specialization");
@@ -1176,7 +1171,8 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
 
         if(degree.contentEquals("Architecture")) {
 
-            specialSpinner.setVisibility(View.VISIBLE);
+            //specialSpinner.setVisibility(View.VISIBLE);
+            llSpecialization.setVisibility(View.VISIBLE);
 
             List<String> list = new ArrayList<String>();
             list.add("Select specialization");
@@ -1216,31 +1212,36 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
 
         if (degree.contentEquals("Arts")) {
 
-            specialSpinner.setVisibility(View.GONE);
+            //specialSpinner.setVisibility(View.GONE);
+            llSpecialization.setVisibility(View.GONE);
 
         }
 
         if (degree.contentEquals("Commerce")) {
 
-            specialSpinner.setVisibility(View.GONE);
+            //specialSpinner.setVisibility(View.GONE);
+            llSpecialization.setVisibility(View.GONE);
 
         }
 
         if (degree.contentEquals("Computer Applications")) {
 
-            specialSpinner.setVisibility(View.GONE);
+            //specialSpinner.setVisibility(View.GONE);
+            llSpecialization.setVisibility(View.GONE);
 
         }
 
         if (degree.contentEquals("Education")) {
 
-            specialSpinner.setVisibility(View.GONE);
+            //specialSpinner.setVisibility(View.GONE);
+            llSpecialization.setVisibility(View.GONE);
 
         }
 
         if (degree.contentEquals("Literature")) {
 
-            specialSpinner.setVisibility(View.VISIBLE);
+            //specialSpinner.setVisibility(View.VISIBLE);
+            llSpecialization.setVisibility(View.VISIBLE);
 
             List<String> list = new ArrayList<String>();
             list.add("Select specialization");
@@ -1275,13 +1276,15 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
 
         if (degree.contentEquals("Law")) {
 
-            specialSpinner.setVisibility(View.GONE);
+            //specialSpinner.setVisibility(View.GONE);
+            llSpecialization.setVisibility(View.GONE);
 
         }
 
         if (degree.contentEquals("Science")) {
 
-            specialSpinner.setVisibility(View.VISIBLE);
+            //specialSpinner.setVisibility(View.VISIBLE);
+            llSpecialization.setVisibility(View.VISIBLE);
 
             List<String> list = new ArrayList<String>();
             list.add("Select specialization");
