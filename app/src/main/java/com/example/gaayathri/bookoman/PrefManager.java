@@ -20,6 +20,7 @@ public class PrefManager {
     private static final String PREF_NAME = "splash-welcome";
 
     private static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
+    private static final String BARCODE_IS_FIRST_TIME_LAUNCH = "BarcodeIsFirstTimeLaunch";
 
     public PrefManager(Context context) {
         this._context = context;
@@ -32,7 +33,16 @@ public class PrefManager {
         editor.commit();
     }
 
+    public void barcodeSetFirstTimeLaunch(boolean isFirstTime) {
+        editor.putBoolean(BARCODE_IS_FIRST_TIME_LAUNCH, isFirstTime);
+        editor.commit();
+    }
+
     public boolean isFirstTimeLaunch() {
         return pref.getBoolean(IS_FIRST_TIME_LAUNCH, true);
+    }
+
+    public boolean isBarcodeFirstTimeLaunch() {
+        return pref.getBoolean(BARCODE_IS_FIRST_TIME_LAUNCH, true);
     }
 }

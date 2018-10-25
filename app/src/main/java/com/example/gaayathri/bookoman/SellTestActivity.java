@@ -118,6 +118,8 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
 
     private ProgressDialog progressDialog1;
 
+    private PrefManager prefManager;
+
     TextView sampleTitle, sampleAuthor, sampleDegree, sampleSpecial, sampleMrp, samplePrice, sampleSellerMsg, adLookLike, imageLookLike;
 
     @Override
@@ -607,21 +609,62 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
 
             case R.id.barCodeScannerBtn:
 
-                IntentIntegrator integrator = new IntentIntegrator(SellTestActivity.this);
-                integrator.setPrompt("Scan the barcode at the back cover of your book");
-                integrator.setCameraId(0);  // Use a specific camera of the device
-                integrator.setOrientationLocked(true);
-                integrator.setBeepEnabled(true);
-                integrator.setCaptureActivity(CaptureActivityPortrait.class);
-                integrator.initiateScan();
+                prefManager = new PrefManager(this);
+                if (prefManager.isBarcodeFirstTimeLaunch()) {
 
-                //Glide.with(SellTestActivity.this).load(R.drawable.add_imge_manually).into(swView);
-                swView.setVisibility(View.GONE);
-                progressBar.setVisibility(View.VISIBLE);
-                title.setText("");
-                author.setText("");
-                nextBtn.setVisibility(View.GONE);
+                    final Dialog barcodeDialog;
+                    barcodeDialog = new Dialog(SellTestActivity.this);
+                    barcodeDialog.setContentView(R.layout.dialog_barcode);
+                    barcodeDialog.show();
 
+                    prefManager.barcodeSetFirstTimeLaunch(false);
+
+                    Button btnGotIt = barcodeDialog.findViewById(R.id.btnGotIt);
+                    btnGotIt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            barcodeDialog.dismiss();
+
+                            IntentIntegrator integrator = new IntentIntegrator(SellTestActivity.this);
+                            integrator.setPrompt("Scan the barcode at the back cover of your book");
+                            integrator.setCameraId(0);  // Use a specific camera of the device
+                            integrator.setOrientationLocked(true);
+                            integrator.setBeepEnabled(true);
+                            integrator.setCaptureActivity(CaptureActivityPortrait.class);
+                            integrator.initiateScan();
+
+                            //Glide.with(SellTestActivity.this).load(R.drawable.add_imge_manually).into(swView);
+                            swView.setVisibility(View.GONE);
+                            progressBar.setVisibility(View.VISIBLE);
+                            title.setText("");
+                            author.setText("");
+                            nextBtn.setVisibility(View.GONE);
+                        }
+                    });
+                } else {
+
+                    IntentIntegrator integrator = new IntentIntegrator(SellTestActivity.this);
+                    integrator.setPrompt("Scan the barcode at the back cover of your book");
+                    integrator.setCameraId(0);  // Use a specific camera of the device
+                    integrator.setOrientationLocked(true);
+                    integrator.setBeepEnabled(true);
+                    integrator.setCaptureActivity(CaptureActivityPortrait.class);
+                    integrator.initiateScan();
+
+                    //Glide.with(SellTestActivity.this).load(R.drawable.add_imge_manually).into(swView);
+                    swView.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.VISIBLE);
+                    title.setText("");
+                    author.setText("");
+                    nextBtn.setVisibility(View.GONE);
+
+                }
+
+               /* if (!prefManager.isFirstTimeLaunch()) {
+
+
+
+                }*/
                 break;
 
             case R.id.bookPic:
@@ -663,6 +706,8 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
         if(result != null) {
             if(result.getContents() == null) {
                 Log.d("MainActivity", "Cancelled scan");
+                swView.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 Log.d("MainActivity", "Scanned");
