@@ -77,7 +77,7 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
     private List<Note> notesList, notesList1, notesList2;
     private FirestoreRecyclerAdapter adapter, adapter1, adapter2;
 
-    Dialog myDialog, myDialog2, userDataDialog;
+    Dialog myDialog, myDialog2, userDataDialog, chatIntroDialog;
 
     // For first recycler view
     String UpdateNoteTitle, UpdateNoteAuthor, UpdateNoteDegree, UpdateNoteSpecialization, UpdateNotePrice, UpdateNoteLocation, UpdateNoteUser, UpdateNoteMrp, UpdateNoteSellerMsg, entryName, downloadUri;
@@ -96,6 +96,8 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
     private FirebaseFirestore firestore;
 
     String cityL, backgroundL;
+
+    private PrefManager prefManager;
 
 
     @Override
@@ -885,6 +887,7 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
 
                     progressDialog1 = new ProgressDialog(getActivity());
                     progressDialog1.setMessage("Loading...");
+                    progressDialog1.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
                     progressDialog1.show();
 
                     Intent dialIntent = new Intent(Intent.ACTION_DIAL);
@@ -897,11 +900,37 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
                 @Override
                 public void onClick(View v) {
 
-                    progressDialog1 = new ProgressDialog(getActivity());
-                    progressDialog1.setMessage("Loading...");
-                    progressDialog1.show();
+                    prefManager = new PrefManager(getActivity());
+                    if (prefManager.isChatFirstTimeLaunch()) {
 
-                    launchOneToOneChat(uid, note.getuser());
+                        chatIntroDialog = new Dialog(getActivity());
+                        chatIntroDialog.setContentView(R.layout.dialog_chat);
+                        chatIntroDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
+                        chatIntroDialog.show();
+
+                        Button btnGotIt = chatIntroDialog.findViewById(R.id.btnGotIt);
+                        btnGotIt.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                progressDialog1 = new ProgressDialog(getActivity());
+                                progressDialog1.setMessage("Loading...");
+                                progressDialog1.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
+                                progressDialog1.show();
+
+                                launchOneToOneChat(uid, note.getuser());
+                                chatIntroDialog.dismiss();
+                                prefManager.chatSetFirstTimeLaunch(false);
+                            }
+                        });
+
+                    } else {
+                        progressDialog1 = new ProgressDialog(getActivity());
+                        progressDialog1.setMessage("Loading...");
+                        progressDialog1.show();
+
+                        launchOneToOneChat(uid, note.getuser());
+
+                    }
 
                 }
             });
@@ -912,5 +941,30 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
         likeButton.setOnLikeListener(this);
         likeButton.setOnAnimationEndListener(this);
 
+        checkFavorited();
+
+    }
+
+    private void checkFavorited() {
+
+        String email = firebaseAuth.getCurrentUser().getEmail();
+
+        final LikeButton likeButton = myDialog.findViewById(R.id.heart_button);
+        likeButton.setOnLikeListener(this);
+        likeButton.setOnAnimationEndListener(this);
+
+        DocumentReference docRef = firestore.collection("users").document(email).collection("favorites").document(entryName);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot documentSnapshot = task.getResult();
+                if (documentSnapshot.exists()) {
+                    likeButton.setLiked(true);
+
+                } else {
+                    likeButton.setLiked(false);
+                }
+            }
+        });
     }
 }

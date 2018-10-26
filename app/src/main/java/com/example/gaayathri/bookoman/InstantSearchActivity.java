@@ -2,6 +2,7 @@ package com.example.gaayathri.bookoman;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
@@ -70,11 +71,13 @@ public class InstantSearchActivity extends AppCompatActivity implements VoiceDia
     private FirebaseAuth firebaseAuth;
 
     Dialog myDialog;
-    Dialog myDialog2;
+    Dialog myDialog2, chatIntroDialog;
     String entryName;
     String downloadUri;
 
     private FirebaseFirestore firestore;
+    private PrefManager prefManager;
+    private ProgressDialog progressDialog1;
 
     BookLoading bookLoading;
 
@@ -89,6 +92,9 @@ public class InstantSearchActivity extends AppCompatActivity implements VoiceDia
 
         myDialog2 = new Dialog(InstantSearchActivity.this);
         myDialog2.setContentView(R.layout.dialog_image_expanded);
+
+        progressDialog1 = new ProgressDialog(InstantSearchActivity.this);
+        progressDialog1.setMessage("Loading...");
 
         firestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -203,7 +209,33 @@ public class InstantSearchActivity extends AppCompatActivity implements VoiceDia
                                         @Override
                                         public void onClick(View v) {
 
-                                            launchOneToOneChat(uid, userL);
+                                            prefManager = new PrefManager(InstantSearchActivity.this);
+                                            if (prefManager.isChatFirstTimeLaunch()) {
+
+                                                chatIntroDialog = new Dialog(InstantSearchActivity.this);
+                                                chatIntroDialog.setContentView(R.layout.dialog_chat);
+                                                chatIntroDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
+                                                chatIntroDialog.show();
+
+                                                Button btnGotIt = chatIntroDialog.findViewById(R.id.btnGotIt);
+                                                btnGotIt.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+
+                                                        progressDialog1.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
+                                                        progressDialog1.show();
+
+                                                        launchOneToOneChat(uid, userL);
+                                                        chatIntroDialog.dismiss();
+                                                        prefManager.chatSetFirstTimeLaunch(false);
+                                                    }
+                                                });
+
+                                            } else {
+
+                                                progressDialog1.show();
+                                                launchOneToOneChat(uid, userL);
+                                            }
 
                                         }
                                     });
@@ -272,12 +304,14 @@ public class InstantSearchActivity extends AppCompatActivity implements VoiceDia
         //filterResultsWindow.dismiss();
         //toggleArrow(buttonFilter, false);
         super.onStop();
+        progressDialog1.dismiss();
     }
 
     @Override
     protected void onDestroy() {
         //filterResultsWindow.dismiss();
         searcher.destroy();
+        progressDialog1.dismiss();
         //toggleArrow(buttonFilter, false);
         super.onDestroy();
         //RefWatcher refWatcher = EcommerceApplication.getRefWatcher(this);

@@ -72,16 +72,18 @@ public class CatagoriesExpandedFragment extends Fragment implements OnLikeListen
     private ListenerRegistration firestoreListener;
     private List<Note> notesList;
     private FloatingActionButton fab;
-    private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog, progressDialog1;
 
     Dialog myDialog;
-    Dialog myDialog2;
+    Dialog myDialog2, chatIntroDialog;
     String entryName;
     String downloadUri;
 
     BookLoading bookLoading;
 
     String value;
+
+    private PrefManager prefManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -100,32 +102,14 @@ public class CatagoriesExpandedFragment extends Fragment implements OnLikeListen
         myDialog2 = new Dialog(getActivity());
         myDialog2.setContentView(R.layout.dialog_image_expanded);
 
-        // Initiating views in dialogs
-        TextView userName = myDialog.findViewById(R.id.userExp);
+        progressDialog1 = new ProgressDialog(getActivity());
+        progressDialog1.setMessage("Loading...");
 
         LikeButton likeButton = myDialog.findViewById(R.id.heart_button);
         likeButton.setOnLikeListener(this);
         likeButton.setOnAnimationEndListener(this);
 
-        Button btnCallSeller = myDialog.findViewById(R.id.btnCallSeller);
-        Button btnChatSeller = myDialog.findViewById(R.id.btnChatSeller);
-
-        btnCallSeller.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Calling seller!!!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnChatSeller.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Chatting seller!!!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         progressDialog = new ProgressDialog(getActivity());
-
 
         // Initialize firebase
         firebaseAuth = getInstance();
@@ -419,6 +403,7 @@ public class CatagoriesExpandedFragment extends Fragment implements OnLikeListen
         super.onStop();
         adapter.stopListening();
         progressDialog.dismiss();
+        progressDialog1.dismiss();
 
         value = "";
     }
@@ -427,6 +412,7 @@ public class CatagoriesExpandedFragment extends Fragment implements OnLikeListen
     public void onDestroy() {
         super.onDestroy();
 
+        progressDialog1.dismiss();
         firestoreListener.remove();
         value = "";
     }
@@ -659,7 +645,33 @@ public class CatagoriesExpandedFragment extends Fragment implements OnLikeListen
                                 @Override
                                 public void onClick(View v) {
 
-                                    launchOneToOneChat(uid, note.getuser());
+                                    prefManager = new PrefManager(getActivity());
+                                    if (prefManager.isChatFirstTimeLaunch()) {
+
+                                        chatIntroDialog = new Dialog(getActivity());
+                                        chatIntroDialog.setContentView(R.layout.dialog_chat);
+                                        chatIntroDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
+                                        chatIntroDialog.show();
+
+                                        Button btnGotIt = chatIntroDialog.findViewById(R.id.btnGotIt);
+                                        btnGotIt.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                //progressDialog1 = new ProgressDialog(getActivity());
+                                                //progressDialog1.setMessage("Loading...");
+                                                progressDialog1.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
+                                                progressDialog1.show();
+
+                                                launchOneToOneChat(uid, note.getuser());
+                                                chatIntroDialog.dismiss();
+                                                prefManager.chatSetFirstTimeLaunch(false);
+                                            }
+                                        });
+
+                                    } else {
+                                        progressDialog1.show();
+                                        launchOneToOneChat(uid, note.getuser());
+                                    }
 
                                 }
                             });

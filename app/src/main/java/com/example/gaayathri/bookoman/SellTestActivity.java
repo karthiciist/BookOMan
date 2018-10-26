@@ -651,7 +651,6 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                     integrator.setCaptureActivity(CaptureActivityPortrait.class);
                     integrator.initiateScan();
 
-                    //Glide.with(SellTestActivity.this).load(R.drawable.add_imge_manually).into(swView);
                     swView.setVisibility(View.GONE);
                     progressBar.setVisibility(View.VISIBLE);
                     title.setText("");
@@ -660,11 +659,6 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
 
                 }
 
-               /* if (!prefManager.isFirstTimeLaunch()) {
-
-
-
-                }*/
                 break;
 
             case R.id.bookPic:

@@ -66,7 +66,10 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
     private ProgressDialog progressDialog;
 
     Dialog myDialog;
-    Dialog myDialog2;
+    Dialog myDialog2, chatIntroDialog;
+
+    private PrefManager prefManager;
+    private ProgressDialog progressDialog1;
 
     String entryName;
     String downloadUri;
@@ -88,6 +91,9 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
 
         myDialog2 = new Dialog(getActivity());
         myDialog2.setContentView(R.layout.dialog_image_expanded);
+
+        progressDialog1 = new ProgressDialog(getActivity());
+        progressDialog1.setMessage("Loading...");
 
         LikeButton likeButton = myDialog.findViewById(R.id.heart_button);
         likeButton.setOnLikeListener(this);
@@ -151,6 +157,14 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
     public void onStop() {
         super.onStop();
         adapter.stopListening();
+        progressDialog1.dismiss();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        progressDialog1.dismiss();
+        firestoreListener.remove();
     }
 
     @Override
@@ -344,7 +358,34 @@ public class MyFavoritesFragment extends Fragment implements OnLikeListener, OnA
                             btnChatSeller.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    launchOneToOneChat(uid, note.getuser());
+
+                                    prefManager = new PrefManager(getActivity());
+                                    if (prefManager.isChatFirstTimeLaunch()) {
+
+                                        chatIntroDialog = new Dialog(getActivity());
+                                        chatIntroDialog.setContentView(R.layout.dialog_chat);
+                                        chatIntroDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
+                                        chatIntroDialog.show();
+
+                                        Button btnGotIt = chatIntroDialog.findViewById(R.id.btnGotIt);
+                                        btnGotIt.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+
+                                                progressDialog1.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
+                                                progressDialog1.show();
+
+                                                launchOneToOneChat(uid, note.getuser());
+                                                chatIntroDialog.dismiss();
+                                                prefManager.chatSetFirstTimeLaunch(false);
+                                            }
+                                        });
+
+                                    } else {
+
+                                        progressDialog1.show();
+                                        launchOneToOneChat(uid, note.getuser());
+                                    }
                                 }
                             });
 

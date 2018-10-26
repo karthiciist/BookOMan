@@ -21,6 +21,7 @@ public class PrefManager {
 
     private static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
     private static final String BARCODE_IS_FIRST_TIME_LAUNCH = "BarcodeIsFirstTimeLaunch";
+    private static final String CHAT_IS_FIRST_TIME_LAUNCH = "BarcodeIsFirstTimeLaunch";
 
     public PrefManager(Context context) {
         this._context = context;
@@ -38,11 +39,20 @@ public class PrefManager {
         editor.commit();
     }
 
+    public void chatSetFirstTimeLaunch(boolean isFirstTime) {
+        editor.putBoolean(CHAT_IS_FIRST_TIME_LAUNCH, isFirstTime);
+        editor.commit();
+    }
+
     public boolean isFirstTimeLaunch() {
         return pref.getBoolean(IS_FIRST_TIME_LAUNCH, true);
     }
 
     public boolean isBarcodeFirstTimeLaunch() {
         return pref.getBoolean(BARCODE_IS_FIRST_TIME_LAUNCH, true);
+    }
+
+    public boolean isChatFirstTimeLaunch() {
+        return pref.getBoolean(CHAT_IS_FIRST_TIME_LAUNCH, true);
     }
 }
