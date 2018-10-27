@@ -220,14 +220,14 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
-                                                    Toast.makeText(getApplicationContext(), "Old material has been deleted!", Toast.LENGTH_SHORT).show();
+                                                    //Toast.makeText(getApplicationContext(), "Old material has been deleted!", Toast.LENGTH_SHORT).show();
 
                                                     StorageReference imageReference1 = storageReference.child(firebaseAuth.getCurrentUser().getEmail()).child("bookimages").child(oldEntryName);
 
                                                     imageReference1.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
                                                         public void onSuccess(Void aVoid) {
-                                                            Toast.makeText(SellTestActivity.this, "Book image deleted successfully!!!", Toast.LENGTH_SHORT).show();
+                                                            //Toast.makeText(SellTestActivity.this, "Book image deleted successfully!!!", Toast.LENGTH_SHORT).show();
                                                         }
                                                     }).addOnFailureListener(new OnFailureListener() {
                                                         @Override
@@ -258,7 +258,7 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                                 uploadTask.addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(SellTestActivity.this, "Failed to upload image and ad!!!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SellTestActivity.this, "Failed to upload image and ad. Error: " + e, Toast.LENGTH_SHORT).show();
                                         progressDialog.dismiss();
                                     }
                                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -604,7 +604,7 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                 break;
 
             case R.id.finish:
-                Toast.makeText(this, "Uploading ad!!!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Uploading ad!!!", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.barCodeScannerBtn:
@@ -706,7 +706,7 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
             } else {
                 Log.d("MainActivity", "Scanned");
 
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "ISBN scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -1109,7 +1109,7 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
 
         String degree = parent.getItemAtPosition(position).toString();
 
-        Toast.makeText(this, degree, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, degree, Toast.LENGTH_SHORT).show();
 
         Spinner specialSpinner = findViewById(R.id.etSpecialization);
         LinearLayout llSpecialization = findViewById(R.id.llSpecialization);

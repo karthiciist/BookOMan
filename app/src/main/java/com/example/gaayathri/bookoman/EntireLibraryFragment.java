@@ -108,23 +108,6 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
         likeButton.setOnLikeListener(this);
         likeButton.setOnAnimationEndListener(this);
 
-        Button btnCallSeller = myDialog.findViewById(R.id.btnCallSeller);
-        Button btnChatSeller = myDialog.findViewById(R.id.btnChatSeller);
-
-        btnCallSeller.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Calling seller!!!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnChatSeller.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Chatting seller!!!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         progressDialog = new ProgressDialog(getActivity());
 
 

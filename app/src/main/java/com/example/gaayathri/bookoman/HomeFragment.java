@@ -759,7 +759,7 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
                             FragmentTransaction ft = getFragmentManager().beginTransaction();
                             ft.replace(R.id.frm,new HomeFragment()).addToBackStack(null).commit();
 
-                            Toast.makeText(getActivity(), "Profile updated successfully!!!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Profile updated successfully!", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -861,7 +861,7 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
             }
         });
 
-        Toast.makeText(getActivity(), entryName, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), entryName, Toast.LENGTH_SHORT).show();
 
         Button call = myDialog.findViewById(R.id.btnCallSeller);
         Button chat = myDialog.findViewById(R.id.btnChatSeller);

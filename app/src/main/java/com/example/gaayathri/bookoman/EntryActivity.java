@@ -161,7 +161,7 @@ public class EntryActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                Toast.makeText(this, e.getMessage() + "1", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -199,7 +199,7 @@ public class EntryActivity extends AppCompatActivity {
 
                                     populateSharedPrefs();
 
-                                    Toast.makeText(EntryActivity.this, "User profile created successfully!!!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EntryActivity.this, "Your profile created successfully!", Toast.LENGTH_SHORT).show();
                                     progressDialog.dismiss();
                                 }
 
@@ -209,7 +209,7 @@ public class EntryActivity extends AppCompatActivity {
                                 public void onFailure(@NonNull Exception e) {
 
                                     String error = e.getMessage();
-                                    Toast.makeText(EntryActivity.this, "Cannot create user profile. Error:" + error, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EntryActivity.this, "Cannot create your profile. Error:" + error, Toast.LENGTH_SHORT).show();
 
                                 }
                             });
@@ -258,8 +258,6 @@ public class EntryActivity extends AppCompatActivity {
                         editor.putString(profilePicUrl, userProfilePic);
                         editor.putString(email, userEmail);
                         editor.commit();
-
-                        Toast.makeText(EntryActivity.this, userCity, Toast.LENGTH_SHORT).show();
 
                         launchChat();
 

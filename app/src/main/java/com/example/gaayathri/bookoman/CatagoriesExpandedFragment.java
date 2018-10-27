@@ -557,7 +557,7 @@ public class CatagoriesExpandedFragment extends Fragment implements OnLikeListen
 
         Query query = firestoreDB.collection("books").whereEqualTo(degree, question);
 
-        Toast.makeText(getActivity(), question, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), question, Toast.LENGTH_SHORT).show();
 
         FirestoreRecyclerOptions<Note> response = new FirestoreRecyclerOptions.Builder<Note>()
                 .setQuery(query, Note.class)

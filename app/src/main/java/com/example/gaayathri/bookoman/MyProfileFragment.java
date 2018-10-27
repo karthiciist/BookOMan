@@ -451,7 +451,7 @@ public class MyProfileFragment extends Fragment {
                             }
                         });
 
-                        Toast.makeText(getActivity(), entryName, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(), entryName, Toast.LENGTH_SHORT).show();
 
                     }
                 });

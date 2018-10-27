@@ -295,7 +295,7 @@ public class MyMaterialsFragment extends Fragment {
 
                         progressDialog.dismiss();
 
-                        Toast.makeText(getActivity(), entryName, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(), entryName, Toast.LENGTH_SHORT).show();
 
                         progressDialog.dismiss();
 
@@ -399,7 +399,7 @@ public class MyMaterialsFragment extends Fragment {
         imageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(getActivity(), "Book image deleted successfully!!!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Book image deleted successfully!!!", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

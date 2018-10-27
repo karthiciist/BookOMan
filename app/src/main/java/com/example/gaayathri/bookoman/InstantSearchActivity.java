@@ -35,11 +35,14 @@ import com.algolia.instantsearch.voice.VoiceDialogFragment;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.like.LikeButton;
 import com.like.OnAnimationEndListener;
 import com.like.OnLikeListener;
@@ -52,6 +55,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.Manifest.permission.RECORD_AUDIO;
 import static com.algolia.instantsearch.voice.PermissionDialogFragment.ID_REQ_VOICE_PERM;
@@ -72,7 +77,7 @@ public class InstantSearchActivity extends AppCompatActivity implements VoiceDia
 
     Dialog myDialog;
     Dialog myDialog2, chatIntroDialog;
-    String entryName;
+    String entryName1;
     String downloadUri;
 
     private FirebaseFirestore firestore;
@@ -114,7 +119,7 @@ public class InstantSearchActivity extends AppCompatActivity implements VoiceDia
             public void onItemClick(RecyclerView recyclerView, int position, View v) {
 
                 JSONObject hit = hits.get(position);
-                
+
                 String entryName = null;
 
                 try {
@@ -123,7 +128,7 @@ public class InstantSearchActivity extends AppCompatActivity implements VoiceDia
                     e.printStackTrace();
                 }
 
-                Toast.makeText(InstantSearchActivity.this, entryName, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(InstantSearchActivity.this, entryName, Toast.LENGTH_SHORT).show();
 
                 bookLoading = myDialog.findViewById(R.id.bookloading);
                 bookLoading.start();
@@ -160,8 +165,9 @@ public class InstantSearchActivity extends AppCompatActivity implements VoiceDia
                                 final String uid = document.getString("uid");
                                 final String phoneL = document.getString("phone");
                                 final String emailL = document.getString("email");
+                                entryName1 = document.getString("entryName");
 
-                                Toast.makeText(InstantSearchActivity.this, titleL, Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(InstantSearchActivity.this, titleL, Toast.LENGTH_SHORT).show();
 
                                 title.setText(titleL);
                                 author.setText(authorL);
@@ -252,9 +258,11 @@ public class InstantSearchActivity extends AppCompatActivity implements VoiceDia
                                     }
                                 });
 
+                                checkFavorited(entryName1);
+
                             } else {
                                 Log.d(TAG, "No such document");
-                                Toast.makeText(InstantSearchActivity.this, "No such document", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(InstantSearchActivity.this, "No such book available", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             Log.d(TAG, "get failed with ", task.getException());
@@ -265,7 +273,7 @@ public class InstantSearchActivity extends AppCompatActivity implements VoiceDia
 
                 mrp.setPaintFlags(mrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-                checkFavorited();
+                //checkFavorited();
 
                 myDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
                 myDialog.show();
@@ -301,26 +309,17 @@ public class InstantSearchActivity extends AppCompatActivity implements VoiceDia
 
     @Override
     protected void onStop() {
-        //filterResultsWindow.dismiss();
-        //toggleArrow(buttonFilter, false);
         super.onStop();
         progressDialog1.dismiss();
     }
 
     @Override
     protected void onDestroy() {
-        //filterResultsWindow.dismiss();
         searcher.destroy();
         progressDialog1.dismiss();
-        //toggleArrow(buttonFilter, false);
         super.onDestroy();
-        //RefWatcher refWatcher = EcommerceApplication.getRefWatcher(this);
-        //refWatcher.watch(this);
-        //refWatcher.watch(findViewById(R.id.hits));
     }
-    // endregion
 
-    // region Permission handling
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (isRecordPermissionWithResults(requestCode, grantResults)) {
@@ -428,17 +427,16 @@ public class InstantSearchActivity extends AppCompatActivity implements VoiceDia
 
     }
 
-    private void checkFavorited() {
+    private void checkFavorited(String entryName1) {
 
-        //String email = firebaseAuth.getCurrentUser().getEmail();
-
-       /* String email = "contact.bookoman@gmail.com";
+        firebaseAuth = FirebaseAuth.getInstance();
+        String email = firebaseAuth.getCurrentUser().getEmail();
 
         final LikeButton likeButton = myDialog.findViewById(R.id.heart_button);
         likeButton.setOnLikeListener(this);
         likeButton.setOnAnimationEndListener(this);
 
-        DocumentReference docRef = firestore.collection("users").document(email).collection("favorites").document(entryName);
+        DocumentReference docRef = firestore.collection("users").document(email).collection("favorites").document(entryName1);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -450,7 +448,7 @@ public class InstantSearchActivity extends AppCompatActivity implements VoiceDia
                     likeButton.setLiked(false);
                 }
             }
-        });*/
+        });
     }
 
     @Override
@@ -461,11 +459,78 @@ public class InstantSearchActivity extends AppCompatActivity implements VoiceDia
     @Override
     public void liked(LikeButton likeButton) {
 
+        String email = firebaseAuth.getCurrentUser().getEmail();
+        String uuid = firebaseAuth.getCurrentUser().getUid();
+
+        TextView titleExp = myDialog.findViewById(R.id.titleExp);
+        TextView authExp = myDialog.findViewById(R.id.authorExp);
+        TextView degreeExp = myDialog.findViewById(R.id.degreeExp);
+        TextView specialExp = myDialog.findViewById(R.id.specialExp);
+        TextView locationExp = myDialog.findViewById(R.id.locationExp);
+        TextView mrpExp = myDialog.findViewById(R.id.mrpPriceExp);
+        TextView priceExp = myDialog.findViewById(R.id.priceExp);
+        TextView userExp = myDialog.findViewById(R.id.userExp);
+        TextView sellerMsgExp = myDialog.findViewById(R.id.sellerMsgExp);
+
+        final Map<String, String> bookMap = new HashMap<>();
+
+        bookMap.put("liked", entryName1);
+        bookMap.put("title", titleExp.getText().toString());
+        bookMap.put("author", authExp.getText().toString());
+        bookMap.put("degree", degreeExp.getText().toString());
+        bookMap.put("specialization", specialExp.getText().toString());
+        bookMap.put("location", locationExp.getText().toString());
+        bookMap.put("price", priceExp.getText().toString());
+        bookMap.put("mrp", mrpExp.getText().toString());
+        bookMap.put("user", userExp.getText().toString());
+        bookMap.put("sellerMsg", sellerMsgExp.getText().toString());
+        bookMap.put("downloadUri", downloadUri);
+
+        firestore.collection("users").document(email).collection("favorites").document(entryName1).set(bookMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(InstantSearchActivity.this, "Added to favorites!!!", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(InstantSearchActivity.this, "Check your internet connection!!!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Map<String, Object> data = new HashMap<>();
+        data.put(uuid, true);
+
+        firestore.collection("books").document(entryName1)
+                .set(data, SetOptions.merge());
     }
 
     @Override
     public void unLiked(LikeButton likeButton) {
 
+        String email = firebaseAuth.getCurrentUser().getEmail();
+        String uuid = firebaseAuth.getCurrentUser().getUid();
+
+        firestore.collection("users").document(email).collection("favorites").document(entryName1)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(InstantSearchActivity.this, "Removed from favorites", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(InstantSearchActivity.this, "Check your internet connection!!!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        Map<String, Object> data = new HashMap<>();
+        data.put(uuid, false);
+
+        firestore.collection("books").document(entryName1)
+                .set(data, SetOptions.merge());
     }
 
 }
