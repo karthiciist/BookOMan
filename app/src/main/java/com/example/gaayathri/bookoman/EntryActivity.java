@@ -119,9 +119,14 @@ public class EntryActivity extends AppCompatActivity {
             btnGoogleSignin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    progressDialog.setMessage("Logging in...");
+                    progressDialog.show();
+
                     signIn();
                 }
             });
+            progressDialog.dismiss();
         }
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -180,14 +185,17 @@ public class EntryActivity extends AppCompatActivity {
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
+            progressDialog.setMessage("Logging in...");
+            progressDialog.show();
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
             }
+            progressDialog.dismiss();
         }
     }
 
