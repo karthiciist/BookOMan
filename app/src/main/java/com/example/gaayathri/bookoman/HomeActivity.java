@@ -1,9 +1,13 @@
 package com.example.gaayathri.bookoman;
 
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -181,4 +185,5 @@ public class HomeActivity extends AppCompatActivity
         finish();
         startActivity(new Intent(HomeActivity.this, EntryActivity.class));
     }
+
 }

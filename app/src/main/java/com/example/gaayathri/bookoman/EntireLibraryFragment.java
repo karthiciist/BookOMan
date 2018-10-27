@@ -499,13 +499,19 @@ public class EntireLibraryFragment extends Fragment implements OnLikeListener, O
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot documentSnapshot = task.getResult();
-                if (documentSnapshot.exists()) {
-                    likeButton.setLiked(true);
 
-                } else {
-                    likeButton.setLiked(false);
+                try {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot.exists()) {
+                        likeButton.setLiked(true);
+
+                    } else {
+                        likeButton.setLiked(false);
+                    }
+                }catch (Exception e){
+                    Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
     }

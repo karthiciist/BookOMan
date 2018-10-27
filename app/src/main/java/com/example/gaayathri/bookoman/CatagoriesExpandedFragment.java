@@ -754,12 +754,16 @@ public class CatagoriesExpandedFragment extends Fragment implements OnLikeListen
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot documentSnapshot = task.getResult();
-                if (documentSnapshot.exists()) {
-                    likeButton.setLiked(true);
+                try{
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot.exists()) {
+                        likeButton.setLiked(true);
 
-                } else {
-                    likeButton.setLiked(false);
+                    } else {
+                        likeButton.setLiked(false);
+                    }
+                }catch (Exception e) {
+                    Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
                 }
             }
         });

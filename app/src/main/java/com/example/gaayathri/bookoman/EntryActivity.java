@@ -1,10 +1,15 @@
 package com.example.gaayathri.bookoman;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+import android.provider.SyncStateContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -85,6 +90,26 @@ public class EntryActivity extends AppCompatActivity {
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
         progressDialog = new ProgressDialog(this);
+
+        if (!isNetworkAvailable()) {
+            // Create an Alert Dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            // Set the Alert Dialog Message
+            builder.setMessage("Internet Connection Required")
+                    .setCancelable(false)
+                    .setPositiveButton("Retry",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                                    int id) {
+                                    // Restart the Activity
+                                    Intent intent = new Intent(EntryActivity.this, EntryActivity.class);
+                                    finish();
+                                    startActivity(intent);
+                                }
+                            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
 
         if (user == null) {
 
@@ -347,6 +372,15 @@ public class EntryActivity extends AppCompatActivity {
 
         ChatManager.start(EntryActivity.this, appId, iChatUser);
 
+    }
+
+    private boolean isNetworkAvailable() {
+        // Using ConnectivityManager to check for Network Connection
+        ConnectivityManager connectivityManager = (ConnectivityManager) this
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager
+                .getActiveNetworkInfo();
+        return activeNetworkInfo != null;
     }
 
 }
