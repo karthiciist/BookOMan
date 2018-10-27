@@ -400,7 +400,7 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
             String withoutRupees = withRupees.replaceAll("₹", "");
             price.setText(withoutRupees);
 
-            String withRupees1 = bundle.getString("UpdateNotePrice");
+            String withRupees1 = bundle.getString("UpdateNoteMrp");
             String withoutRupees1 = withRupees1.replaceAll("₹", "");
             mrp.setText(withoutRupees1);
 
@@ -1150,22 +1150,20 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
                     specialSpinner.setSelection(3);
                 } else if (UpdateNoteSpecialization.equals("EEE")) {
                     specialSpinner.setSelection(4);
-                } else if (UpdateNoteSpecialization.equals("ECE")) {
-                    specialSpinner.setSelection(5);
                 } else if (UpdateNoteSpecialization.equals("E&I")) {
-                    specialSpinner.setSelection(6);
+                    specialSpinner.setSelection(5);
                 } else if (UpdateNoteSpecialization.equals("Information Technology")) {
-                    specialSpinner.setSelection(7);
+                    specialSpinner.setSelection(6);
                 } else if (UpdateNoteSpecialization.equals("ICE")) {
-                    specialSpinner.setSelection(8);
+                    specialSpinner.setSelection(7);
                 } else if (UpdateNoteSpecialization.equals("Mechanical Engineering")) {
-                    specialSpinner.setSelection(9);
+                    specialSpinner.setSelection(8);
                 } else if (UpdateNoteSpecialization.equals("Mechatronics")) {
-                    specialSpinner.setSelection(10);
+                    specialSpinner.setSelection(9);
                 } else if (UpdateNoteSpecialization.equals("Production Engineering")) {
-                    specialSpinner.setSelection(11);
+                    specialSpinner.setSelection(10);
                 } else if (UpdateNoteSpecialization.equals("Others")) {
-                    specialSpinner.setSelection(12);
+                    specialSpinner.setSelection(11);
                 }
             }
         }

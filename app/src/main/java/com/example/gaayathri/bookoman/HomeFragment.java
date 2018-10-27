@@ -99,6 +99,8 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
 
     private PrefManager prefManager;
 
+    String phoneNum;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -773,6 +775,8 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
                         }
                     });
 
+                    userDataDialog.dismiss();
+
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
                     ft.detach(HomeFragment.this).attach(HomeFragment.this).commit();
 
@@ -834,7 +838,9 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
         userExp.setText(UpdateNoteUser);
 
         entryName = note.getEntryName();
-        final String uid = note.getUid().toString();
+        final String uid = note.getUid();
+
+        phoneNum = note.getPhone();
 
         mrpExp.setPaintFlags(mrpExp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
@@ -878,63 +884,107 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
 
         } else {
 
-            call.setVisibility(View.VISIBLE);
-            chat.setVisibility(View.VISIBLE);
+            if (phoneNum == "") {
+                call.setVisibility(View.GONE);
+                chat.setVisibility(View.VISIBLE);
 
-            call.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                chat.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                    progressDialog1 = new ProgressDialog(getActivity());
-                    progressDialog1.setMessage("Loading...");
-                    progressDialog1.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
-                    progressDialog1.show();
+                        prefManager = new PrefManager(getActivity());
+                        if (prefManager.isChatFirstTimeLaunch()) {
 
-                    Intent dialIntent = new Intent(Intent.ACTION_DIAL);
-                    dialIntent.setData(Uri.parse("tel:" + note.getPhone()));
-                    startActivity(dialIntent);
-                }
-            });
+                            chatIntroDialog = new Dialog(getActivity());
+                            chatIntroDialog.setContentView(R.layout.dialog_chat);
+                            chatIntroDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
+                            chatIntroDialog.show();
 
-            chat.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                            Button btnGotIt = chatIntroDialog.findViewById(R.id.btnGotIt);
+                            btnGotIt.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    progressDialog1 = new ProgressDialog(getActivity());
+                                    progressDialog1.setMessage("Loading...");
+                                    progressDialog1.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
+                                    progressDialog1.show();
 
-                    prefManager = new PrefManager(getActivity());
-                    if (prefManager.isChatFirstTimeLaunch()) {
+                                    launchOneToOneChat(uid, note.getuser());
+                                    chatIntroDialog.dismiss();
+                                    prefManager.chatSetFirstTimeLaunch(false);
+                                }
+                            });
 
-                        chatIntroDialog = new Dialog(getActivity());
-                        chatIntroDialog.setContentView(R.layout.dialog_chat);
-                        chatIntroDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
-                        chatIntroDialog.show();
+                        } else {
+                            progressDialog1 = new ProgressDialog(getActivity());
+                            progressDialog1.setMessage("Loading...");
+                            progressDialog1.show();
 
-                        Button btnGotIt = chatIntroDialog.findViewById(R.id.btnGotIt);
-                        btnGotIt.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                progressDialog1 = new ProgressDialog(getActivity());
-                                progressDialog1.setMessage("Loading...");
-                                progressDialog1.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
-                                progressDialog1.show();
+                            launchOneToOneChat(uid, note.getuser());
 
-                                launchOneToOneChat(uid, note.getuser());
-                                chatIntroDialog.dismiss();
-                                prefManager.chatSetFirstTimeLaunch(false);
-                            }
-                        });
-
-                    } else {
-                        progressDialog1 = new ProgressDialog(getActivity());
-                        progressDialog1.setMessage("Loading...");
-                        progressDialog1.show();
-
-                        launchOneToOneChat(uid, note.getuser());
+                        }
 
                     }
+                });
 
-                }
-            });
+            }else {
 
+                call.setVisibility(View.VISIBLE);
+                chat.setVisibility(View.VISIBLE);
+
+                call.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        progressDialog1 = new ProgressDialog(getActivity());
+                        progressDialog1.setMessage("Loading...");
+                        progressDialog1.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
+                        progressDialog1.show();
+
+                        Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+                        dialIntent.setData(Uri.parse("tel:" + note.getPhone()));
+                        startActivity(dialIntent);
+                    }
+                });
+
+                chat.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        prefManager = new PrefManager(getActivity());
+                        if (prefManager.isChatFirstTimeLaunch()) {
+
+                            chatIntroDialog = new Dialog(getActivity());
+                            chatIntroDialog.setContentView(R.layout.dialog_chat);
+                            chatIntroDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
+                            chatIntroDialog.show();
+
+                            Button btnGotIt = chatIntroDialog.findViewById(R.id.btnGotIt);
+                            btnGotIt.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    progressDialog1 = new ProgressDialog(getActivity());
+                                    progressDialog1.setMessage("Loading...");
+                                    progressDialog1.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
+                                    progressDialog1.show();
+
+                                    launchOneToOneChat(uid, note.getuser());
+                                    chatIntroDialog.dismiss();
+                                    prefManager.chatSetFirstTimeLaunch(false);
+                                }
+                            });
+
+                        } else {
+                            progressDialog1 = new ProgressDialog(getActivity());
+                            progressDialog1.setMessage("Loading...");
+                            progressDialog1.show();
+
+                            launchOneToOneChat(uid, note.getuser());
+
+                        }
+                    }
+                });
+            }
         }
 
         LikeButton likeButton = myDialog.findViewById(R.id.heart_button);
