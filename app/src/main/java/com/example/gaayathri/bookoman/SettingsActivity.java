@@ -97,6 +97,10 @@ public class SettingsActivity extends AppCompatActivity {
             userDataDialog = new Dialog(getActivity());
             userDataDialog.setContentView(R.layout.dialog_edit_profile);
 
+            final Dialog tAndCondDialog;
+            tAndCondDialog = new Dialog(getActivity());
+            tAndCondDialog.setContentView(R.layout.dialog_termsandconditions);
+
             final EditText etname = userDataDialog.findViewById(R.id.et_name);
             final EditText etphone = userDataDialog.findViewById(R.id.et_phone);
             final EditText etemail = userDataDialog.findViewById(R.id.et_email);
@@ -313,6 +317,17 @@ public class SettingsActivity extends AppCompatActivity {
                     return true;
                 }
             });
+
+            Preference tAndCondtion = findPreference("tAndCond");
+            tAndCondtion.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                public boolean onPreferenceClick(Preference preference) {
+                    tAndCondDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
+                    CheckBox tAndCondCheckbox = tAndCondDialog.findViewById(R.id.tAndCondCheckbox);
+                    tAndCondCheckbox.setChecked(true);
+                    tAndCondDialog.show();
+                    return true;
+                }
+            });
         }
 
     }
@@ -406,15 +421,10 @@ public class SettingsActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("message/rfc822");
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact.bookoman@gmail.com"});
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Query from android app");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Query from Book O Man user");
         intent.putExtra(Intent.EXTRA_TEXT, body);
         context.startActivity(Intent.createChooser(intent, context.getString(R.string.choose_email_client)));
 
     }
 
-    private void sendToEditProfile() {
-
-
-
-    }
 }
