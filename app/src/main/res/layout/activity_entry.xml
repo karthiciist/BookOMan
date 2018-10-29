@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".EntryActivity"
     android:orientation="vertical"
     android:background="@color/white"
@@ -31,10 +31,20 @@
             android:layout_height="60dp"
             android:layout_marginRight="30dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="50dp"
             android:layout_centerInParent="true"
             android:text="@string/google_sign_up"
             app:isDarkTheme="true" />
 
     </LinearLayout>
-</LinearLayout>
+
+    <TextView
+        android:id="@+id/tAndCond"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Signing up implies you aggree with these Terms and Conditions"
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="10dp"/>
+</RelativeLayout>

@@ -311,7 +311,7 @@ public class HomeFragment extends Fragment implements OnLikeListener, OnAnimatio
                     String cityLL = snapshot.getString("city");
                     String backgroundLL = snapshot.getString("background");
 
-                    sharedpreferences = getActivity().getSharedPreferences("mypref", 0); // 0 - for private mode
+                    //sharedpreferences = getActivity().getSharedPreferences("mypref", 0); // 0 - for private mode
                     SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.putString("city", cityLL);
                     editor.putString("background", backgroundLL);

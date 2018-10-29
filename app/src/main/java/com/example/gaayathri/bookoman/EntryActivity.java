@@ -1,6 +1,7 @@
 package com.example.gaayathri.bookoman;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,7 +17,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -80,6 +83,8 @@ public class EntryActivity extends AppCompatActivity {
 
     Button btnGoogleSignin;
 
+    Dialog tAndCondDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +120,9 @@ public class EntryActivity extends AppCompatActivity {
 
             setContentView(R.layout.activity_entry);
 
+            tAndCondDialog = new Dialog(EntryActivity.this);
+            tAndCondDialog.setContentView(R.layout.dialog_termsandconditions);
+
             btnGoogleSignin = findViewById(R.id.btnGoogleSignin);
             btnGoogleSignin.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -126,7 +134,20 @@ public class EntryActivity extends AppCompatActivity {
                     signIn();
                 }
             });
-            progressDialog.dismiss();
+            //progressDialog.dismiss();
+
+            TextView tAndCond = findViewById(R.id.tAndCond);
+            tAndCond.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    CheckBox tAndCondCheckbox = tAndCondDialog.findViewById(R.id.tAndCondCheckbox);
+                    tAndCondCheckbox.setChecked(true);
+                    tAndCondDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
+                    tAndCondDialog.show();
+
+                }
+            });
         }
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -195,7 +216,7 @@ public class EntryActivity extends AppCompatActivity {
             } catch (ApiException e) {
                 Toast.makeText(this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
             }
-            progressDialog.dismiss();
+            //progressDialog.dismiss();
         }
     }
 
@@ -233,7 +254,7 @@ public class EntryActivity extends AppCompatActivity {
                                     populateSharedPrefs();
 
                                     Toast.makeText(EntryActivity.this, "Your profile created successfully!", Toast.LENGTH_SHORT).show();
-                                    progressDialog.dismiss();
+                                    //progressDialog.dismiss();
                                 }
 
 
