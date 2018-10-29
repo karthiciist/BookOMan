@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -61,7 +62,7 @@ import java.util.Map;
 public class MyProfileFragment extends Fragment {
 
     private static final String TAG = "SecondActivity";
-    private RecyclerView recyclerView;
+    private EmptyRecyclerView recyclerView;
     private FirestoreRecyclerAdapter adapter;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestoreDB;
@@ -220,6 +221,18 @@ public class MyProfileFragment extends Fragment {
         });
 
         recyclerView = view.findViewById(R.id.rvNoteList);
+
+        LinearLayout tvEmpty = view.findViewById(R.id.tvEmpty);
+        recyclerView.setEmptyView(tvEmpty);
+
+        Button sellbtn = view.findViewById(R.id.sellbtn);
+        sellbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sellIntent = new Intent(getActivity(), SellTestActivity.class);
+                startActivity(sellIntent);
+            }
+        });
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(mLayoutManager);

@@ -297,12 +297,69 @@
                     android:layout_marginLeft="20dp"
                     android:textStyle="bold"/>
 
-                <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+                <FrameLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    tools:context=".MyFavoritesFragment"
+                    android:background="@color/white">
 
+                    <com.example.gaayathri.bookoman.EmptyRecyclerView
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/rvNoteList"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scrollbars="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/toolbarMain" />
+
+                    <LinearLayout
+                        android:id="@+id/tvEmpty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:background="@color/white"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="No ads from you yet!"
+                            android:textSize="25sp"
+                            android:textColor="@color/grey"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tap the below button to post an ad"
+                            android:textSize="15sp"
+                            android:textColor="@color/grey"/>
+                        <Button
+                            android:id="@+id/sellbtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Post an ad"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:padding="10dp"
+                            android:background="@drawable/button_background"
+                            android:textColor="@color/white"/>
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+                <!--<android.support.v7.widget.RecyclerView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/rvNoteList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scrollbars="vertical" />
+                    android:scrollbars="vertical" />-->
 
             </LinearLayout>
 
