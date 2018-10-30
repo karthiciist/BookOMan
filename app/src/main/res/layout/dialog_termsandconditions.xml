@@ -72,14 +72,28 @@
             android:layout_gravity="center_horizontal"
             android:padding="5dp">
 
-            <CheckBox
+            <Button
+                android:id="@+id/btnGotIt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:paddingRight="70dp"
+                android:paddingLeft="70dp"
+                android:background="@drawable/button_background"
+                android:text="Got it"
+                android:textColor="@android:color/white" />
+
+            <!--<CheckBox
                 android:id="@+id/tAndCondCheckbox"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="I accept these terms and conditions"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="@color/grey"/>
+                android:textColor="@color/grey"/>-->
         </LinearLayout>
 
     </LinearLayout>

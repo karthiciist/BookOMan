@@ -322,9 +322,16 @@ public class SettingsActivity extends AppCompatActivity {
             tAndCondtion.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
                     tAndCondDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
-                    CheckBox tAndCondCheckbox = tAndCondDialog.findViewById(R.id.tAndCondCheckbox);
-                    tAndCondCheckbox.setChecked(true);
                     tAndCondDialog.show();
+
+                    Button btnGotIt = tAndCondDialog.findViewById(R.id.btnGotIt);
+                    btnGotIt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            tAndCondDialog.dismiss();
+                        }
+                    });
+
                     return true;
                 }
             });

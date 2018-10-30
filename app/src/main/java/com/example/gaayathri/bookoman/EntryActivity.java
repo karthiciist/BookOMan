@@ -141,10 +141,16 @@ public class EntryActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                    CheckBox tAndCondCheckbox = tAndCondDialog.findViewById(R.id.tAndCondCheckbox);
-                    tAndCondCheckbox.setChecked(true);
                     tAndCondDialog.getWindow().getAttributes().windowAnimations = R.style.Dialogscale;
                     tAndCondDialog.show();
+
+                    Button btnGotIt = tAndCondDialog.findViewById(R.id.btnGotIt);
+                    btnGotIt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            tAndCondDialog.dismiss();
+                        }
+                    });
 
                 }
             });
@@ -253,7 +259,7 @@ public class EntryActivity extends AppCompatActivity {
 
                                     populateSharedPrefs();
 
-                                    Toast.makeText(EntryActivity.this, "Your profile created successfully!", Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(EntryActivity.this, "Your profile created successfully!", Toast.LENGTH_SHORT).show();
                                     //progressDialog.dismiss();
                                 }
 
