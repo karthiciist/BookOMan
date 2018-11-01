@@ -139,6 +139,18 @@ public class MyMaterialsFragment extends Fragment {
 
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
 
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0 && fab.getVisibility() == View.VISIBLE) {
+                    fab.hide();
+                } else if (dy < 0 && fab.getVisibility() != View.VISIBLE) {
+                    fab.show();
+                }
+            }
+        });
+
         loadNotesList();
 
         firestoreListener = firestoreDB.collection("books").whereEqualTo("uid", uid)
@@ -394,7 +406,7 @@ public class MyMaterialsFragment extends Fragment {
 
         String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-        StorageReference imageReference = storageReference.child(firebaseAuth.getCurrentUser().getEmail()).child("bookimages").child("thumb_" + entryName);
+        StorageReference imageReference = storageReference.child(firebaseAuth.getCurrentUser().getEmail()).child("bookimages").child(entryName);
 
         imageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

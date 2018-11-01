@@ -140,6 +140,19 @@ public class CatagoriesExpandedFragment extends Fragment implements OnLikeListen
 
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
 
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0 && fab.getVisibility() == View.VISIBLE) {
+                    fab.hide();
+                } else if (dy < 0 && fab.getVisibility() != View.VISIBLE) {
+                    fab.show();
+                }
+            }
+        });
+
+
         loadNotesList(value);
 
         String question = null;

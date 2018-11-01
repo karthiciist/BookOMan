@@ -363,7 +363,7 @@ public class MessageListActivity extends AppCompatActivity
         // toolbar recipient display name
         mTitleTextView.setText(recipient.getFullName());
 
-        toolbar.setOnClickListener(new View.OnClickListener() {
+        /*toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MessageListActivity.this,
@@ -372,7 +372,7 @@ public class MessageListActivity extends AppCompatActivity
                 intent.putExtra(ChatUI.BUNDLE_RECIPIENT, recipient);
                 startActivity(intent);
             }
-        });
+        });*/
     }
 
     private void initGroupToolbar(final ChatGroup chatGroup) {
