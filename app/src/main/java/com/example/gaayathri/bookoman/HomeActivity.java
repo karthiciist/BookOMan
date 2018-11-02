@@ -123,15 +123,10 @@ public class HomeActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            int fragments = getSupportFragmentManager().getBackStackEntryCount();
-            if (fragments == 1) {
+            if (getFragmentManager().getBackStackEntryCount() == 1) {
                 finish();
             } else {
-                if (getFragmentManager().getBackStackEntryCount() > 1) {
-                    getFragmentManager().popBackStack();
-                } else {
-                    super.onBackPressed();
-                }
+                super.onBackPressed();
             }
         }
     }
@@ -149,7 +144,7 @@ public class HomeActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
 
-            fragmentTransaction.replace(R.id.frm,new HomeFragment()).addToBackStack(null).commit();
+            fragmentTransaction.replace(R.id.frm,new HomeFragment()).commit();
 
         } else if (id == R.id.nav_entire_library) {
 
