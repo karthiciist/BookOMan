@@ -1,13 +1,21 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'key0'
+            keyPassword 'Venikutti@123'
+            storeFile file('C:/Users/Gaayathri/Desktop/bookOman/keys/keys.jks')
+            storePassword 'Venikutti@123'
+        }
+    }
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.example.gaayathri.bookoman"
+        applicationId "com.appu.gaayathri.bookoman"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode 5
+        versionName "1.0.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -59,14 +67,11 @@ dependencies {
     implementation 'com.victor:lib:1.0.4'
     implementation project(':chat21')
     implementation 'com.github.mmoamenn:Steps_Android:0.0.1'
-
     implementation 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
     implementation 'com.google.zxing:core:3.2.1'
-
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
     implementation 'com.github.florent37:materialtextfield:1.0.7'
-
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'
 }
 

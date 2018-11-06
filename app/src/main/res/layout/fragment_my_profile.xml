@@ -306,7 +306,7 @@
                     tools:context=".MyFavoritesFragment"
                     android:background="@color/white">
 
-                    <com.example.gaayathri.bookoman.EmptyRecyclerView
+                    <com.appu.gaayathri.bookoman.EmptyRecyclerView
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/rvNoteList"
                         android:layout_width="match_parent"

@@ -54,7 +54,7 @@ public final class ChatAuthentication {
 //    readme here
 //    https://github.com/firebase/quickstart-android/tree/master/auth
 
-//    example here
+//    appu here
 //    https://github.com/firebase/quickstart-android/blob/master/auth/app/src/main/java/com/google/firebase/quickstart/auth/CustomAuthActivity.java
 
     public interface OnChatLoginCallback {
@@ -183,7 +183,7 @@ public final class ChatAuthentication {
         Log.d(DEBUG_LOGIN, "createContactNode: userId == " + userId);
 
         DatabaseReference mNodeContacts = FirebaseDatabase.getInstance().getReference()
-                .child("apps/" + appId + "/contacts/" + userId);
+                .child("apps/" + "bookomanchat" + "/contacts/" + userId);
 
         // add uid
         mNodeContacts
@@ -197,7 +197,7 @@ public final class ChatAuthentication {
 
         // retrieve node contacts
         DatabaseReference mNodeContacts = FirebaseDatabase.getInstance().getReference()
-                .child("apps/" + appId + "/contacts/" + userId);
+                .child("apps/" + "bookomanchat" + "/contacts/" + userId);
 
 //            // add uid
 //            mNodeContacts
@@ -507,7 +507,7 @@ public final class ChatAuthentication {
 
         // remove the instanceId for the logged user
         DatabaseReference firebaseUsersPath = root
-                .child("apps/" + ChatManager.Configuration.appId + "/users/" +
+                .child("apps/" + "bookomanchat" + "/users/" +
                         userId + "/instances/" + token);
         firebaseUsersPath.removeValue();
 

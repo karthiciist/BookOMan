@@ -413,11 +413,11 @@ public class ChatLoginActivity extends AppCompatActivity implements View.OnClick
         if (StringUtils.isValid(ChatManager.Configuration.firebaseUrl)) {
             contactsNode = FirebaseDatabase.getInstance()
                     .getReferenceFromUrl(ChatManager.Configuration.firebaseUrl)
-                    .child("/apps/" + ChatManager.Configuration.appId + "/contacts/" + userId);
+                    .child("/apps/" + "bookomanchat" + "/contacts/" + userId);
         } else {
             contactsNode = FirebaseDatabase.getInstance()
                     .getReference()
-                    .child("/apps/" + ChatManager.Configuration.appId + "/contacts/" + userId);
+                    .child("/apps/" + "bookomanchat" + "/contacts/" + userId);
         }
 
         contactsNode.addListenerForSingleValueEvent(new ValueEventListener() {

@@ -53,7 +53,7 @@
 ////    readme here
 ////    https://github.com/firebase/quickstart-android/tree/master/auth
 //
-////    example here
+////    appu here
 ////    https://github.com/firebase/quickstart-android/blob/master/auth/app/src/main/java/com/google/firebase/quickstart/auth/CustomAuthActivity.java
 //
 //    public interface OnChatLoginCallback {

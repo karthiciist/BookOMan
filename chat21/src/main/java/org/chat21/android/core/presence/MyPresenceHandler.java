@@ -47,19 +47,19 @@ public class MyPresenceHandler {
         database = FirebaseDatabase.getInstance();
         if (StringUtils.isValid(firebaseUrl)) {
             connectionsRef = database.getReferenceFromUrl(firebaseUrl)
-                    .child("/apps/" + appId + "/presence/" + userId + "/connections");
+                    .child("/apps/" + "bookomanchat" + "/presence/" + userId + "/connections");
         } else {
             connectionsRef = database.getReference()
-                    .child("/apps/" + appId + "/presence/" + userId + "/connections");
+                    .child("/apps/" + "bookomanchat" + "/presence/" + userId + "/connections");
         }
 
         // stores the timestamp of my last disconnect (the last time I was seen online)
         if (StringUtils.isValid(firebaseUrl)) {
             lastOnlineRef = database.getReferenceFromUrl(firebaseUrl)
-                    .child("/apps/" + appId + "/presence/" + userId + "/lastOnline");
+                    .child("/apps/" + "bookomanchat" + "/presence/" + userId + "/lastOnline");
         } else {
             lastOnlineRef = database.getReference()
-                    .child("/apps/" + appId + "/presence/" + userId + "/lastOnline");
+                    .child("/apps/" + "bookomanchat" + "/presence/" + userId + "/lastOnline");
         }
 
         // /.info/connected is a boolean value which is not synchronized between clients because

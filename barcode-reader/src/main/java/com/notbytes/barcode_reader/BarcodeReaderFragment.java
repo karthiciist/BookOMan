@@ -236,7 +236,7 @@ public class BarcodeReaderFragment extends Fragment implements View.OnTouchListe
 
     /**
      * Creates and starts the camera.  Note that this uses a higher resolution in comparison
-     * to other detection examples to enable the barcode detector to detect small barcodes
+     * to other detection appus to enable the barcode detector to detect small barcodes
      * at long distances.
      * <p>
      * Suppressing InlinedApi since there is a check that the minimum version is met before using
@@ -280,7 +280,7 @@ public class BarcodeReaderFragment extends Fragment implements View.OnTouchListe
         }
 
         // Creates and starts the camera.  Note that this uses a higher resolution in comparison
-        // to other detection examples to enable the barcode detector to detect small barcodes
+        // to other detection appus to enable the barcode detector to detect small barcodes
         // at long distances.
 
         CameraSource.Builder builder = new CameraSource.Builder(getActivity(), barcodeDetector)
@@ -552,7 +552,7 @@ public class BarcodeReaderFragment extends Fragment implements View.OnTouchListe
          * @return Whether or not the detector should consider this event
          * as handled. If an event was not handled, the detector
          * will continue to accumulate movement until an event is
-         * handled. This can be useful if an application, for example,
+         * handled. This can be useful if an application, for appu,
          * only wants to update scaling factors if the change is
          * greater than 0.01.
          */
@@ -568,7 +568,7 @@ public class BarcodeReaderFragment extends Fragment implements View.OnTouchListe
          * @param detector The detector reporting the event - use this to
          *                 retrieve extended info about event state.
          * @return Whether or not the detector should continue recognizing
-         * this gesture. For example, if a gesture is beginning
+         * this gesture. For appu, if a gesture is beginning
          * with a focal point outside of a region where it makes
          * sense, onScaleBegin() may return false to ignore the
          * rest of the gesture.

@@ -117,7 +117,6 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tvCity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="In your city"
@@ -218,7 +217,6 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tvCity1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Recommended for you"
@@ -239,12 +237,39 @@
                         android:textStyle="bold"/>
                 </LinearLayout>
 
-                <android.support.v7.widget.RecyclerView
+                <com.appu.gaayathri.bookoman.EmptyRecyclerView
                     xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/rvNoteList3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scrollbars="vertical" />
+
+                <LinearLayout
+                    android:id="@+id/tvEmpty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:background="@color/white"
+                    android:padding="10dp"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Be the first one to place an ad in this category"
+                        android:textSize="18sp"
+                        android:textAlignment="center"
+                        android:textColor="@color/grey"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tap 'POST AN AD' button above"
+                        android:textSize="13sp"
+                        android:textColor="@color/grey"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 

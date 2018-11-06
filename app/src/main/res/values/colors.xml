@@ -5,7 +5,6 @@
     <color name="colorAccent">#fc850f</color>
 
     <color name="colorAccentSoft">#79d25b06</color>
-    <color name="colorPrice">#97100b</color>
     <color name="colorFilterBackground">#e0e0e0</color>
 
     <color name="red">#FF0000</color>
@@ -15,10 +14,7 @@
 
 
     <color name="address">#2F7092</color>
-    <color name="followers">#0D5D98</color>
     <color name="headings">#3797CF</color>
-    <color name="solidCircle">#AAFFFFFF</color>
-    <color name="circleBorder">#50FFFFFF</color>
     <color name="gradEnd">#67EFC8</color>
     <color name="gradStart">#63C9FF</color>
     <color name="followersBg">#65DCE5</color>
@@ -28,14 +24,7 @@
 
     <color name="md_green_700">#087e3b</color>
 
-    <color name="googlesignin">#e72113</color>
-
     <!-- Screens background color-->
-    <color name="bg_screen1">#f64c73</color>
-    <color name="bg_screen2">#20d2bb</color>
-    <color name="bg_screen3">#3395ff</color>
-    <color name="bg_screen4">#c873f4</color>
-    <color name="bg_screen5">#ff3c00</color>
 
     <!-- dots inactive colors -->
     <color name="dot_dark_screen1">#d1395c</color>

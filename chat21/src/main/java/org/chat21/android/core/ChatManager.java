@@ -74,7 +74,7 @@ public class ChatManager {
 
     public void setLoggedUser(IChatUser loggedUser) {
         this.loggedUser = loggedUser;
-        Log.d(TAG, "ChatManager.setloggedUser: loggedUser == " + loggedUser.toString());
+        //Log.d(TAG, "ChatManager.setloggedUser: loggedUser == " + loggedUser.toString());
         // serialize on disk
         IOUtils.saveObjectToFile(mContext, _SERIALIZED_CHAT_CONFIGURATION_LOGGED_USER, loggedUser);
     }
@@ -120,11 +120,11 @@ public class ChatManager {
         if (StringUtils.isValid(ChatManager.Configuration.firebaseUrl)) {
             contactsNode = FirebaseDatabase.getInstance()
                     .getReferenceFromUrl(ChatManager.Configuration.firebaseUrl)
-                    .child("/apps/" + ChatManager.Configuration.appId + "/contacts");
+                    .child("/apps/" + "bookomanchat" + "/contacts");
         } else {
             contactsNode = FirebaseDatabase.getInstance()
                     .getReference()
-                    .child("/apps/" + ChatManager.Configuration.appId + "/contacts");
+                    .child("/apps/" + "bookomanchat" + "/contacts");
         }
 
         // save the user on contacts node
@@ -381,7 +381,7 @@ public class ChatManager {
 
         // remove the instanceId for the logged user
         DatabaseReference firebaseUsersPath = root
-                .child("apps/" + ChatManager.Configuration.appId + "/users/" +
+                .child("apps/" + "bookomanchat" + "/users/" +
                         loggedUser.getId() + "/instances/" + token);
         firebaseUsersPath.removeValue();
 

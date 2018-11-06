@@ -8,17 +8,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:737796002286:android:c2960ecbf1cbd247",
+        "mobilesdk_app_id": "1:737796002286:android:b06c798dfe33e16f",
         "android_client_info": {
-          "package_name": "com.example.gaayathri.bookoman"
+          "package_name": "com.appu.gaayathri.bookoman"
         }
       },
       "oauth_client": [
         {
-          "client_id": "737796002286-ges7anco1sfq8f410114a1bht1o73rsj.apps.googleusercontent.com",
+          "client_id": "737796002286-h9409lfg59j9meo7hfaa5l1kk00ll4hu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.gaayathri.bookoman",
+            "package_name": "com.appu.gaayathri.bookoman",
             "certificate_hash": "7740d64611c4c731fcf25a959b6e1ee82b748a90"
           }
         },

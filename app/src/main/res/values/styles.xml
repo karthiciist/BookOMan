@@ -19,25 +19,6 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="MaterialSearchViewStyle">
-
-        <!-- Change text color for edit text. This will also be the color of the cursor -->
-        <item name="android:textColor">@color/grey</item>
-
-        <!-- Change hint text color for edit text -->
-        <item name="android:textColorHint">@color/grey</item>
-
-        <!-- Hint for edit text -->
-        <item name="android:hint">@string/search_hint</item>
-    </style>
-
-    <style name="SettingsTheme" parent="@android:style/Theme.Material.Light.DarkActionBar"/>
-
-    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <!-- Customize color of navigation drawer icon and back arrow -->
-        <item name="colorControlNormal">@color/white</item>
-    </style>
-
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/background_launcher</item>
     </style>

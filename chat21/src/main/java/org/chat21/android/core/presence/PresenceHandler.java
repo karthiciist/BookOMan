@@ -45,10 +45,10 @@ public class PresenceHandler {
 
         if (StringUtils.isValid(firebaseUrl)) {
             userPresenceRef = database.getReferenceFromUrl(firebaseUrl)
-                    .child("/apps/" + appId + "/presence/" + userId);
+                    .child("/apps/" + "bookomanchat" + "/presence/" + userId);
         } else {
             userPresenceRef = database.getReference()
-                    .child("/apps/" + appId + "/presence/" + userId);
+                    .child("/apps/" + "bookomanchat" + "/presence/" + userId);
         }
     }
 

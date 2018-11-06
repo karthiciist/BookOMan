@@ -30,7 +30,7 @@ public abstract class TokenBroadcastReceiver extends BroadcastReceiver {
 
     private static final String TAG = "TokenBroadcastReceiver";
 
-    public static final String ACTION_TOKEN = "com.google.example.ACTION_TOKEN";
+    public static final String ACTION_TOKEN = "com.google.appu.ACTION_TOKEN";
     public static final String EXTRA_KEY_TOKEN = "key_token";
 
     @Override

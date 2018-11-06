@@ -59,11 +59,11 @@ public class ConversationsHandler {
         if (StringUtils.isValid(firebaseUrl)) {
             this.conversationsNode = FirebaseDatabase.getInstance()
                     .getReferenceFromUrl(firebaseUrl)
-                    .child("/apps/" + appId + "/users/" + currentUserId + "/conversations/");
+                    .child("/apps/" + "bookomanchat" + "/users/" + currentUserId + "/conversations/");
         } else {
             this.conversationsNode = FirebaseDatabase.getInstance()
                     .getReference()
-                    .child("/apps/" + appId + "/users/" + currentUserId + "/conversations/");
+                    .child("/apps/" + "bookomanchat" + "/users/" + currentUserId + "/conversations/");
         }
         this.conversationsNode.keepSynced(true);
 

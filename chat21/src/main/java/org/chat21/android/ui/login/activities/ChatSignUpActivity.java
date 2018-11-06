@@ -269,11 +269,11 @@ public class ChatSignUpActivity extends AppCompatActivity {
         if (StringUtils.isValid(ChatManager.Configuration.firebaseUrl)) {
             contactsNode = FirebaseDatabase.getInstance()
                     .getReferenceFromUrl(ChatManager.Configuration.firebaseUrl)
-                    .child("/apps/" + ChatManager.Configuration.appId + "/contacts");
+                    .child("/apps/" + "bookomanchat" + "/contacts");
         } else {
             contactsNode = FirebaseDatabase.getInstance()
                     .getReference()
-                    .child("/apps/" + ChatManager.Configuration.appId + "/contacts");
+                    .child("/apps/" + "bookomanchat" + "/contacts");
         }
 
         // save the user on contacts node

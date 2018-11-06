@@ -46,11 +46,11 @@ public class ContactsSynchronizer {
         if (StringUtils.isValid(firebaseUrl)) {
             this.contactsNode = FirebaseDatabase.getInstance()
                     .getReferenceFromUrl(firebaseUrl)
-                    .child("/apps/" + appId + "/contacts/");
+                    .child("/apps/" + "bookomanchat" + "/contacts/");
         } else {
             this.contactsNode = FirebaseDatabase.getInstance()
                     .getReference()
-                    .child("/apps/" + appId + "/contacts/");
+                    .child("/apps/" + "bookomanchat" + "/contacts/");
         }
         this.contactsNode.keepSynced(true);
 

@@ -55,11 +55,11 @@ public class ConversationMessagesHandler {
         if (StringUtils.isValid(firebaseUrl)) {
             this.conversationMessagesNode = FirebaseDatabase.getInstance()
                     .getReferenceFromUrl(firebaseUrl)
-                    .child("/apps/" + appId + "/users/" + currentUser.getId() + "/messages/" + recipient.getId());
+                    .child("/apps/" + "bookomanchat" + "/users/" + currentUser.getId() + "/messages/" + recipient.getId());
         } else {
             this.conversationMessagesNode = FirebaseDatabase.getInstance()
                     .getReference()
-                    .child("/apps/" + appId + "/users/" + currentUser.getId() + "/messages/" + recipient.getId());
+                    .child("/apps/" + "bookomanchat" + "/users/" + currentUser.getId() + "/messages/" + recipient.getId());
         }
 
         this.conversationMessagesNode.keepSynced(true);

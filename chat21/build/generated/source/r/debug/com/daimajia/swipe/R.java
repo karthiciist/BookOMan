@@ -17,12 +17,12 @@ public final class R {
         public static int topEdgeSwipeOffset = 0x7f0401ed;
     }
     public static final class id {
-        public static int bottom = 0x7f0c0034;
-        public static int lay_down = 0x7f0c00c2;
-        public static int left = 0x7f0c00c7;
-        public static int pull_out = 0x7f0c0110;
-        public static int right = 0x7f0c0118;
-        public static int top = 0x7f0c0171;
+        public static int bottom = 0x7f0c0030;
+        public static int lay_down = 0x7f0c00b6;
+        public static int left = 0x7f0c00ba;
+        public static int pull_out = 0x7f0c00fe;
+        public static int right = 0x7f0c0104;
+        public static int top = 0x7f0c015b;
     }
     public static final class styleable {
         public static int[] SwipeLayout = { 0x7f040045, 0x7f040086, 0x7f0400be, 0x7f040140, 0x7f04017f, 0x7f040199, 0x7f0401ed };

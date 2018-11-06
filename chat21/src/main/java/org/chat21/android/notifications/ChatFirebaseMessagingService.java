@@ -47,7 +47,7 @@ public class ChatFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.d(DEBUG_NOTIFICATION, "Message data payload: " + remoteMessage.getData());
-//            example DIRECT:
+//            appu DIRECT:
 //            {
 //                sender=u2K7nLo2dTZEOYYTykrufN6BDF92,
 //                sender_fullname=Stefano De Pascalis,
@@ -58,7 +58,7 @@ public class ChatFirebaseMessagingService extends FirebaseMessagingService {
 //                recipient=QetCMCeMldY06F4YPOeC6Rvph4C3
 //            }
 //
-//            example GROUP:
+//            appu GROUP:
 //            {
 //                google.sent_time=1518079821473,
 //                google.ttl=2419200,
@@ -125,7 +125,7 @@ public class ChatFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.d(DEBUG_NOTIFICATION, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-//            example DIRECT:
+//            appu DIRECT:
 //            Message Notification Body: Foreground
         }
 

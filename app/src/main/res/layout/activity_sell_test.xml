@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
-    tools:context="com.example.gaayathri.bookoman.SellTestActivity">
+    tools:context="com.appu.gaayathri.bookoman.SellTestActivity">
 
     <com.bluehomestudio.steps.CircleImageSteps
         android:id="@+id/cis_steps"
@@ -87,12 +87,11 @@
                     xmlns:tools="http://schemas.android.com/tools"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:context="com.example.gaayathri.logindemo.SellActivity"
+                    tools:context="com.appu.gaayathri.logindemo.SellActivity"
                     android:orientation="vertical"
                     android:gravity="center">
 
                     <TextView
-                        android:id="@+id/textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"

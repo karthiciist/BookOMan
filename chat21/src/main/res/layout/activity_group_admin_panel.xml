@@ -8,13 +8,11 @@
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
@@ -97,7 +95,6 @@
 
             <!--member list-->
             <android.support.v7.widget.CardView
-                android:id="@+id/cardview_members"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardUseCompatPadding="true">
@@ -115,7 +112,6 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/members_label"
                             style="@style/TextAppearance.AppCompat.Medium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -136,7 +132,6 @@
                             android:visibility="gone">
 
                             <ImageView
-                                android:id="@+id/add_member_icon"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/ic_add_member_grey_36dp" />
@@ -151,7 +146,6 @@
                                 android:paddingStart="@dimen/chat_padding_small">
 
                                 <TextView
-                                    android:id="@+id/add_member_title"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/activity_group_admin_panel_add_member_title"
@@ -191,7 +185,6 @@
 
             <!--created by and when-->
             <android.support.v7.widget.CardView
-                android:id="@+id/cardview_created_by_on"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardUseCompatPadding="true">

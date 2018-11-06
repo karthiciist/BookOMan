@@ -31,10 +31,7 @@
     <string name="activity_new_group_icon_label">Add\nphoto</string>
     <string name="activity_public_profile_presence_offline">Offline</string>
     <string name="activity_public_profile_presence_online">Online</string>
-    <string name="add_members_activity_contact_already_added_label">Already added to the group</string>
     <string name="add_members_activity_contact_not_added_label">contact is not present in the list</string>
-    <string name="add_members_activity_contacts_title">Contact List</string>
-    <string name="add_members_activity_searchview_query_hint">Search contact</string>
     <string name="bottom_sheet_attach_documents_label">Documents</string>
     <string name="bottom_sheet_attach_images_label">Images</string>
     <string name="bottom_sheet_conversation_list_confirm_delete_conversation_alert_message">Do you really want to delete the chat?\n The operation cannot be cancelled.</string>
@@ -53,15 +50,12 @@
     <string name="bottom_sheet_group_admin_panel_member_remove_member_btn_label">Remove member</string>
     <string name="bottom_sheet_group_admin_panel_member_see_profile_btn_label">See profile</string>
     <string name="bottom_sheet_group_admin_panel_member_send_message_btn_label">Send message</string>
-    <string name="fragment_conversation_list_my_group_label">Groups</string>
     <string name="label_no_contacts_error_subtitle">Change the search parameters</string>
     <string name="label_no_contacts_error_title">No contact found</string>
     <string name="label_no_conversation_error_subtitle">Click \'Chat with seller\' button in any ad to start a conversation</string>
     <string name="label_no_conversation_error_title">No conversation!</string>
     <string name="menu_activity_group_admin_panel_activity_cannot_add_member_offline">Cannot add a member if you are offline</string>
     <string name="menu_activity_new_group_action_next">Next</string>
-    <string name="menu_add_members_action_add_member">@string/activity_group_admin_panel_add_member_title</string>
-    <string name="menu_add_members_action_create">Create</string>
     <string name="menu_add_members_action_next">Next</string>
     <string name="string_add_members_activity_title">Add members</string>
     <string name="string_contact_list_activity_title">Contacts</string>

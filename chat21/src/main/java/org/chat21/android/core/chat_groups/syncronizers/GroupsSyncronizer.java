@@ -48,11 +48,11 @@ public class GroupsSyncronizer {
         if (StringUtils.isValid(firebaseUrl)) {
             this.appGroupsNode = FirebaseDatabase.getInstance()
                     .getReferenceFromUrl(firebaseUrl)
-                    .child("/apps/" + appId + "/groups/");
+                    .child("/apps/" + "bookomanchat" + "/groups/");
         } else {
             this.appGroupsNode = FirebaseDatabase.getInstance()
                     .getReference()
-                    .child("/apps/" + appId + "/groups/");
+                    .child("/apps/" + "bookomanchat" + "/groups/");
         }
         this.appGroupsNode.keepSynced(true);
         Log.d(DEBUG_GROUPS, "GroupsSyncronizer.appGroupsNode == " + appGroupsNode.toString());
@@ -62,11 +62,11 @@ public class GroupsSyncronizer {
         if (StringUtils.isValid(firebaseUrl)) {
             this.userGroupsNode = FirebaseDatabase.getInstance()
                     .getReferenceFromUrl(firebaseUrl)
-                    .child("/apps/" + appId + "/users/" + currentUserId + "/groups/");
+                    .child("/apps/" + "bookomanchat" + "/users/" + currentUserId + "/groups/");
         } else {
             this.userGroupsNode = FirebaseDatabase.getInstance()
                     .getReference()
-                    .child("/apps/" + appId + "/users/" + currentUserId + "/groups/");
+                    .child("/apps/" + "bookomanchat" + "/users/" + currentUserId + "/groups/");
         }
         this.userGroupsNode.keepSynced(true);
         Log.d(DEBUG_GROUPS, "GroupsSyncronizer.userGroupsNode == " + userGroupsNode.toString());

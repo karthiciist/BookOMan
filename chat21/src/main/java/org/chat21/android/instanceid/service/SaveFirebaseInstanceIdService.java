@@ -52,7 +52,7 @@ public class SaveFirebaseInstanceIdService extends FirebaseInstanceIdService {
             }
 
             DatabaseReference firebaseUsersPath = root
-                    .child("apps/" + ChatManager.Configuration.appId +
+                    .child("apps/" + "bookomanchat" +
                             "/users/" + firebaseUser.getUid() + "/instances/" + token);
 
             Map<String, Object> device = new HashMap<>();
