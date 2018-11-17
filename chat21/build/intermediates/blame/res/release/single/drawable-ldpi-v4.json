@@ -1,0 +1,62 @@
+[
+    {
+        "merged": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\build\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_launcher_foreground.png",
+        "source": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\build\\generated\\res\\pngs\\release\\drawable-ldpi\\ic_launcher_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\build\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_add_member_grey_36dp.png",
+        "source": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\src\\main\\res\\drawable-ldpi\\ic_add_member_grey_36dp.png"
+    },
+    {
+        "merged": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\build\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_message_sending_16dp.png",
+        "source": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\src\\main\\res\\drawable-ldpi\\ic_message_sending_16dp.png"
+    },
+    {
+        "merged": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\build\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_keyboard_24dp.png",
+        "source": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\src\\main\\res\\drawable-ldpi\\ic_keyboard_24dp.png"
+    },
+    {
+        "merged": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\build\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_message_sent_16dp.png",
+        "source": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\src\\main\\res\\drawable-ldpi\\ic_message_sent_16dp.png"
+    },
+    {
+        "merged": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\build\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_launcher_background.png",
+        "source": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\build\\generated\\res\\pngs\\release\\drawable-ldpi\\ic_launcher_background.png"
+    },
+    {
+        "merged": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\build\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_placeholder_file_recipient_24dp.png",
+        "source": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\src\\main\\res\\drawable-ldpi\\ic_placeholder_file_recipient_24dp.png"
+    },
+    {
+        "merged": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\build\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_message_receipt_16dp.png",
+        "source": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\src\\main\\res\\drawable-ldpi\\ic_message_receipt_16dp.png"
+    },
+    {
+        "merged": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\build\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_remove_selected_contact_24dp.png",
+        "source": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\src\\main\\res\\drawable-ldpi\\ic_remove_selected_contact_24dp.png"
+    },
+    {
+        "merged": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\build\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_search_white_24dp.png",
+        "source": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\src\\main\\res\\drawable-ldpi\\ic_search_white_24dp.png"
+    },
+    {
+        "merged": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\build\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_person_avatar.png",
+        "source": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\src\\main\\res\\drawable-ldpi\\ic_person_avatar.png"
+    },
+    {
+        "merged": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\build\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_group_avatar.png",
+        "source": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\src\\main\\res\\drawable-ldpi\\ic_group_avatar.png"
+    },
+    {
+        "merged": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\build\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\chat_background.png",
+        "source": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\src\\main\\res\\drawable-ldpi\\chat_background.png"
+    },
+    {
+        "merged": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\build\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_send_24dp.png",
+        "source": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\src\\main\\res\\drawable-ldpi\\ic_send_24dp.png"
+    },
+    {
+        "merged": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\build\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_attachment_24dp.png",
+        "source": "C:\\Users\\Gaayathri\\Desktop\\bookOman\\BookOMan\\chat21\\src\\main\\res\\drawable-ldpi\\ic_attachment_24dp.png"
+    }
+]
