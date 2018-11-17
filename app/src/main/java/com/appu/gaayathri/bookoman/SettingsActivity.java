@@ -264,12 +264,27 @@ public class SettingsActivity extends AppCompatActivity {
                     String cityL = spcity.getSelectedItem().toString();
                     String backgroundL = spbackground.getSelectedItem().toString();
 
+                    String cityLLL;
+                    String backgroundLLL;
+
+                    if (cityL.equals("Select a city")){
+                        cityLLL = "";
+                    }else{
+                        cityLLL = cityL;
+                    }
+
+                    if (backgroundL.equals("Select a degree")){
+                        backgroundLLL = "";
+                    }else{
+                        backgroundLLL = backgroundL;
+                    }
+
                     SharedPreferences sharedpreferences = getActivity().getSharedPreferences(mypreference, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.putString(name, nameL);
                     editor.putString(phone, phoneL);
-                    editor.putString(background, backgroundL);
-                    editor.putString(city, cityL);
+                    editor.putString(background, backgroundLLL);
+                    editor.putString(city, cityLLL);
                     editor.commit();
 
                     Map<String, String> userMap = new HashMap<>();
@@ -277,8 +292,8 @@ public class SettingsActivity extends AppCompatActivity {
                     userMap.put("name", nameL);
                     userMap.put("email", emailL);
                     userMap.put("phone", phoneL);
-                    userMap.put("city", cityL);
-                    userMap.put("background", backgroundL);
+                    userMap.put("city", cityLLL);
+                    userMap.put("background", backgroundLLL);
 
                     firestore.collection("users").document(mail).set(userMap, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
