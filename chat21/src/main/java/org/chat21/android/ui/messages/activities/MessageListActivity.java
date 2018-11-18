@@ -1,9 +1,11 @@
 package org.chat21.android.ui.messages.activities;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -13,6 +15,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.Px;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -115,6 +118,9 @@ public class MessageListActivity extends AppCompatActivity
     private ImageView attachButton;
     private ImageView sendButton;
     private LinearLayout mEmojiBar;
+
+    public static final int MY_REQUEST_READ_GALLERY   = 13;
+    public static final int MY_REQUEST_WRITE_GALLERY   = 14;
 
     /**
      * {@code recipient} is the real contact whom is talking with.
@@ -510,13 +516,11 @@ public class MessageListActivity extends AppCompatActivity
         attachButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Log.d(TAG, "MessageListActivity.onAttachClicked");
 
                 if (ChatUI.getInstance().getOnAttachClickListener() != null) {
                     ChatUI.getInstance().getOnAttachClickListener().onAttachClicked(null);
                 }
-
-                showAttachBottomSheet();
+                checkPermissionRG();
             }
         });
 
@@ -624,7 +628,6 @@ public class MessageListActivity extends AppCompatActivity
         BottomSheetAttach dialog = BottomSheetAttach.newInstance(recipient, channelType);
         dialog.show(ft, BottomSheetAttach.class.getName());
     }
-//
 //
 ////    private void showFilePickerDialog() {
 ////        Log.d(TAG, "showFilePickerDialog");
@@ -960,5 +963,53 @@ public class MessageListActivity extends AppCompatActivity
     @Override
     public void onGroupRemoved(ChatRuntimeException e) {
         Log.e(TAG, "MessageListActivity.onGroupRemoved: " + e.toString());
+    }
+
+    private void checkPermissionRG(){
+        int permissionCheck = ContextCompat.checkSelfPermission(MessageListActivity.this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
+
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    MessageListActivity.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, MY_REQUEST_READ_GALLERY);
+            checkPermissionWG();
+        } else {
+            checkPermissionWG();
+        }
+    }
+    private void checkPermissionWG(){
+        int permissionCheck = ContextCompat.checkSelfPermission(MessageListActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    MessageListActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_REQUEST_WRITE_GALLERY);
+
+        } else {
+            showAttachBottomSheet();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_REQUEST_WRITE_GALLERY: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    //Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+                    showAttachBottomSheet();
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    //Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
     }
 }

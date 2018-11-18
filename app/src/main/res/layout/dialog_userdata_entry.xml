@@ -40,6 +40,7 @@
             android:background="@drawable/text_view_border"
             android:padding="10dp"
             android:inputType="number"
+            android:textAlignment="center"
             android:layout_margin="10dp"
             android:text=""
             android:textColor="#000000"
