@@ -801,7 +801,12 @@ public class SellTestActivity extends AppCompatActivity implements AdapterView.O
             try {
                 Uri photocUri = Uri.fromFile(filen);
                 intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, photocUri);
-                startActivityForResult(intent, CAPTURE_CAMERA);
+                try {
+                    startActivityForResult(intent, CAPTURE_CAMERA);
+                } catch (Exception e) {
+                    Toast.makeText(this, "No permission", Toast.LENGTH_SHORT).show();
+                }
+
             } catch (ActivityNotFoundException e) {
                 Toast.makeText(SellTestActivity.this, "please check your sdcard status", Toast.LENGTH_SHORT).show();
             }

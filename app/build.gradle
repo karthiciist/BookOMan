@@ -14,8 +14,8 @@ android {
         applicationId "com.appu.gaayathri.bookoman"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 6
-        versionName "1.0.5"
+        versionCode 8
+        versionName "1.0.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
